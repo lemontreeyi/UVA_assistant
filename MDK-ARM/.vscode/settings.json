@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "flycontrol.h": "c",
+        "coderdecoder.h": "c",
+        "vl53l1_def.h": "c",
+        "cstdlib": "c",
+        "xutility": "c",
+        "uart_api.h": "c"
+    }
+}

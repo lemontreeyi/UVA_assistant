@@ -1,0 +1,75 @@
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
+Build target 'H743_Fly'
+compiling uart_api.c...
+..\Src\uart_api.c(82): warning:  #550-D: variable "Tx_Data"  was set but never used
+      uint8_t Tx_Data[30] = {0}, i = 0, k = 0;
+..\Src\uart_api.c: 1 warning, 0 errors
+compiling encodedDecoder.c...
+compiling key.c...
+compiling flyControl.c...
+..\Src\flyControl.c(116): warning:  #223-D: function "abs" declared implicitly
+  		PID_Control_param = (abs(CurrentPoint - SetPoint) > 85)?  1.3  : 1.0;
+..\Src\flyControl.c(129): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  		if(flag) out *= 0.5;
+..\Src\flyControl.c(148): warning:  #223-D: function "abs" declared implicitly
+  	return abs((int)out);
+..\Src\flyControl.c(272): warning:  #223-D: function "abs" declared implicitly
+  	if(abs(current_height - target_height) < 100)
+..\Src\flyControl.c(405): warning:  #223-D: function "abs" declared implicitly
+  		if(abs(point_x - SetPoint_x) < 45)
+..\Src\flyControl.c(419): warning:  #223-D: function "abs" declared implicitly
+  		if(abs(point_y - SetPoint_y) < 45)
+..\Src\flyControl.c: 6 warnings, 0 errors
+compiling main.c...
+../Core/Src/main.c(266): warning:  #177-D: variable "a"  was declared but never referenced
+  	float a = 0.55;
+../Core/Src/main.c(271): warning:  #550-D: variable "cmd"  was set but never used
+  	uint8_t cmd=0;
+../Core/Src/main.c(272): warning:  #177-D: variable "key"  was declared but never referenced
+  	uint8_t key;
+../Core/Src/main.c(280): warning:  #177-D: variable "Ctrl_flag_time"  was declared but never referenced
+    uint32_t Ctrl_flag_time = 0;
+../Core/Src/main.c(282): warning:  #177-D: variable "decodetimer"  was declared but never referenced
+  	uint32_t decodetimer;
+../Core/Src/main.c(286): warning:  #177-D: variable "msg1"  was declared but never referenced
+  	mavlink_message_t msg1;
+../Core/Src/main.c(287): warning:  #177-D: variable "msg2"  was declared but never referenced
+  	mavlink_message_t msg2;
+../Core/Src/main.c(288): warning:  #177-D: variable "msg_tmp"  was declared but never referenced
+  	mavlink_message_t msg_tmp;
+../Core/Src/main.c(289): warning:  #177-D: variable "msg_altitude"  was declared but never referenced
+  	mavlink_message_t msg_altitude;
+../Core/Src/main.c(290): warning:  #177-D: variable "msg_request_data_stream"  was declared but never referenced
+  	mavlink_message_t msg_request_data_stream;
+../Core/Src/main.c(291): warning:  #177-D: variable "len"  was declared but never referenced
+  	uint32_t len = 0;
+../Core/Src/main.c(292): warning:  #177-D: variable "str"  was declared but never referenced
+    uint8_t str[] = "hello world\r\n";
+../Core/Src/main.c(1791): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	out_Data  = 0.7*IN_Data+0.3*last_Data;
+../Core/Src/main.c(1791): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	out_Data  = 0.7*IN_Data+0.3*last_Data;
+../Core/Src/main.c(2648): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;	
+../Core/Src/main.c(2674): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;	
+../Core/Src/main.c(2705): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;
+../Core/Src/main.c(91): warning:  #177-D: variable "Recv_Cnt_UART3"  was declared but never referenced
+  static int Recv_Cnt_UART3 = 0;
+../Core/Src/main.c(94): warning:  #177-D: variable "UART3_Frame_Flag"  was declared but never referenced
+  static int UART3_Frame_Flag = 0;
+../Core/Src/main.c(96): warning:  #177-D: variable "MAVLink_message_length"  was declared but never referenced
+  static int MAVLink_message_length = 0;
+../Core/Src/main.c(97): warning:  #177-D: variable "packet"  was declared but never referenced
+  static mavlink_distance_sensor_t packet;
+../Core/Src/main.c(98): warning:  #177-D: variable "height"  was declared but never referenced
+  static float height = 0;
+../Core/Src/main.c(1605): warning:  #177-D: function "PrintfLogo"  was declared but never referenced
+  static void PrintfLogo(void)
+../Core/Src/main.c: 23 warnings, 0 errors
+linking...
+Program Size: Code=31574 RO-data=1210 RW-data=328 ZI-data=3360  
+FromELF: creating hex file...
+"H743_Fly\H743_Fly.axf" - 0 Error(s), 30 Warning(s).
+Build Time Elapsed:  00:00:23
