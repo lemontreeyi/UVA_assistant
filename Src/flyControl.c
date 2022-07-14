@@ -145,7 +145,9 @@ int PID_GetTime(PID_TIME *pp, int CurrentPoint, int SetPoint)
 	out = pp->Proportion * Error
 			+ pp->Derivative * dError;
 	out = range(out, -pp->Max, pp->Max);
-	return abs((int)out);
+	out = abs((int)out);
+	out += (out > 40) ? 0:(40 - out);	
+	return out;
 }
 
 /*==================================================================================================== 
@@ -160,39 +162,39 @@ void delay1ms(int time)
 
 void PIDInit (PID *pp) 
 { 
-	PID_Control_Pitch.Pid_Clc_limit = 700;		//4500+400 = 4900
-    PID_Control_Pitch.Proportion    = 2.22;//2.22;		
+	PID_Control_Pitch.Pid_Clc_limit = 500;		//4500+400 = 4900
+    PID_Control_Pitch.Proportion    = 2.1;//2.22;		
 	//  45 * 2.22 + 200 = 300; 85*2.22+200 = 389; 85*2.22*1.3+150=395; 112*2.22*1.3+50 = 473
 	PID_Control_Roll.Integral       = 0;    
-    PID_Control_Pitch.Derivative    = 1.4; 
+    PID_Control_Pitch.Derivative    = 1.8; 
     PID_Control_Pitch.SetPoint      = 112;
 	PID_Control_Pitch.LastError     = 0;  
     PID_Control_Pitch.PreviousError = 0;    
     PID_Control_Pitch.SumError      = 0;   
 	
-	PID_Control_Roll.Pid_Clc_limit = 700;		//4500+600 = 5100
-    PID_Control_Roll.Proportion    = 2.22;
+	PID_Control_Roll.Pid_Clc_limit = 500;		//4500+600 = 5100
+    PID_Control_Roll.Proportion    = 2.1;
 	//  45 * 2.22 + 200 = 300; 85*2.22+200 = 389; 85*2.22*1.3+150=395; 112*2.22*1.3+50 = 473
     PID_Control_Roll.Integral      = 0; 
-    PID_Control_Roll.Derivative    = 1.4;
+    PID_Control_Roll.Derivative    = 1.5;
     PID_Control_Roll.SetPoint      = 112;  
 	PID_Control_Roll.LastError     = 0;  
     PID_Control_Roll.PreviousError = 0;    
     PID_Control_Roll.SumError      = 0;
 
-	PID_Pitch_Time.Max = 320;
-	PID_Pitch_Time.Proportion = 3.2;
+	PID_Pitch_Time.Max = 210;
+	PID_Pitch_Time.Proportion = 2.2;
 	PID_Pitch_Time.Integral = 0;
-	PID_Pitch_Time.Derivative = 1.4;
+	PID_Pitch_Time.Derivative = 1.8;
 	PID_Pitch_Time.SetPoint = 112;
 	PID_Pitch_Time.LastError = 0;
 	PID_Pitch_Time.PreviousError = 0;
 	PID_Pitch_Time.SumError = 0;
 
-	PID_Roll_Time.Max = 320;
-	PID_Roll_Time.Proportion = 3.2;
+	PID_Roll_Time.Max = 210;
+	PID_Roll_Time.Proportion = 2.2;
 	PID_Roll_Time.Integral = 0;
-	PID_Roll_Time.Derivative = 1.4;
+	PID_Roll_Time.Derivative = 1.5;
 	PID_Roll_Time.SetPoint = 112;
 	PID_Roll_Time.LastError = 0;
 	PID_Roll_Time.PreviousError = 0;
@@ -396,8 +398,8 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 	//int flag = 0;
 	x = round(point_x - h * tan(roll));
 	y = round(point_y - h * tan(pitch));
-	deadZoneX = x - SetPoint_x;
-	deadZoneY = y - SetPoint_y;
+	deadZoneX = point_x - SetPoint_x;
+	deadZoneY = point_y - SetPoint_y;
 
 	//roll方向
 	if(myabs(deadZoneX)>=DeadThreShold)
@@ -407,12 +409,15 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 		else 
 			pwm_roll_clc  = PIDCalc(&PID_Control_Roll  ,point_x,SetPoint_x, 0);
 		pwm_roll_out  = PWM_Roll_mid  + pwm_roll_clc;
-		//Set_PWM_Roll (pwm_roll_out);
+		// Set_PWM_Roll (pwm_roll_out);
+		// pwm_roll_time = PID_GetTime(&PID_Roll_Time, point_x, SetPoint_x);
+		// HAL_Delay(pwm_roll_time);
+		// Set_PWM_Roll(PWM_Roll_mid);
 	}
-	// if(myabs(deadZoneX)<DeadThreShold)
-	// {
-	// 	Set_PWM_Roll(PWM_Roll_mid);
-	// }
+	if(myabs(deadZoneX)<DeadThreShold)
+	{
+		Set_PWM_Roll(PWM_Roll_mid);
+	}
 	//pitch方向
 	if(myabs(deadZoneY)>=DeadThreShold)
 	{
@@ -421,12 +426,15 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 		else 
 			pwm_pitch_clc = PIDCalc(&PID_Control_Pitch ,point_y,SetPoint_y, 0);
 		pwm_pitch_out = PWM_Pitch_mid + pwm_pitch_clc;
-		//Set_PWM_Pitch(pwm_pitch_out);
+		// Set_PWM_Pitch(pwm_pitch_out);
+		// pwm_pitch_time = PID_GetTime(&PID_Pitch_Time, point_y, SetPoint_y);
+		// HAL_Delay(pwm_pitch_time);
+		// Set_PWM_Pitch(PWM_Pitch_mid);
 	} 
-	// if(myabs(deadZoneY) < DeadThreShold)
-	// {
-	// 	Set_PWM_Pitch(PWM_Pitch_mid);
-	// }
+	if(myabs(deadZoneY) < DeadThreShold)
+	{
+		Set_PWM_Pitch(PWM_Pitch_mid);
+	}
 	printf("Roll_x = %d , %d, Pitch_y = %d, %d\r\n", point_x,pwm_roll_out, point_y, pwm_pitch_out);
 }
 

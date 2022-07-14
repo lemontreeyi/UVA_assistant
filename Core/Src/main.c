@@ -157,6 +157,7 @@ mavlink_status_t status;
 bool Ctrl_flag = 0;
 
 // //vl53l1x
+void send_com(uint8_t data);
 // int32_t distance;
 // VL53L1_Dev_t Dev;
 // VL53L1_RangingMeasurementData_t result_data;
@@ -387,11 +388,6 @@ int main(void)
 //	  MAVLink_message_length=mavlink_msg_to_send_buffer(MAVLink_TX_BUF,&msg_tmp);   //
 ///**********************************************************************************/
 
-		// mavlink_msg_request_data_stream_pack(54,0,&msg_request_data_stream,0,0,12,5,1);
-		// len = mavlink_msg_to_send_buffer(MAVLink_TX_BUF, &msg_request_data_stream);
-    // BSP_USART_SendArray_LL(USART3, MAVLink_TX_BUF, len);
-		// BSP_USART_SendArray_LL(USART2, MAVLink_TX_BUF, len);
-		// BSP_USART_SendArray_LL(USART1, MAVLink_TX_BUF, len);
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
     HAL_Delay(300);
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
@@ -403,11 +399,7 @@ int main(void)
   __HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_1, 500);
 
   mav_request_data(USART3);
-  // VL53L1_Error Status = VL53L1_ERROR_NONE;
-  // Status = vl53l1x_init(&Dev);
-  // if(Status != VL53L1_ERROR_NONE)
-  //   printf("error:%d\r\n", Status);
-  //vl53l1x_Cali(&Dev, &save);
+
 
   while (1)
   {
@@ -517,7 +509,7 @@ int main(void)
         ContrlTime_x = HAL_GetTick() - ctrlstart_x;
         ContrlTime_y = HAL_GetTick() - ctrlstart_y;
         //Set_PWM_Thr(4500);
-		    if(ContrlTime_y>=700)
+		    if(ContrlTime_y>=680)
 		    {
 		    	ctrlstart_y = HAL_GetTick();
 		    }
@@ -531,7 +523,7 @@ int main(void)
           Set_PWM_Pitch(4500);
         }
 
-        if(ContrlTime_x>=700)
+        if(ContrlTime_x>=680)
         {
           ctrlstart_x = HAL_GetTick();
         }
@@ -1992,6 +1984,14 @@ bool write_fifo(fifo* p, uint8_t data)
 
 //   }
 // }
+
+void send_com(uint8_t data)
+{
+  uint8_t bytes[3] = {0};
+  bytes[0] = 0xa5;
+  bytes[1] = data;
+  USART_Send_Check(UART5, bytes, 3);
+}
 
 /****************************串口接收中断回调*****************************/
 void   USART_RxCallback(USART_TypeDef *huart)

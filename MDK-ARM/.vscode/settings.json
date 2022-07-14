@@ -5,6 +5,7 @@
         "vl53l1_def.h": "c",
         "cstdlib": "c",
         "xutility": "c",
-        "uart_api.h": "c"
+        "uart_api.h": "c",
+        "stm32h7xx_hal.h": "c"
     }
 }

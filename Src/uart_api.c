@@ -77,17 +77,20 @@ void USART_Send_Check(USART_TypeDef* huart, uint8_t *Buffer, uint8_t len)
 /*
 发送一帧数据
 */
-void USART_Send_out(USART_TypeDef* huart, uint8_t *data, uint8_t len, uint8_t send)
+void USART_Send_out(USART_TypeDef* huart, uint16_t *data, uint8_t len, uint8_t send)
 {
     uint8_t Tx_Data[30] = {0}, i = 0, k = 0;
+    memset(Tx_Data, 0, (2*len+5));
     Tx_Data[i++] = 0x5A;        //Byte0:帧头
     Tx_Data[i++] = 0x5A;        //Byte1:帧头
     Tx_Data[i++] = send;        //Byte2:功能字节，本帧数据类型
-    Tx_Data[i++] = len;         //Byte3:数据个数
-    for(k=0;k<len;k++)          //存入数据到缓存
+    Tx_Data[i++] = 2 * len;     //Byte3:数据个数
+    for(k=0;k<len;k++)          //存入数据到缓存Tx_Data
     {
+        Tx_Data[i++] = (uint8_t)data[k]>>8;
         Tx_Data[i++] = (uint8_t)data[k];
     }
+    USART_Send_Check(huart, Tx_Data, 2 * len + 5);
 
 }
 
