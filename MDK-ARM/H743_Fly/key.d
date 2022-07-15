@@ -53,3 +53,4 @@ h743_fly\key.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h
 h743_fly\key.o: ../Inc/led.h
 h743_fly\key.o: ../Inc/uart_api.h
 h743_fly\key.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stdio.h
+h743_fly\key.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\string.h

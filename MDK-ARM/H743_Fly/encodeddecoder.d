@@ -51,6 +51,7 @@ h743_fly\encodeddecoder.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dmam
 h743_fly\encodeddecoder.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h
 h743_fly\encodeddecoder.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stdio.h
 h743_fly\encodeddecoder.o: ../Inc/uart_api.h
+h743_fly\encodeddecoder.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\string.h
 h743_fly\encodeddecoder.o: ../Inc/flyControl.h
 h743_fly\encodeddecoder.o: ../Inc/beep.h
 h743_fly\encodeddecoder.o: ../Inc/led.h

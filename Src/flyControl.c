@@ -32,8 +32,8 @@ int PWM_Thr_min_LOCK =1101;
 
 int          pwm_pitch_out=0;
 int          pwm_roll_out=0;
-int 		 		 pwm_pitch_time = 0;
-int 		 		 pwm_roll_time = 0;
+int 		 pwm_pitch_time = 0;
+int 		 pwm_roll_time = 0;
 
 unsigned char  SetHigh=80;
 uint8_t InitedFlag;
@@ -166,7 +166,7 @@ void PIDInit (PID *pp)
     PID_Control_Pitch.Proportion    = 2.1;//2.22;		
 	//  45 * 2.22 + 200 = 300; 85*2.22+200 = 389; 85*2.22*1.3+150=395; 112*2.22*1.3+50 = 473
 	PID_Control_Roll.Integral       = 0;    
-    PID_Control_Pitch.Derivative    = 1.8; 
+    PID_Control_Pitch.Derivative    = 2.5; 
     PID_Control_Pitch.SetPoint      = 112;
 	PID_Control_Pitch.LastError     = 0;  
     PID_Control_Pitch.PreviousError = 0;    
@@ -176,7 +176,7 @@ void PIDInit (PID *pp)
     PID_Control_Roll.Proportion    = 2.1;
 	//  45 * 2.22 + 200 = 300; 85*2.22+200 = 389; 85*2.22*1.3+150=395; 112*2.22*1.3+50 = 473
     PID_Control_Roll.Integral      = 0; 
-    PID_Control_Roll.Derivative    = 1.5;
+    PID_Control_Roll.Derivative    = 2.5;
     PID_Control_Roll.SetPoint      = 112;  
 	PID_Control_Roll.LastError     = 0;  
     PID_Control_Roll.PreviousError = 0;    
@@ -194,7 +194,7 @@ void PIDInit (PID *pp)
 	PID_Roll_Time.Max = 210;
 	PID_Roll_Time.Proportion = 2.2;
 	PID_Roll_Time.Integral = 0;
-	PID_Roll_Time.Derivative = 1.5;
+	PID_Roll_Time.Derivative = 1.8;
 	PID_Roll_Time.SetPoint = 112;
 	PID_Roll_Time.LastError = 0;
 	PID_Roll_Time.PreviousError = 0;
@@ -270,13 +270,14 @@ void Take_off_Preper(void)
 =====================================================================================================*/ 
 void Take_off(float target_height, float current_height)//mm
 {	
-	printf("*******************Takeoff***************\r\n");
+	//printf("cur_distance = %d\r\n", current_height);
 	if(abs(current_height - target_height) < 100)
 		Set_PWM_Thr(4500);
-	else if(current_height - target_height > 100)
-		Set_PWM_Thr(4500 - 650 * exp(-current_height / target_height));
-	else
-		Set_PWM_Thr(4500 + 650 * exp(-current_height / target_height));
+	else if(abs(current_height - target_height) > 100)
+	{
+		if(current_height < target_height) Set_PWM_Thr((int)(4500 + 650 * exp(-current_height / target_height)));
+		else Set_PWM_Thr((int)(4500 - 650 * exp(-current_height / target_height)));
+	}	
 }
 
 

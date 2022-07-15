@@ -1,3 +1,57 @@
-Load "H743_Fly\\H743_Fly.axf" 
-Erase Done.Programming Done.Verify OK.Application running ...
-Flash Load finished at 17:36:56
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
+Build target 'H743_Fly'
+compiling main.c...
+../Core/Src/main.c(462): warning:  #223-D: function "abs" declared implicitly
+          if(abs(distance - 1500) > 100 && is_takeoff==1)
+../Core/Src/main.c(248): warning:  #550-D: variable "cmd"  was set but never used
+  	uint8_t cmd=0;
+../Core/Src/main.c(249): warning:  #177-D: variable "key"  was declared but never referenced
+  	uint8_t key;
+../Core/Src/main.c(251): warning:  #550-D: variable "ContrlTime_x"  was set but never used
+    uint32_t ContrlTime_x = 0;
+../Core/Src/main.c(252): warning:  #550-D: variable "ContrlTime_y"  was set but never used
+    uint32_t ContrlTime_y = 0;
+../Core/Src/main.c(257): warning:  #177-D: variable "Ctrl_flag_time"  was declared but never referenced
+    uint32_t Ctrl_flag_time = 0;
+../Core/Src/main.c(259): warning:  #177-D: variable "decodetimer"  was declared but never referenced
+  	uint32_t decodetimer;
+../Core/Src/main.c(262): warning:  #177-D: variable "flag_rx2"  was declared but never referenced
+    int flag_rx2 = 0;
+../Core/Src/main.c(263): warning:  #177-D: variable "msg1"  was declared but never referenced
+  	mavlink_message_t msg1;
+../Core/Src/main.c(264): warning:  #177-D: variable "msg2"  was declared but never referenced
+  	mavlink_message_t msg2;
+../Core/Src/main.c(265): warning:  #177-D: variable "msg_tmp"  was declared but never referenced
+  	mavlink_message_t msg_tmp;
+../Core/Src/main.c(266): warning:  #177-D: variable "msg_altitude"  was declared but never referenced
+  	mavlink_message_t msg_altitude;
+../Core/Src/main.c(267): warning:  #177-D: variable "msg_request_data_stream"  was declared but never referenced
+  	mavlink_message_t msg_request_data_stream;
+../Core/Src/main.c(268): warning:  #177-D: variable "len"  was declared but never referenced
+  	uint32_t len = 0;
+../Core/Src/main.c(269): warning:  #177-D: variable "str"  was declared but never referenced
+    uint8_t str[] = "hello world\r\n";
+../Core/Src/main.c(2297): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;	
+../Core/Src/main.c(2323): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;	
+../Core/Src/main.c(2354): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;
+../Core/Src/main.c(84): warning:  #177-D: variable "Recv_Cnt_UART3"  was declared but never referenced
+  static int Recv_Cnt_UART3 = 0;
+../Core/Src/main.c(87): warning:  #177-D: variable "UART3_Frame_Flag"  was declared but never referenced
+  static int UART3_Frame_Flag = 0;
+../Core/Src/main.c(88): warning:  #177-D: variable "heartbeat"  was declared but never referenced
+  static int heartbeat = 0;
+../Core/Src/main.c(89): warning:  #177-D: variable "MAVLink_message_length"  was declared but never referenced
+  static int MAVLink_message_length = 0;
+../Core/Src/main.c(90): warning:  #177-D: variable "packet"  was declared but never referenced
+  static mavlink_distance_sensor_t packet;
+../Core/Src/main.c(91): warning:  #177-D: variable "height"  was declared but never referenced
+  static float height = 0;
+../Core/Src/main.c: 24 warnings, 0 errors
+linking...
+Program Size: Code=31532 RO-data=1300 RW-data=320 ZI-data=3384  
+FromELF: creating hex file...
+"H743_Fly\H743_Fly.axf" - 0 Error(s), 24 Warning(s).
+Build Time Elapsed:  00:00:12

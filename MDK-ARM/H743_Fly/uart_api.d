@@ -39,3 +39,15 @@ h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_usart.h
 h743_fly\uart_api.o: ../Inc/uart_api.h
 h743_fly\uart_api.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stdio.h
+h743_fly\uart_api.o: ../Core/Inc/main.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_rcc.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_bus.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_cortex.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_system.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_utils.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_pwr.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_gpio.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dma.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dmamux.h
+h743_fly\uart_api.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h
+h743_fly\uart_api.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\string.h

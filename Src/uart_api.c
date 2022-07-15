@@ -2,6 +2,37 @@
 #include "stm32h7xx_ll_usart.h"
 #include "uart_api.h"
 
+uint8_t cxof_buf[9] = {0};
+
+/*
+通信包格式：0xFE, 0x04, x_L, x_H, y_L, y_H, check_sum, quality, 0xAA
+func:用于将位置差打包成光流数据传入飞控
+*/
+void Pack_cxof_buf(uint16_t dx, uint16_t dy, uint8_t quality, uint8_t *cxof_buf)
+{
+    uint8_t check_sum = 0;
+    memset(cxof_buf, 0, 9);
+    cxof_buf[0] = 0xFE;
+    cxof_buf[1] = 0x04;
+    cxof_buf[2] = dx & 0xFF;        //x低八位
+    cxof_buf[3] = dx >> 8;          //x高八位
+    cxof_buf[4] = dy & 0xFF;        //y低8位
+    cxof_buf[5] = dy >> 8;          //y高8位
+    for(int i=2;i<6;i++){
+        check_sum += cxof_buf[i];
+    }
+    cxof_buf[6] = check_sum;
+    cxof_buf[7] = quality;
+    cxof_buf[8] = 0xAA;
+}
+
+/*
+func:用于将cxof通信包从指定串口发出
+*/
+void Send_cxof_buf(USART_TypeDef* huart, uint8_t *buf, uint32_t size)
+{
+    BSP_USART_SendArray_LL(huart, buf, size);
+}
 
 void BSP_USART_SendData_LL(USART_TypeDef* huart, uint8_t Data)
 {

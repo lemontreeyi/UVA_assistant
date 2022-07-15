@@ -2,7 +2,7 @@
 /**
   ******************************************************************************
   * @file           : main.c
-  * @brief          : Main program body
+  * @brif          : Main program body
   ******************************************************************************
   * @attention
   *
@@ -37,11 +37,10 @@
 #include "coderDecoder.h"
 #include "flyControl.h"
 #include "MAV_Altitude_Decode.h"
+#define TAKEOFF
 
 /* 定义例程名和例程发布日期 */
 #define ABS(x) ((x<0)?-x:x)
-#define EXAMPLE_NAME	"V4梦创飞控室内自动飞行例程"
-#define EXAMPLE_DATE	"2021-04-7 "
 #define DEMO_VER		  "V-1.0"
 
   
@@ -77,12 +76,6 @@ int PWM_Mode_N2 =4500;
 int PWM_Mode_N3 =5000;
 int PWM_Mode_N4 =7000;
 
-int old_x = 0;
-int old_y = 0;
-float pitch = 0;
-float yaw = 0;
-float roll = 0;
-
 uint16_t    USART1_RX_STA=0; 
 uint16_t    USART2_RX_STA=0;
 uint16_t    USART3_RX_STA=0; 
@@ -110,7 +103,6 @@ uint8_t MAVLink_RECV_BUF_FAKE [USART2_MAX_RECV_LEN] = {0};
 //回应 头 消息号 数据1  数据2 数据3 数据4 尾
 uint8_t encodeAnswer[11]    ={'#','1',0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,'*'};
 
-#define A 60
 float old_value;
 
 static      int16_t s_dat[CH_NUM];
@@ -122,7 +114,7 @@ float  OutData[4];
 char   menu=0;
 
 PID         PID_Control_Att;           //  PID Control Structure 
-float filter(float new_value);
+
 int mode_flag = 0;
 
 void  OutPut_Data(void);
@@ -140,31 +132,17 @@ void TIM13_Set(uint8_t sta);
 void TIM15_Set(uint8_t sta);
 void Data_to_VisualScope(void);
 unsigned short CRC_CHECK(unsigned char *Buf, unsigned char CRC_CNT);
-void mav_request_data(USART_TypeDef* huart);
-typedef struct fifo
-{
-  uint8_t buf[MAVLINK_MAX_PACKET_LEN];
-  int front, rear;
-} fifo;
-void init_fifo(fifo* p);
-bool is_empty_fifo(fifo* p);
-bool is_full_fifo(fifo* p);
-bool read_fifo(fifo* p, uint8_t* data);
-bool write_fifo(fifo* p, uint8_t data);
-fifo mav_fifo;
+
 mavlink_message_t msg;
 mavlink_status_t status;
-bool Ctrl_flag = 0;
+
 
 // //vl53l1x
-void send_com(uint8_t data);
-// int32_t distance;
-// VL53L1_Dev_t Dev;
-// VL53L1_RangingMeasurementData_t result_data;
-// VL53L1_CalibrationData_t save;
-// VL53L1_Error vl53l1x_init(VL53L1_DEV pDev);
-// VL53L1_Error vl53l1x_Cali(VL53L1_DEV pDev, VL53L1_CalibrationData_t* save);
-// VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev);
+uint16_t distance = 0;
+uint8_t re_buf_Data[8] = {0}, Receive_ok = 0;
+uint8_t sum = 0, i = 0;
+uint8_t RangeStatus = 0, Time = 0, Mode = 0;
+uint16_t data = 0;
 
 //mavlink
 void MANUAL_CONTROL_Send(int16_t xpoint,int16_t ypoint);
@@ -182,7 +160,6 @@ void end(void)
 }
 
 /* 仅允许本文件内调用的函数声明 */
-static void PrintfLogo(void);
 static void PrintfHardInfo(void);
 /* USER CODE END Includes */
 
@@ -264,7 +241,6 @@ PUTCHAR_PROTOTYPE
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	float a = 0.55;
 	uint16_t i1=0,i2=0,i3=0;
 	uint16_t rxlen_usart_1;
 	uint16_t rxlen_usart_2;
@@ -330,7 +306,6 @@ int main(void)
   MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
 	Device_Init();
-  //PrintfLogo();		  /* 打印例程Logo到串口1 */
 	PrintfHardInfo();	/* 打印硬件接线信息 */
 	//init_fifo(&mav_fifo);
 	/*
@@ -383,10 +358,6 @@ int main(void)
 		//TIM3_Set(0);			  
 	  //TIM5_Set(0);	
 		
-///*************************************打一个假包，用于获取消息实际长度*************/	
-//		mavlink_msg_altitude_pack(54,0,&msg_tmp,0,1,1,1,1,1,1);                       //
-//	  MAVLink_message_length=mavlink_msg_to_send_buffer(MAVLink_TX_BUF,&msg_tmp);   //
-///**********************************************************************************/
 
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
     HAL_Delay(300);
@@ -396,14 +367,9 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	printf("test begin!!!\r\n");
-  __HAL_TIM_SetCompare(&htim4, TIM_CHANNEL_1, 500);
-
-  mav_request_data(USART3);
-
-
+  
   while (1)
   {
-    // vl53l1x_GetDistance(&Dev);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -446,10 +412,8 @@ int main(void)
 				//BSP_USART_SendArray_LL(USART1, FreeBuffer_Encode, 11);
         if(rxlen_usart_2 == 11) {
           cmd = encodeDecode_Analysis(FreeBuffer_Encode,encodeAnswer,rxlen_usart_2);
-          flag_rx2 += 1;
-          heartbeat = 0;
+
         } //分析字符串
-				//printf("cmd:%d\r\n",cmd);
 				rxlen_usart_2=0;
 				USART2_RX_STA=0;
 				BSP_USART_StartIT_LL( USART2 ); //启动下一次接收
@@ -471,20 +435,39 @@ int main(void)
         USART3_RX_STA = 0;
         BSP_USART_StartIT_LL( USART3 );   //启动下一次接收
       }
+      //处理激光雷达传来的数据
+      if(Receive_ok == 1)
+      {
+        for(sum=0,i=0;i<(re_buf_Data[3] + 4);i++)
+        {
+          sum += re_buf_Data[i];
+        }
+        if(sum == re_buf_Data[i])
+        {
+          distance = re_buf_Data[4]<<8 | re_buf_Data[5];
+          RangeStatus = (re_buf_Data[6]>>4)&0x0f;
+          Time = (re_buf_Data[6]>>2)&0x03;
+          Mode = re_buf_Data[6] & 0x03;
+          //printf("distance = %d, Mode = %d", distance, Mode);
+        }
+        Receive_ok = 0;
+        BSP_USART_StartIT_LL(USART3);
+      }
 			
 			//执行指令的当作
 			if(2==RC_Read())//读取是否直通
 			{ 
         if(mode_flag == 0) mode_flag = 1;
 #ifdef TAKEOFF
-        if(abs(distance - 1500) > 100 && is_takeoff)
+        if(abs(distance - 1500) > 100 && is_takeoff==1)
         {
           Take_off(1500, distance);
           takeoff_Time = HAL_GetTick();
         }
-        else if(abs(distance - 1500) <= 100 && is_takeoff)
+        else if(abs(distance - 1500) <= 100 && is_takeoff==1)
         {
           is_takeoff = ((HAL_GetTick() - takeoff_Time) > 1000)?0:1;
+          if(is_takeoff == 0) Set_PWM_Thr(4500);
         }
 #endif
 				//更新状态 与 时间控制分开执行
@@ -492,55 +475,43 @@ int main(void)
         if(ContriGetDataTime >= 80)
         {
           ContriGetDataStart = HAL_GetTick();
-          if(flag_rx2 > 0)
-          {
-            if(flag_rx2 > 10000) flag_rx2 = 2;
-            if(flag_rx2 == 1) {
-              old_x = Attitude.Position_x;
-              old_y = Attitude.Position_y;
-            }
-            Loiter(Attitude.Position_x,Attitude.Position_y,112,112, 0.0, 0.0);    //224x224
-            pwm_pitch_time = PID_GetTime(&PID_Pitch_Time, Attitude.Position_y, 112);
-            pwm_roll_time  = PID_GetTime(&PID_Roll_Time, Attitude.Position_x, 112);
-						printf("pitch_time:%d, roll_time:%d \r\n", pwm_pitch_time, pwm_roll_time);
-          }
+          Loiter(Attitude.Position_x,Attitude.Position_y,112,112, 0.0, 0.0);    //224x224
+          pwm_pitch_time = PID_GetTime(&PID_Pitch_Time, Attitude.Position_y, 112);
+          pwm_roll_time  = PID_GetTime(&PID_Roll_Time, Attitude.Position_x, 112);
+					printf("pitch_time:%d, roll_time:%d \r\n", pwm_pitch_time, pwm_roll_time);
+          
         }
 
         ContrlTime_x = HAL_GetTick() - ctrlstart_x;
         ContrlTime_y = HAL_GetTick() - ctrlstart_y;
         //Set_PWM_Thr(4500);
-		    if(ContrlTime_y>=680)
-		    {
-		    	ctrlstart_y = HAL_GetTick();
-		    }
-        else if(ContrlTime_y <= pwm_pitch_time)
-        {
-          //Set_PWM_Roll(pwm_roll_out);
-          Set_PWM_Pitch(pwm_pitch_out);
-        }
-        else
-        {
-          Set_PWM_Pitch(4500);
-        }
+		    // if(ContrlTime_y>=680)
+		    // {
+		    // 	ctrlstart_y = HAL_GetTick();
+		    // }
+        // else if(ContrlTime_y <= pwm_pitch_time)
+        // {
+        //   //Set_PWM_Roll(pwm_roll_out);
+        //   Set_PWM_Pitch(pwm_pitch_out);
+        // }
+        // else
+        // {
+        //   Set_PWM_Pitch(4500);
+        // }
 
-        if(ContrlTime_x>=680)
-        {
-          ctrlstart_x = HAL_GetTick();
-        }
-        else if(ContrlTime_x <= pwm_roll_time)
-        {
-          Set_PWM_Roll(pwm_roll_out);
-        }
-        else
-        {
-          Set_PWM_Roll(4500);
-        }
+        // if(ContrlTime_x>=680)
+        // {
+        //   ctrlstart_x = HAL_GetTick();
+        // }
+        // else if(ContrlTime_x <= pwm_roll_time)
+        // {
+        //   Set_PWM_Roll(pwm_roll_out);
+        // }
+        // else
+        // {
+        //   Set_PWM_Roll(4500);
+        // }
 
-				heartbeat++;
-				if(heartbeat>300)
-				{
-					heartbeat = 0;
-				}
 			}
 			else if(3==RC_Read())
 			{
@@ -1511,7 +1482,7 @@ static void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   USART_InitStruct.PrescalerValue = LL_USART_PRESCALER_DIV1;
-  USART_InitStruct.BaudRate = 57600;
+  USART_InitStruct.BaudRate = 115200;
   USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
   USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
   USART_InitStruct.Parity = LL_USART_PARITY_NONE;
@@ -1586,29 +1557,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-/*
-*********************************************************************************************************
-*	函 数 名: PrintfLogo
-*	功能说明: 打印例程名称和例程发布日期, 接上串口线后，打开PC机的超级终端软件可以观察结果
-*	形    参：无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-static void PrintfLogo(void)
-{
-	printf("*************************************************************\n\r");
-	printf("* 例程名称   : %s\r\n", EXAMPLE_NAME);	/* 打印例程名称 */
-	printf("* 例程版本   : %s\r\n", DEMO_VER);		/* 打印例程版本 */
-	printf("* 发布日期   : %s\r\n", EXAMPLE_DATE);	/* 打印例程日期 */
-
-	/* 打印ST固件库版本，这3个定义宏在stm32f40x.h文件中 */
-	printf("* 固件库版本 :STM32F10x_StdPeriph_Driver)\r\n");
-	printf("* \n\r");	/* 打印一行空格 */
-	printf("* QQ    : 665836518 \r\n");
-	printf("* 淘宝店地址 : https://shop144519723.taobao.com/index.htm?spm=2013.1.w5002-13163471369.2.71db1223NyFC4j \r\n");
-	printf("* 梦创电子 \r\n");
-	printf("*************************************************************\n\r");
-}
 
 /*
 *********************************************************************************************************
@@ -1622,7 +1570,6 @@ static void PrintfHardInfo(void)
 {
   printf("*****************************************************************\r\n");
 	printf("  接线方法: \r\n");
-	printf("**梦创电子四旋翼飞行器室内自动飞行****\r\n");
   printf("  +5V       <------   5.0V      5V供电\r\n");
   printf("  GND       -------   GND       地\r\n");
 	printf("  PB0       ------>   PWM3      与遥控器的pitch通道相连\r\n");
@@ -1775,232 +1722,14 @@ float filter_av(char filter_id)
 	return sum/N;
 }
 
-
-//************************************数据处理函数********************************//
-float DataProcessing(float IN_Data)
-{
-	static float out_Data=0,last_Data=0,filter_Data=0; //static只初始化一次
-	out_Data  = 0.7*IN_Data+0.3*last_Data;
-	filter_Data  = filter(out_Data);
-	last_Data = filter_Data;
-	return filter_Data;
-}
-
-
-float filter(float new_value)
-{
-if(new_value>200)
-	new_value=200;
-if(new_value<10)
-	new_value=10;
-if ( ( new_value - old_value > A ) || ( old_value - new_value > A ))
- {
-	old_value = old_value;
-	return old_value;
- }
- old_value = new_value;
- return new_value;
-}
-
-// 请求飞控发送数据
-void mav_request_data(USART_TypeDef* huart)
-{
-  mavlink_message_t msg;
-  uint8_t Sendbuf[MAVLINK_MAX_PACKET_LEN];
-  int Buflen;
-  mavlink_msg_request_data_stream_pack(100, 200, &msg, 1, MAV_COMP_ID_ALL, MAV_DATA_STREAM_ALL, 50, 1);
-  Buflen = mavlink_msg_to_send_buffer(Sendbuf, &msg);
-  BSP_USART_SendArray_LL(huart, Sendbuf, Buflen);
-
-}
-void init_fifo(fifo* p)
-{
-  p->front = p->rear = 0;
-  memset(p->buf, 0, MAVLINK_MAX_PACKET_LEN);
-}
-bool is_empty_fifo(fifo* p)
-{
-  if(p->front == p->rear)
-    return 1;
-  else
-    return 0;
-}
-bool is_full_fifo(fifo* p)
-{
-  if((p->rear - p->front + MAVLINK_MAX_PACKET_LEN) % MAVLINK_MAX_PACKET_LEN == MAVLINK_MAX_PACKET_LEN - 1)
-    return 1;
-  else
-    return 0;
-}
-bool read_fifo(fifo* p, uint8_t* data)
-{
-  if(!is_empty_fifo(p))
-  {
-    p->buf[p->front] = *data;
-    p->front = (p->front + 1) % MAVLINK_MAX_PACKET_LEN;
-    return 1;
-  }
-  return 0;
-}
-bool write_fifo(fifo* p, uint8_t data)
-{
-  if(!is_full_fifo(p))
-  {
-    p->buf[p->rear] = data;
-    p->rear = (p->rear + 1) % MAVLINK_MAX_PACKET_LEN;
-    return 1;
-  }
-  return 0;
-}
-
-//测距模块
-//初始化测距模块
-// VL53L1_Error vl53l1x_init(VL53L1_DEV pDev)
-// {
-//   VL53L1_Error Status = VL53L1_ERROR_NONE;
-//   pDev->I2cHandle = &hi2c1;
-//   pDev->I2cDevAddr = 0x52;
-//   pDev->comms_type = 1;
-//   pDev->comms_speed_khz = 400;
-
-//   Status = VL53L1_WaitDeviceBooted(pDev);
-//   if(Status != VL53L1_ERROR_NONE)
-//   {
-//     printf("Wait device Boot failed!\r\n");
-// 		return Status;
-//   }
-//   HAL_Delay(2);
-
-//   Status = VL53L1_DataInit(pDev);
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 	{
-// 		printf("datainit failed!\r\n");
-// 		return Status;
-// 	}
-//   HAL_Delay(2);
-
-//   Status = VL53L1_StaticInit(pDev);
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 	{
-// 		printf("static init failed!\r\n");
-// 		return Status;
-// 	}
-// 	HAL_Delay(2);
-
-//   Status = VL53L1_SetDistanceMode(pDev, VL53L1_DISTANCEMODE_LONG);//设置测距距离模式
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 	{
-// 		printf("set discance mode failed!\r\n");
-// 		return Status;
-// 	}
-// 	HAL_Delay(2);
-
-//   Status = VL53L1_SetMeasurementTimingBudgetMicroSeconds(pDev, 50000);//设置超时时间
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 		return Status;
-// 	HAL_Delay(2);
-
-// 	Status = VL53L1_SetInterMeasurementPeriodMilliSeconds(pDev, 100);//设置测量间隔
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 	{
-// 		printf("SetInterMeasurementPeriodMilliSeconds failed!\r\n");
-// 		return Status;
-// 	}
-// 	HAL_Delay(2);
-
-//   Status = VL53L1_StartMeasurement(pDev);
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 	{
-// 		printf("start measurement failed!\r\n");
-// 		return Status;
-// 	}
-  
-//   return Status;
-// }
-// //校准测距模块
-// VL53L1_Error vl53l1x_Cali(VL53L1_DEV pDev, VL53L1_CalibrationData_t* save)
-// {
-//   VL53L1_Error Status = VL53L1_ERROR_NONE;
-//   Status = VL53L1_StopMeasurement(pDev);
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 		return Status;
-
-//   Status = VL53L1_SetPresetMode(pDev, VL53L1_PRESETMODE_AUTONOMOUS);
-//   if(Status!=VL53L1_ERROR_NONE) 
-// 		return Status;
-  
-//   Status = VL53L1_PerformRefSpadManagement(pDev);//perform ref SPAD management
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 		return Status;
-
-//   Status = VL53L1_PerformOffsetSimpleCalibration(pDev,140);//14cm的出厂校验值
-//   if(Status!=VL53L1_ERROR_NONE) 
-// 		return Status;
-  
-//   Status = VL53L1_PerformSingleTargetXTalkCalibration(pDev, 140);
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 		return Status;
-  
-//   Status = VL53L1_GetCalibrationData(pDev,save);
-// 	if(Status!=VL53L1_ERROR_NONE) 
-// 		return Status;
-
-//   //全部完成 重新打开测量
-//   Status = VL53L1_StartMeasurement(pDev);
-//   if(Status!=VL53L1_ERROR_NONE) 
-// 	{
-// 		printf("start measurement failed!\r\n");
-// 		return Status;
-// 	}
-
-//   return Status;
-// }
-// VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev)
-// {
-//   VL53L1_Error Status = VL53L1_ERROR_NONE;
-//   uint8_t isDataReady=0;
-//   //status = VL53L1_WaitMeasurementDataReady(pDev);//阻塞
-//   Status = VL53L1_GetMeasurementDataReady(pDev,&isDataReady);//非阻塞
-//   if(Status!=VL53L1_ERROR_NONE) 
-// 	{
-// 		printf("Wait too long!\r\n");
-// 		return Status;
-// 	}
-//   if(isDataReady)
-//   {
-//     Status = VL53L1_GetRangingMeasurementData(pDev, &result_data);
-//     distance = result_data.RangeMilliMeter;
-//     printf("distance:%dmm\r\n", distance);
-//     Status = VL53L1_ClearInterruptAndStartMeasurement(pDev);
-//   }
-  
-//   return Status;
-// }
-
-
-// int Filter_pwm(int position, int *old, int max)
-// {
-//   if(position > (max -20)){
-
-//   }
-// }
-
-void send_com(uint8_t data)
-{
-  uint8_t bytes[3] = {0};
-  bytes[0] = 0xa5;
-  bytes[1] = data;
-  USART_Send_Check(UART5, bytes, 3);
-}
-
 /****************************串口接收中断回调*****************************/
 void   USART_RxCallback(USART_TypeDef *huart)
 { 
 	
 	if(LL_USART_IsActiveFlag_RXNE(huart) && LL_USART_IsEnabledIT_RXNE(huart))
   { 
-  //***********串口1中断**********************************
-		if(huart == USART1)
+  //***********串口5中断**********************************
+		if(huart == UART5)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
       /*测试代码*/
@@ -2061,104 +1790,24 @@ void   USART_RxCallback(USART_TypeDef *huart)
     else if(huart == USART3)
     {
       uint8_t data = LL_USART_ReceiveData8(huart);  //串口接收一个字节
-			//printf("%c",data);
-      // if(mavlink_parse_char(MAVLINK_COMM_0, data, &msg, &status))
-      // {
-      //   //printf("ID: %d\r\n", msg.msgid);
-      //   switch (msg.msgid)
-      //   {
-      //     // case MAVLINK_MSG_ID_ATTITUDE:
-      //     //   pitch = mavlink_msg_attitude_get_pitch(&msg);
-      //     //   yaw = mavlink_msg_attitude_get_yaw(&msg);
-      //     //   roll = mavlink_msg_attitude_get_roll(&msg);
-			// 		//   printf("pitch:%f, roll:%f\r\n", pitch, roll);
-      //     //   break;
-      //     case MAVLINK_MSG_ID_DISTANCE_SENSOR:
-      //       printf("ok_height\r\n");
-      //       height = (float)mavlink_msg_distance_sensor_get_current_distance(&msg);
-      //       printf("height:%f\r\n", height);
-      //       break;
-      //     // case MAVLINK_MSG_ID_VFR_HUD:
-      //     //   printf("ok_height\r\n");
-      //     //   height = mavlink_msg_vfr_hud_get_alt(&msg);
-      //     //   printf("height:%f\r\n", height);
-      //     //   break;
-      //     case MAVLINK_MSG_ID_HIGHRES_IMU:
-      //       printf("okk_height!\r\n");
-      //       height = mavlink_msg_highres_imu_get_pressure_alt(&msg);
-      //       printf("height:%f\r\n", height);
-      //       break;
-      //     case MAVLINK_MSG_ID_HIL_SENSOR:
-      //       printf("okkk_height!\r\n");
-      //       height = mavlink_msg_hil_sensor_get_pressure_alt(&msg);
-      //       printf("height:%f\r\n", height);
-      //       break;
-      //     case MAVLINK_MSG_ID_HEARTBEAT:
-      //       printf("ok\r\n");
-      //       break;
-      //     default:
-      //       break;
-      //   }
-      //   LL_USART_DisableIT_RXNE(USART3);
-      //   BSP_USART_StartIT_LL(USART3);
-      // }
-      // if(!write_fifo(&mav_fifo, data))
-      // {
-      //   uint8_t fifo_data;
-      //   while(read_fifo(&mav_fifo, &fifo_data))
-      //   {
-      //     printf("ok\r\n");
-      //     if(mavlink_parse_char(MAVLINK_COMM_0, fifo_data, &msg, &status))
-      //     {
-      //       //mavlink_distance_sensor_t dis_msg;
-      //       switch (msg.msgid)
-      //       {
-      //         case MAVLINK_MSG_ID_ATTITUDE:
-      //            pitch = mavlink_msg_attitude_get_pitch(&msg);
-      //           yaw = mavlink_msg_attitude_get_yaw(&msg);
-      //           roll = mavlink_msg_attitude_get_roll(&msg);
-			// 		      printf("pitch:%f, roll:%f\r\n", pitch, roll);
-      //           break;
-      //     // case MAVLINK_MSG_ID_DISTANCE_SENSOR:
-      //     //   mavlink_msg_distance_sensor_decode(&msg, &dis_msg);
-      //     //   height = (float)dis_msg.current_distance;
-      //     //   printf("height:%f\r\n", height);
-      //     //   break;
-      //         case MAVLINK_MSG_ID_HEARTBEAT:
-      //           printf("ok\r\n");
-      //           break;
-      //         default:
-      //           break;
-      //       }
-      //     }
-      //   }
-      //   write_fifo(&mav_fifo, data);
-      //   LL_USART_DisableIT_RXNE(USART3);
-      //   BSP_USART_StartIT_LL(USART3);
-      // }
-      
-      // if(data == 0x23)  //表示字符 '#',即约定的通信包开头
-      // {
-      //   UART3_Frame_Flag = 1; 
-      // }
-      // if((USART3_RX_STA & (1<<15))==0 && (UART3_Frame_Flag==1))
-      // {
-      //   TIM13->CNT = 0;    //定时器2清空
-      //   if(USART3_RX_STA == 0)    //新一轮接收开始
-      //   {
-      //     TIM13_Set(1);
-      //     Recv_Cnt_UART3 = 0;
-      //   }
-      //   USART3_RX_BUF[USART3_RX_STA++] = data;  //存入接收缓冲区
-      //   Recv_Cnt_UART3 ++;  //接收计数
-      //   if(Recv_Cnt_UART3>=11)   //接满一个通信包的长度
-			// 	{
-      //     Recv_Cnt_UART3=0;
-      //     UART3_Frame_Flag = 0;
-			// 	  USART3_RX_STA |= 1<<15;				 //强制标记接收完成
-			//     LL_USART_DisableIT_RXNE(USART3);   //关闭接收非空中断
-			// 	}
-      // }
+      //printf("%c", data);
+      static uint8_t usart3_index = 0, rebuf[20] = {0};
+      rebuf[usart3_index++] = data;
+      if(rebuf[0] != 0x5a) usart3_index = 0;    //帧头不对
+      if(usart3_index==2 && rebuf[1]!=0x5a) usart3_index = 0; //帧头不对
+      if(usart3_index > 3)    //表示已经收到byte3->数据量
+      {
+        if(usart3_index == rebuf[3] + 5){  //接收完一帧数据
+          if(Receive_ok == 0){                    //当数据在main中处理后才接收新数据
+            //printf("receive a full\r\n");
+            memcpy(re_buf_Data, rebuf, 8);    //拷贝接收到的数据
+            Receive_ok = 1;                   //标志已经接收完成
+          }
+          usart3_index = 0;   //清空接收缓存数量
+          Receive_ok = 1;
+          LL_USART_DisableIT_RXNE(USART3);
+        }
+      }
     }
     /**************串口5中断待添加，调试成功后将串口1(type-c)替换成串口5即可********/
 	}

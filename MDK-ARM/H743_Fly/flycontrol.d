@@ -53,8 +53,8 @@ h743_fly\flycontrol.o: ../Inc/flyControl.h
 h743_fly\flycontrol.o: ../Inc/beep.h
 h743_fly\flycontrol.o: ../Inc/led.h
 h743_fly\flycontrol.o: ../Inc/uart_api.h
+h743_fly\flycontrol.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\string.h
 h743_fly\flycontrol.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 h743_fly\flycontrol.o: ../Inc/coderDecoder.h
 h743_fly\flycontrol.o: F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\arm_math.h
 h743_fly\flycontrol.o: F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm7.h
-h743_fly\flycontrol.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\string.h
