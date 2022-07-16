@@ -3,7 +3,7 @@ h743_fly\stm32h7xx_ll_exti.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_e
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/CMSIS/Include/core_cm7.h
-h743_fly\stm32h7xx_ll_exti.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stdint.h
+h743_fly\stm32h7xx_ll_exti.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/CMSIS/Include/cmsis_version.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -15,8 +15,8 @@ h743_fly\stm32h7xx_ll_exti.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-h743_fly\stm32h7xx_ll_exti.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stddef.h
-h743_fly\stm32h7xx_ll_exti.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\math.h
+h743_fly\stm32h7xx_ll_exti.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+h743_fly\stm32h7xx_ll_exti.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc_ex.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio.h
 h743_fly\stm32h7xx_ll_exti.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_gpio_ex.h

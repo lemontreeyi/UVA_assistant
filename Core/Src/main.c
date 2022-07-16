@@ -36,6 +36,7 @@
 #include "beep.h"
 #include "coderDecoder.h"
 #include "flyControl.h"
+#include "Matrix.h"
 #include "MAV_Altitude_Decode.h"
 #define TAKEOFF
 
@@ -151,6 +152,15 @@ void heartbeat_Mavlink(void);
 int  RC_Read(void);
 void Back_to_Center(void);
 	
+//光流
+bool is_cxof_ready = 1;
+float distance_to_station[4] = {0, 0, 0, 0};
+float location[2] = {0, 0};
+uint16_t d_location[2] = {0 ,0};
+bool getdistance(float distance[])
+{
+  return 0;
+}
 
 void end(void)
 {
@@ -368,8 +378,26 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	printf("test begin!!!\r\n");
   
+  //先计算一次，舍弃掉此次
+  getdistance(distance_to_station);
+  calculate_location(distance_to_station, location);
+  calculate_cxof(location, d_location);
+
   while (1)
   {
+    if(is_cxof_ready)
+    {
+      if(getdistance(distance_to_station))
+        is_cxof_ready = 0;
+    }
+    else
+    {
+      calculate_location(distance_to_station, location);
+      calculate_cxof(location, d_location);
+      Pack_cxof_buf(d_location[0], d_location[1], 100, cxof_buf);
+      Send_cxof_buf(UART5, cxof_buf, 9);
+      is_cxof_ready = 1;
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
