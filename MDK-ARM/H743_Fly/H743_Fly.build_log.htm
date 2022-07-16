@@ -21,31 +21,12 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
 Dialog DLL:      TCM.DLL V1.27.0.0
  
 <h2>Project:</h2>
-f:\User\lemon\Desktop\UVA_assistant£¨11£©\MDK-ARM\H743_Fly.uvprojx
+f:\User\lemon\Desktop\UVA_assistant\MDK-ARM\H743_Fly.uvprojx
 Project File Date:  07/16/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
 Build target 'H743_Fly'
-compiling encodedDecoder.c...
-compiling flyControl.c...
-..\Src\flyControl.c(116): warning:  #223-D: function "abs" declared implicitly
-  		PID_Control_param = (abs(CurrentPoint - SetPoint) > 85)?  1.3  : 1.0;
-..\Src\flyControl.c(129): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  		if(flag) out *= 0.5;
-..\Src\flyControl.c(148): warning:  #223-D: function "abs" declared implicitly
-  	out = abs((int)out);
-..\Src\flyControl.c(274): warning:  #223-D: function "abs" declared implicitly
-  	if(abs(current_height - target_height) < 100)
-..\Src\flyControl.c(408): warning:  #223-D: function "abs" declared implicitly
-  		if(abs(point_x - SetPoint_x) < 45)
-..\Src\flyControl.c(425): warning:  #223-D: function "abs" declared implicitly
-  		if(abs(point_y - SetPoint_y) < 45)
-..\Src\flyControl.c(397): warning:  #550-D: variable "x"  was set but never used
-  	int x = 0;
-..\Src\flyControl.c(398): warning:  #550-D: variable "y"  was set but never used
-  	int y = 0;
-..\Src\flyControl.c: 8 warnings, 0 errors
 compiling main.c...
 ../Core/Src/main.c(486): warning:  #223-D: function "abs" declared implicitly
           if(abs(distance - 1500) > 100 && is_takeoff==1)
@@ -77,11 +58,11 @@ compiling main.c...
   	uint32_t len = 0;
 ../Core/Src/main.c(280): warning:  #177-D: variable "str"  was declared but never referenced
     uint8_t str[] = "hello world\r\n";
-../Core/Src/main.c(2340): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(2341): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;	
-../Core/Src/main.c(2366): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(2367): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;	
-../Core/Src/main.c(2397): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(2398): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;
 ../Core/Src/main.c(83): warning:  #177-D: variable "Recv_Cnt_UART1"  was declared but never referenced
   static int Recv_Cnt_UART1 = 0;
@@ -101,9 +82,9 @@ compiling main.c...
   static float height = 0;
 ../Core/Src/main.c: 26 warnings, 0 errors
 linking...
-Program Size: Code=36488 RO-data=1336 RW-data=340 ZI-data=4012  
+Program Size: Code=36520 RO-data=1336 RW-data=340 ZI-data=4012  
 FromELF: creating hex file...
-"H743_Fly\H743_Fly.axf" - 0 Error(s), 34 Warning(s).
+"H743_Fly\H743_Fly.axf" - 0 Error(s), 26 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -121,7 +102,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:19
+Build Time Elapsed:  00:00:11
 </pre>
 </body>
 </html>

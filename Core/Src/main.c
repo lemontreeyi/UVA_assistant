@@ -1770,6 +1770,7 @@ void   USART_RxCallback(USART_TypeDef *huart)
 		if(huart == UART5)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
+      printf("%c", data);
       static uint8_t uart5_cnt = 0, uwb_id = 0;
       if(!get_uwb_ready)
       {
