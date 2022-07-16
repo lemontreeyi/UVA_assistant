@@ -154,14 +154,14 @@ void Back_to_Center(void);
 	
 //光流
 uint8_t uwb_buf[4][20] = {0};
+bool uwb_receive_ready = 1;
+bool get_uwb_ready = 0;
 bool is_cxof_ready = 1;
-uint16_t distance_to_station[4] = {0, 0, 0, 0};
-uint16_t location[3] = {0, 0, 0};
+float distance_to_station[4] = {0, 0, 0, 0};
+float location[3] = {0, 0, 0};
 short d_location[2] = {0 ,0};
-bool getdistance(uint16_t distance[])
-{
-  return 0;
-}
+bool Get_UWB_distance(float distance[]);
+
 
 void end(void)
 {
@@ -380,7 +380,7 @@ int main(void)
 	printf("test begin!!!\r\n");
   
   //先计算一次，舍弃掉此次
-  getdistance(distance_to_station);
+  Get_UWB_distance(distance_to_station);
   calculate_location(distance_to_station, location);
   calculate_cxof(location, d_location);
 
@@ -388,7 +388,7 @@ int main(void)
   {
     if(is_cxof_ready)
     {
-      if(getdistance(distance_to_station)) is_cxof_ready = 0;
+      if(Get_UWB_distance(distance_to_station)) is_cxof_ready = 0;
     }
     else
     {
@@ -1746,6 +1746,20 @@ float filter_av(char filter_id)
 	return sum/N;
 }
 
+/*根据串口接收的数据获取4个UWB基站的距离*/
+bool Get_UWB_distance(float distance[])
+{
+  if(get_uwb_ready)
+  {
+    encodeDecode_UWBpacket(uwb_buf, distance_to_station);   //送入解析函数，得到4个基站的距离
+    get_uwb_ready = 0;                                      //清除uwb标志位，串口再次开始接收
+    BSP_USART_StartIT_LL(UART5);                            //清除串口5的相关标志位&开启接收中断
+    for(int i=0;i<4;i++) memset(uwb_buf[i], 0, 20);         //重置接收数组
+    return true;
+  }
+  else return false;
+}
+
 /****************************串口接收中断回调*****************************/
 void   USART_RxCallback(USART_TypeDef *huart)
 { 
@@ -1756,30 +1770,35 @@ void   USART_RxCallback(USART_TypeDef *huart)
 		if(huart == UART5)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
-      /*测试代码*/
-			if(data == 0x23)  //表示字符 '#',即约定的通信包开头
-			{
-				UART1_Frame_Flag = 1;
-			}
-			//printf("USART1_RX_STA =%d data = %d \r\n",USART1_RX_STA , data);
-      if(((USART1_RX_STA  & (1<<15))==0) && (UART1_Frame_Flag == 1))	//还可以接收数据 ,最高位不为1.
-			{
-        TIM12->CNT=0;				//计数器清空
-        if(USART1_RX_STA == 0)  //新一轮接收数据
+      static uint8_t uart5_cnt = 0, uwb_id = 0;
+      if(!get_uwb_ready)
+      {
+        if(uart5_cnt < 10)
         {
-          Recv_Cnt_UART1 = 0;
-          TIM12_Set(1);  //中断方式开启定时器3
-        } 
-        USART1_RX_BUF[USART1_RX_STA++] = data;				//记录接收到的值
-				Recv_Cnt_UART1 ++;  //计数值增1
-				if(Recv_Cnt_UART1 >= 11){
-          //接满一个通信包的长度
-          Recv_Cnt_UART1=0;
-          UART1_Frame_Flag = 0;
-				 USART1_RX_STA |= 1<<15;				 //强制标记接收完成
-			   LL_USART_DisableIT_RXNE(USART1);   //关闭接收非空中断
+          for(int i=0;i<4;i++) uwb_buf[i][uart5_cnt++] = data;
+          //用接收到的前三个字节作为校验位
+          if(uwb_buf[0][0] != 0x24) uart5_cnt = 0;
+          if(uart5_cnt==2 && uwb_buf[0][1]!=0x44) uart5_cnt = 0;
+          if(uart5_cnt==3 && uwb_buf[0][2]!=0x49) uart5_cnt = 0;
         }
-			}	
+        else if(uart5_cnt==10)
+        {
+          uwb_id = data;
+          uwb_buf[uwb_id][uart5_cnt++] = data;
+        }
+        else{
+          uwb_buf[uwb_id][uart5_cnt++] = data;
+          //接收完一个完整的通信包后清零计数
+          if(data == 0x0A && uwb_buf[uwb_id][uart5_cnt-2] == 0x0D) uart5_cnt = 0;
+        }
+      }
+      uwb_receive_ready = 1;
+      for(int i=0;i<4;i++)
+      {
+        uwb_receive_ready &= ((uwb_buf[i][16]==0x0D) && (uwb_buf[i][17]==0x0A)) ? true:false;
+      }
+      get_uwb_ready = uwb_receive_ready;    //如果4个基站都接收完成，则将uwb状态位置1，否则置0
+      if(get_uwb_ready) LL_USART_DisableIT_RXNE(UART5);     //每次接收完后中止接收中断
 		}
 	 //***********串口2中断*********************
 		else if(huart == USART2)
