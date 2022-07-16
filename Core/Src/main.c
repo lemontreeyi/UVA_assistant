@@ -156,7 +156,7 @@ void Back_to_Center(void);
 uint8_t uwb_buf[4][20] = {0};
 bool is_cxof_ready = 1;
 uint16_t distance_to_station[4] = {0, 0, 0, 0};
-uint16_t location[2] = {0, 0};
+uint16_t location[3] = {0, 0, 0};
 short d_location[2] = {0 ,0};
 bool getdistance(uint16_t distance[])
 {
