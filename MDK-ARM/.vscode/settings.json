@@ -8,6 +8,7 @@
         "uart_api.h": "c",
         "stm32h7xx_hal.h": "c",
         "algorithm": "c",
-        "xstring": "c"
+        "xstring": "c",
+        "matrix.h": "c"
     }
 }
