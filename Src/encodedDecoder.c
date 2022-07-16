@@ -1,5 +1,4 @@
 #include "coderDecoder.h"
-#include "main.h"
 #include "stdio.h"
 #include "uart_api.h"
 #include "flyControl.h"
@@ -62,6 +61,23 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 	else return 0;
 }
 
-
+/*
+解析uwb串口发过来的通信包，仅适用于distance不超过10m的情况！
+paragram:
+inbuf->串口收到来自四个基站的通信包数组
+dist ->四个基站的距离数据数组
+*/
+void encodeDecode_UWBpacket(uint8_t **inbuf, uint8_t *dist)
+{
+	int index = 0,s_id;
+	uint8_t integer, decimal;
+	for(int i=0;i<4;i++)
+	{
+		s_id = inbuf[i][10];
+		integer = inbuf[i][12];							//m为单位
+		decimal = inbuf[i][14] * 10 + inbuf[i][15];		//cm为单位
+		*(dist + s_id - 1) = integer * 100 + decimal;	//归一化到cm为单位
+	}
+}
 
 

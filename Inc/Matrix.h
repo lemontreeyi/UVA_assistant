@@ -15,12 +15,12 @@
 
 typedef struct Matrix
 {
-    float** matrix;
+    uint16_t** matrix;
     int line;
     int cols;
 } Matrix;
 
-void calculate_location(float d[], float location[]);
-void calculate_cxof(float location[], uint16_t d_location[]);
+void calculate_location(uint16_t d[], uint16_t location[]);
+void calculate_cxof(uint16_t location[], short d_location[]);
 
 #endif

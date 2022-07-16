@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-Matrix creat_matrix(float* e, int line, int cols)
+//创建一个矩阵对象
+Matrix creat_matrix(uint16_t* e, int line, int cols)
 {
     Matrix m;
     m.line = line;
     m.cols = cols;
-    m.matrix = (float**)malloc(sizeof(float*) * line);
+    m.matrix = (uint16_t**)malloc(sizeof(uint16_t*) * line);
     for(int i = 0; i < line; ++i)
     {
-        m.matrix[i] = (float*)malloc(sizeof(float) * cols);
+        m.matrix[i] = (uint16_t*)malloc(sizeof(uint16_t) * cols);
     }
     for(int i = 0; i < line; ++i)
     {
@@ -25,7 +26,7 @@ Matrix creat_matrix(float* e, int line, int cols)
 //矩阵乘法
 Matrix multiply_matrix(Matrix m1, Matrix m2)
 {
-    float* e = (float*)malloc(sizeof(float) * (m1.line * m2.cols));
+    uint16_t* e = (uint16_t*)malloc(sizeof(uint16_t) * (m1.line * m2.cols));
     for(int i = 0; i < m1.line; ++i)
     {
         for(int j = 0; j < m2.cols; ++j)
@@ -48,9 +49,9 @@ Matrix matrix_T(Matrix m)
     Matrix temp;
     temp.line = m.cols;
     temp.cols = m.line;
-    temp.matrix = (float**)malloc(sizeof(float*) * temp.line);
+    temp.matrix = (uint16_t**)malloc(sizeof(uint16_t*) * temp.line);
     for(int i = 0; i < temp.line; ++i)
-        temp.matrix[i] = (float*)malloc(sizeof(float) * temp.cols);
+        temp.matrix[i] = (uint16_t*)malloc(sizeof(uint16_t) * temp.cols);
     for(int i = 0; i < temp.line; ++i)
     {
         for(int j = 0; j < temp.cols; ++j)
@@ -64,8 +65,8 @@ Matrix matrix_T(Matrix m)
 //求2*2矩阵的逆矩阵
 Matrix matrix_inv(Matrix m)
 {
-    float delta = m.matrix[0][0] * m.matrix[1][1] - m.matrix[0][1] * m.matrix[1][0];
-    float e[4] = {m.matrix[1][1] / delta, -m.matrix[0][1] / delta, -m.matrix[1][0] / delta, m.matrix[0][0] / delta};
+    uint16_t delta = m.matrix[0][0] * m.matrix[1][1] - m.matrix[0][1] * m.matrix[1][0];
+    uint16_t e[4] = {m.matrix[1][1] / delta, -m.matrix[0][1] / delta, -m.matrix[1][0] / delta, m.matrix[0][0] / delta};
     return creat_matrix(e, 2, 2);
 }
 
@@ -97,15 +98,15 @@ void delete_matrix(Matrix m)
 //参数说明：
 //pamar1: 存放四个距离的数组
 //pamar2,pamar3: 计算出的飞行器的当前坐标
-void calculate_location(float d[], float location[])
+void calculate_location(uint16_t d[], uint16_t location[])
 {
-    float e1[3] = {
+    uint16_t e1[3] = {
         STATION1_X * STATION1_X - STATION4_X * STATION4_X + STATION1_Y * STATION1_Y - STATION4_Y * STATION4_Y - d[0] * d[0] + d[3] * d[3],
         STATION2_X * STATION2_X - STATION4_X * STATION4_X + STATION2_Y * STATION2_Y - STATION4_Y * STATION4_Y - d[1] * d[1] + d[3] * d[3],
         STATION3_X * STATION3_X - STATION4_X * STATION4_X + STATION3_Y * STATION3_Y - STATION4_Y * STATION4_Y - d[2] * d[2] + d[3] * d[3]
     };
     Matrix b = creat_matrix(e1, 3, 1);
-    float e2[6] = {
+    uint16_t e2[6] = {
         2 * (STATION1_X - STATION4_X), 2 * (STATION1_Y - STATION4_Y),
         2 * (STATION2_X - STATION4_X), 2 * (STATION2_Y - STATION4_Y),
         2 * (STATION3_X - STATION4_X), 2 * (STATION3_Y - STATION4_Y)
@@ -127,9 +128,9 @@ void calculate_location(float d[], float location[])
 /*
 根据飞行器的位置计算光流
 */
-void calculate_cxof(float location[], uint16_t d_location[])
+void calculate_cxof(uint16_t location[], short d_location[])
 {
-    static float pre_location[2] = {0, 0};
+    static uint16_t pre_location[2] = {0, 0};
     d_location[0] = (short)(location[0] - pre_location[0]);
     d_location[1] = (short)(location[1] - pre_location[1]);
 

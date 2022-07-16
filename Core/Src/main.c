@@ -153,11 +153,12 @@ int  RC_Read(void);
 void Back_to_Center(void);
 	
 //光流
+uint8_t uwb_buf[4][20] = {0};
 bool is_cxof_ready = 1;
-float distance_to_station[4] = {0, 0, 0, 0};
-float location[2] = {0, 0};
-uint16_t d_location[2] = {0 ,0};
-bool getdistance(float distance[])
+uint16_t distance_to_station[4] = {0, 0, 0, 0};
+uint16_t location[2] = {0, 0};
+short d_location[2] = {0 ,0};
+bool getdistance(uint16_t distance[])
 {
   return 0;
 }
@@ -387,8 +388,7 @@ int main(void)
   {
     if(is_cxof_ready)
     {
-      if(getdistance(distance_to_station))
-        is_cxof_ready = 0;
+      if(getdistance(distance_to_station)) is_cxof_ready = 0;
     }
     else
     {
@@ -440,7 +440,6 @@ int main(void)
 				//BSP_USART_SendArray_LL(USART1, FreeBuffer_Encode, 11);
         if(rxlen_usart_2 == 11) {
           cmd = encodeDecode_Analysis(FreeBuffer_Encode,encodeAnswer,rxlen_usart_2);
-
         } //分析字符串
 				rxlen_usart_2=0;
 				USART2_RX_STA=0;
@@ -456,9 +455,6 @@ int main(void)
         {
           FreeBuffer_Encode_3[i3] = USART3_RX_BUF[i3];    //将串口3接收的数据传输到自由缓冲区
         }
-				//printf("%s", FreeBuffer_Encode_3);
-        //解码处理...->待写；注意多个设备向飞控助手串口发送时，飞控助手如何全部处理
-        //cmd=encodeDecode_Analysis(FreeBuffer_Encode_3,encodeAnswer,rxlen_usart_3); //分析字符串
         rxlen_usart_3 = 0;
         USART3_RX_STA = 0;
         BSP_USART_StartIT_LL( USART3 );   //启动下一次接收

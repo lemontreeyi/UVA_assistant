@@ -3,49 +3,157 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.17.0.0
-Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: X Kraft, XKraft, LIC=RC9X7-EPC47-AQ80M-XPAKG-NX0RT-V0U3E
+IDE-Version: ¦ÌVision V5.23.0.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 2041729, HP Inc., LIC=P6F56-DKL4I-JPTZQ-NPAAZ-GJ9CY-5X6VK
  
 Tool Versions:
-Toolchain:       MDK-ARM Standard  Version: 5.17
-Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
-C Compiler:      Armcc.exe V5.06 update 1 (build 61)
-Assembler:       Armasm.exe V5.06 update 1 (build 61)
-Linker/Locator:  ArmLink.exe V5.06 update 1 (build 61)
-Library Manager: ArmAr.exe V5.06 update 1 (build 61)
-Hex Converter:   FromElf.exe V5.06 update 1 (build 61)
-CPU DLL:         SARMCM3.DLL V5.17
-Dialog DLL:      DCM.DLL V1.13.4.0
+Toolchain:       MDK-ARM Professional  Version: 5.23
+Toolchain Path:  F:\Tools\KEIL_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 4 (build 422)
+Assembler:       Armasm.exe V5.06 update 4 (build 422)
+Linker/Locator:  ArmLink.exe V5.06 update 4 (build 422)
+Library Manager: ArmAr.exe V5.06 update 4 (build 422)
+Hex Converter:   FromElf.exe V5.06 update 4 (build 422)
+CPU DLL:         SARMCM3.DLL V5.23
+Dialog DLL:      DCM.DLL V1.15.0.0
 Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
-Dialog DLL:      TCM.DLL V1.14.6.0
+Dialog DLL:      TCM.DLL V1.27.0.0
  
 <h2>Project:</h2>
-d:\study\ardupilot\UVA_assistant-main\MDK-ARM\H743_Fly.uvprojx
+f:\User\lemon\Desktop\UVA_assistant\MDK-ARM\H743_Fly.uvprojx
 Project File Date:  07/16/2022
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
 Build target 'H743_Fly'
-"H743_Fly\H743_Fly.axf" - 0 Error(s), 0 Warning(s).
+assembling startup_stm32h743xx.s...
+compiling Matrix.c...
+compiling stm32h7xx_ll_exti.c...
+compiling MAV_Altitude_Decode.c...
+compiling beep.c...
+compiling uart_api.c...
+compiling led.c...
+compiling stm32h7xx_it.c...
+compiling key.c...
+compiling stm32h7xx_hal_msp.c...
+compiling encodedDecoder.c...
+compiling flyControl.c...
+..\Src\flyControl.c(116): warning:  #223-D: function "abs" declared implicitly
+  		PID_Control_param = (abs(CurrentPoint - SetPoint) > 85)?  1.3  : 1.0;
+..\Src\flyControl.c(129): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  		if(flag) out *= 0.5;
+..\Src\flyControl.c(148): warning:  #223-D: function "abs" declared implicitly
+  	out = abs((int)out);
+..\Src\flyControl.c(274): warning:  #223-D: function "abs" declared implicitly
+  	if(abs(current_height - target_height) < 100)
+..\Src\flyControl.c(408): warning:  #223-D: function "abs" declared implicitly
+  		if(abs(point_x - SetPoint_x) < 45)
+..\Src\flyControl.c(425): warning:  #223-D: function "abs" declared implicitly
+  		if(abs(point_y - SetPoint_y) < 45)
+..\Src\flyControl.c(397): warning:  #550-D: variable "x"  was set but never used
+  	int x = 0;
+..\Src\flyControl.c(398): warning:  #550-D: variable "y"  was set but never used
+  	int y = 0;
+..\Src\flyControl.c: 8 warnings, 0 errors
+compiling main.c...
+../Core/Src/main.c(490): warning:  #223-D: function "abs" declared implicitly
+          if(abs(distance - 1500) > 100 && is_takeoff==1)
+../Core/Src/main.c(258): warning:  #550-D: variable "cmd"  was set but never used
+  	uint8_t cmd=0;
+../Core/Src/main.c(259): warning:  #177-D: variable "key"  was declared but never referenced
+  	uint8_t key;
+../Core/Src/main.c(261): warning:  #550-D: variable "ContrlTime_x"  was set but never used
+    uint32_t ContrlTime_x = 0;
+../Core/Src/main.c(262): warning:  #550-D: variable "ContrlTime_y"  was set but never used
+    uint32_t ContrlTime_y = 0;
+../Core/Src/main.c(267): warning:  #177-D: variable "Ctrl_flag_time"  was declared but never referenced
+    uint32_t Ctrl_flag_time = 0;
+../Core/Src/main.c(269): warning:  #177-D: variable "decodetimer"  was declared but never referenced
+  	uint32_t decodetimer;
+../Core/Src/main.c(272): warning:  #177-D: variable "flag_rx2"  was declared but never referenced
+    int flag_rx2 = 0;
+../Core/Src/main.c(273): warning:  #177-D: variable "msg1"  was declared but never referenced
+  	mavlink_message_t msg1;
+../Core/Src/main.c(274): warning:  #177-D: variable "msg2"  was declared but never referenced
+  	mavlink_message_t msg2;
+../Core/Src/main.c(275): warning:  #177-D: variable "msg_tmp"  was declared but never referenced
+  	mavlink_message_t msg_tmp;
+../Core/Src/main.c(276): warning:  #177-D: variable "msg_altitude"  was declared but never referenced
+  	mavlink_message_t msg_altitude;
+../Core/Src/main.c(277): warning:  #177-D: variable "msg_request_data_stream"  was declared but never referenced
+  	mavlink_message_t msg_request_data_stream;
+../Core/Src/main.c(278): warning:  #177-D: variable "len"  was declared but never referenced
+  	uint32_t len = 0;
+../Core/Src/main.c(279): warning:  #177-D: variable "str"  was declared but never referenced
+    uint8_t str[] = "hello world\r\n";
+../Core/Src/main.c(2325): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;	
+../Core/Src/main.c(2351): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;	
+../Core/Src/main.c(2382): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;
+../Core/Src/main.c(85): warning:  #177-D: variable "Recv_Cnt_UART3"  was declared but never referenced
+  static int Recv_Cnt_UART3 = 0;
+../Core/Src/main.c(88): warning:  #177-D: variable "UART3_Frame_Flag"  was declared but never referenced
+  static int UART3_Frame_Flag = 0;
+../Core/Src/main.c(89): warning:  #177-D: variable "heartbeat"  was declared but never referenced
+  static int heartbeat = 0;
+../Core/Src/main.c(90): warning:  #177-D: variable "MAVLink_message_length"  was declared but never referenced
+  static int MAVLink_message_length = 0;
+../Core/Src/main.c(91): warning:  #177-D: variable "packet"  was declared but never referenced
+  static mavlink_distance_sensor_t packet;
+../Core/Src/main.c(92): warning:  #177-D: variable "height"  was declared but never referenced
+  static float height = 0;
+../Core/Src/main.c: 24 warnings, 0 errors
+compiling stm32h7xx_hal_adc_ex.c...
+compiling stm32h7xx_hal_adc.c...
+compiling stm32h7xx_hal_gpio.c...
+compiling stm32h7xx_hal_rcc.c...
+compiling stm32h7xx_hal_hsem.c...
+compiling stm32h7xx_hal_flash_ex.c...
+compiling stm32h7xx_hal_flash.c...
+compiling stm32h7xx_hal_rcc_ex.c...
+compiling stm32h7xx_hal_dma_ex.c...
+compiling stm32h7xx_hal_pwr.c...
+compiling stm32h7xx_hal_mdma.c...
+compiling stm32h7xx_hal_dma.c...
+compiling stm32h7xx_hal_pwr_ex.c...
+compiling stm32h7xx_hal.c...
+compiling stm32h7xx_hal_i2c_ex.c...
+compiling stm32h7xx_hal_cortex.c...
+compiling stm32h7xx_hal_exti.c...
+compiling stm32h7xx_hal_i2c.c...
+compiling stm32h7xx_hal_tim_ex.c...
+compiling stm32h7xx_ll_rcc.c...
+compiling stm32h7xx_ll_utils.c...
+compiling stm32h7xx_hal_tim.c...
+compiling stm32h7xx_ll_gpio.c...
+compiling stm32h7xx_ll_usart.c...
+compiling system_stm32h7xx.c...
+compiling stm32h7xx_ll_dma.c...
+linking...
+Program Size: Code=35860 RO-data=1324 RW-data=352 ZI-data=3920  
+FromELF: creating hex file...
+"H743_Fly\H743_Fly.axf" - 0 Error(s), 32 Warning(s).
 
 <h2>Software Packages used:</h2>
 
 Package Vendor: ARM
-                http://www.keil.com/pack/ARM.CMSIS.4.5.0.pack
-                ARM::CMSIS:CORE:4.3.0
+                http://www.keil.com/pack/ARM.CMSIS.5.0.1.pack
+                ARM::CMSIS:CORE:5.0.1
                 CMSIS (Cortex Microcontroller Software Interface Standard)
-   * Component: CORE Version: 4.3.0
+   * Component: CORE Version: 5.0.1
 
 <h2>Collection of Component include folders:</h2>
-  d:\study\ardupilot\UVA_assistant-main\MDK-ARM\RTE
-  C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
-  C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include
+  .\RTE\_H743_Fly
+  F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
+  F:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include
 
 <h2>Collection of Component Files used:</h2>
 
-   * Component: ARM::CMSIS:CORE:4.3.0
-Build Time Elapsed:  00:00:00
+   * Component: ARM::CMSIS:CORE:5.0.1
+Build Time Elapsed:  00:01:50
 </pre>
 </body>
 </html>
