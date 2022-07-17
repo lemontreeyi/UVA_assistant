@@ -22,14 +22,12 @@ Dialog DLL:      TCM.DLL V1.27.0.0
  
 <h2>Project:</h2>
 f:\User\lemon\Desktop\UVA_assistant\MDK-ARM\H743_Fly.uvprojx
-Project File Date:  07/16/2022
+Project File Date:  07/17/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
 Build target 'H743_Fly'
 compiling main.c...
-../Core/Src/main.c(486): warning:  #223-D: function "abs" declared implicitly
-          if(abs(distance - 1500) > 100 && is_takeoff==1)
 ../Core/Src/main.c(259): warning:  #550-D: variable "cmd"  was set but never used
   	uint8_t cmd=0;
 ../Core/Src/main.c(260): warning:  #177-D: variable "key"  was declared but never referenced
@@ -58,11 +56,11 @@ compiling main.c...
   	uint32_t len = 0;
 ../Core/Src/main.c(280): warning:  #177-D: variable "str"  was declared but never referenced
     uint8_t str[] = "hello world\r\n";
-../Core/Src/main.c(2341): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(2344): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;	
-../Core/Src/main.c(2367): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(2370): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;	
-../Core/Src/main.c(2398): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(2401): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;
 ../Core/Src/main.c(83): warning:  #177-D: variable "Recv_Cnt_UART1"  was declared but never referenced
   static int Recv_Cnt_UART1 = 0;
@@ -80,11 +78,11 @@ compiling main.c...
   static mavlink_distance_sensor_t packet;
 ../Core/Src/main.c(92): warning:  #177-D: variable "height"  was declared but never referenced
   static float height = 0;
-../Core/Src/main.c: 26 warnings, 0 errors
+../Core/Src/main.c: 25 warnings, 0 errors
 linking...
-Program Size: Code=36520 RO-data=1336 RW-data=340 ZI-data=4012  
+Program Size: Code=35664 RO-data=1248 RW-data=332 ZI-data=4012  
 FromELF: creating hex file...
-"H743_Fly\H743_Fly.axf" - 0 Error(s), 26 Warning(s).
+"H743_Fly\H743_Fly.axf" - 0 Error(s), 25 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -102,7 +100,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:11
+Build Time Elapsed:  00:00:10
 </pre>
 </body>
 </html>

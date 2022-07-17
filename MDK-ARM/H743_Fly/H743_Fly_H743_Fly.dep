@@ -1,9 +1,9 @@
 Dependencies for Project 'H743_Fly', Target 'H743_Fly': (DO NOT MODIFY !)
-F (startup_stm32h743xx.s)(0x62D01085)(--cpu Cortex-M7.fp.dp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include--pd "__UVISION_VERSION SETA 523" --pd "_RTE_ SETA 1" --pd "STM32H743xx SETA 1"--list startup_stm32h743xx.lst --xref -o h743_fly\startup_stm32h743xx.o --depend h743_fly\startup_stm32h743xx.d)
+F (startup_stm32h743xx.s)(0x62D39D74)(--cpu Cortex-M7.fp.dp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include--pd "__UVISION_VERSION SETA 523" --pd "_RTE_ SETA 1" --pd "STM32H743xx SETA 1"--list startup_stm32h743xx.lst --xref -o h743_fly\startup_stm32h743xx.o --depend h743_fly\startup_stm32h743xx.d)
 F (..\Src\beep.c)(0x62C13178)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\beep.o --omf_browse h743_fly\beep.crf --depend h743_fly\beep.d)
 I (../Inc/beep.h)(0x62C13178)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -53,7 +53,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h)(0x62629A26)
 F (..\Src\encodedDecoder.c)(0x62D27425)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\encodeddecoder.o --omf_browse h743_fly\encodeddecoder.crf --depend h743_fly\encodeddecoder.d)
 I (../Inc/coderDecoder.h)(0x62D2740A)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -110,7 +110,7 @@ I (F:\Tools\KEIL_v5\ARM\ARMCC\include\stdbool.h)(0x57F606B8)
 F (..\Src\key.c)(0x62C13178)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\key.o --omf_browse h743_fly\key.crf --depend h743_fly\key.d)
 I (../Inc/key.h)(0x62C13178)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -165,7 +165,7 @@ I (F:\Tools\KEIL_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
 F (..\Src\led.c)(0x62C13178)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\led.o --omf_browse h743_fly\led.crf --depend h743_fly\led.d)
 I (../Inc/led.h)(0x62C13178)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -214,7 +214,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dmamux.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h)(0x62629A26)
 F (..\Src\uart_api.c)(0x62D14F84)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\uart_api.o --omf_browse h743_fly\uart_api.crf --depend h743_fly\uart_api.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -267,7 +267,7 @@ I (F:\Tools\KEIL_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
 F (..\MAVLink_Decode\MAV_Altitude_Decode.c)(0x62C13178)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\mav_altitude_decode.o --omf_browse h743_fly\mav_altitude_decode.crf --depend h743_fly\mav_altitude_decode.d)
 I (..\MAVLink_Decode\MAV_Altitude_Decode.h)(0x62C13178)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -431,7 +431,7 @@ I (F:\Tools\KEIL_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
 F (..\Src\flyControl.c)(0x62D10830)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\flycontrol.o --omf_browse h743_fly\flycontrol.crf --depend h743_fly\flycontrol.d)
 I (../Core/Inc/main.h)(0x62C2C01E)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -487,10 +487,15 @@ I (F:\Tools\KEIL_v5\ARM\ARMCC\include\stdbool.h)(0x57F606B8)
 I (../Inc/coderDecoder.h)(0x62D2740A)
 I (F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\arm_math.h)(0x5898498A)
 I (F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm7.h)(0x5898498A)
-F (../Core/Src/main.c)(0x62D2750D)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\main.o --omf_browse h743_fly\main.crf --depend h743_fly\main.d)
+F (..\Src\Matrix.c)(0x62D271DD)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\matrix.o --omf_browse h743_fly\matrix.crf --depend h743_fly\matrix.d)
+I (../Inc/Matrix.h)(0x62D27204)
+I (F:\Tools\KEIL_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
+I (F:\Tools\KEIL_v5\ARM\ARMCC\include\stdlib.h)(0x57F606B8)
+I (F:\Tools\KEIL_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
+F (../Core/Src/main.c)(0x62D3A0DB)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\main.o --omf_browse h743_fly\main.crf --depend h743_fly\main.d)
 I (../Core/Inc/main.h)(0x62C2C01E)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -674,10 +679,10 @@ I (../Inc/coderDecoder.h)(0x62D2740A)
 I (../Inc/flyControl.h)(0x62CA8BEE)
 I (../Inc/Matrix.h)(0x62D27204)
 I (../MAVLink_Decode/MAV_Altitude_Decode.h)(0x62C13178)
-F (../Core/Src/stm32h7xx_it.c)(0x62C2C01D)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_it.o --omf_browse h743_fly\stm32h7xx_it.crf --depend h743_fly\stm32h7xx_it.d)
+F (../Core/Src/stm32h7xx_it.c)(0x62D2B380)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_it.o --omf_browse h743_fly\stm32h7xx_it.crf --depend h743_fly\stm32h7xx_it.d)
 I (../Core/Inc/main.h)(0x62C2C01E)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -724,10 +729,10 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dma.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dmamux.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h)(0x62629A26)
 I (../Core/Inc/stm32h7xx_it.h)(0x62C2C01D)
-F (../Core/Src/stm32h7xx_hal_msp.c)(0x62C40ECE)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_msp.o --omf_browse h743_fly\stm32h7xx_hal_msp.crf --depend h743_fly\stm32h7xx_hal_msp.d)
+F (../Core/Src/stm32h7xx_hal_msp.c)(0x62D2B381)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_msp.o --omf_browse h743_fly\stm32h7xx_hal_msp.crf --depend h743_fly\stm32h7xx_hal_msp.d)
 I (../Core/Inc/main.h)(0x62C2C01E)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -773,11 +778,6 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_gpio.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dma.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dmamux.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h)(0x62629A26)
-F (..\Src\Matrix.c)(0x62D271DD)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\matrix.o --omf_browse h743_fly\matrix.crf --depend h743_fly\matrix.d)
-I (../Inc/Matrix.h)(0x62D27204)
-I (F:\Tools\KEIL_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (F:\Tools\KEIL_v5\ARM\ARMCC\include\stdlib.h)(0x57F606B8)
-I (F:\Tools\KEIL_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_exti.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_ll_exti.o --omf_browse h743_fly\stm32h7xx_ll_exti.crf --depend h743_fly\stm32h7xx_ll_exti.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -790,7 +790,7 @@ I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x62629A26)
 I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x62629A1A)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x62629A26)
@@ -818,7 +818,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_adc.o --omf_browse h743_fly\stm32h7xx_hal_adc.crf --depend h743_fly\stm32h7xx_hal_adc.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -855,7 +855,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_adc_ex.o --omf_browse h743_fly\stm32h7xx_hal_adc_ex.crf --depend h743_fly\stm32h7xx_hal_adc_ex.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -892,7 +892,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_rcc.o --omf_browse h743_fly\stm32h7xx_hal_rcc.crf --depend h743_fly\stm32h7xx_hal_rcc.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -929,7 +929,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_rcc_ex.o --omf_browse h743_fly\stm32h7xx_hal_rcc_ex.crf --depend h743_fly\stm32h7xx_hal_rcc_ex.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -966,7 +966,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_flash.o --omf_browse h743_fly\stm32h7xx_hal_flash.crf --depend h743_fly\stm32h7xx_hal_flash.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1003,7 +1003,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_flash_ex.o --omf_browse h743_fly\stm32h7xx_hal_flash_ex.crf --depend h743_fly\stm32h7xx_hal_flash_ex.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1040,7 +1040,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_gpio.o --omf_browse h743_fly\stm32h7xx_hal_gpio.crf --depend h743_fly\stm32h7xx_hal_gpio.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1077,7 +1077,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_hsem.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_hsem.o --omf_browse h743_fly\stm32h7xx_hal_hsem.crf --depend h743_fly\stm32h7xx_hal_hsem.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1114,7 +1114,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_dma.o --omf_browse h743_fly\stm32h7xx_hal_dma.crf --depend h743_fly\stm32h7xx_hal_dma.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1151,7 +1151,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_dma_ex.o --omf_browse h743_fly\stm32h7xx_hal_dma_ex.crf --depend h743_fly\stm32h7xx_hal_dma_ex.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1188,7 +1188,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_mdma.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_mdma.o --omf_browse h743_fly\stm32h7xx_hal_mdma.crf --depend h743_fly\stm32h7xx_hal_mdma.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1225,7 +1225,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_pwr.o --omf_browse h743_fly\stm32h7xx_hal_pwr.crf --depend h743_fly\stm32h7xx_hal_pwr.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1262,7 +1262,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_pwr_ex.o --omf_browse h743_fly\stm32h7xx_hal_pwr_ex.crf --depend h743_fly\stm32h7xx_hal_pwr_ex.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1299,7 +1299,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_cortex.o --omf_browse h743_fly\stm32h7xx_hal_cortex.crf --depend h743_fly\stm32h7xx_hal_cortex.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1336,7 +1336,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal.o --omf_browse h743_fly\stm32h7xx_hal.crf --depend h743_fly\stm32h7xx_hal.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1373,7 +1373,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_i2c.o --omf_browse h743_fly\stm32h7xx_hal_i2c.crf --depend h743_fly\stm32h7xx_hal_i2c.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1410,7 +1410,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_i2c_ex.o --omf_browse h743_fly\stm32h7xx_hal_i2c_ex.crf --depend h743_fly\stm32h7xx_hal_i2c_ex.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1447,7 +1447,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_exti.o --omf_browse h743_fly\stm32h7xx_hal_exti.crf --depend h743_fly\stm32h7xx_hal_exti.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1494,7 +1494,7 @@ I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x62629A26)
 I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x62629A1A)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x62629A26)
@@ -1533,7 +1533,7 @@ I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x62629A26)
 I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x62629A1A)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x62629A26)
@@ -1565,7 +1565,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_pwr.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_tim.o --omf_browse h743_fly\stm32h7xx_hal_tim.crf --depend h743_fly\stm32h7xx_hal_tim.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1602,7 +1602,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h)(0x62629A26)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c)(0x62629A26)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc -I ../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I ../Drivers/CMSIS/Include -I ../Inc -I ../MAVLink -I ../MAVLink/common -I ../MAVLink_Decode -I ../vl53l1x/platform -I ../vl53l1x/core-I.\RTE\_H743_Fly-IF:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.3.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="523" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_hal_tim_ex.o --omf_browse h743_fly\stm32h7xx_hal_tim_ex.crf --depend h743_fly\stm32h7xx_hal_tim_ex.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62629A1A)
@@ -1649,7 +1649,7 @@ I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x62629A26)
 I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x62629A1A)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x62629A26)
@@ -1689,7 +1689,7 @@ I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x62629A26)
 I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x62629A1A)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x62629A26)
@@ -1728,7 +1728,7 @@ I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x62629A26)
 I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x62629A1A)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x62629A26)
@@ -1767,7 +1767,7 @@ I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x62629A26)
 I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x62629A26)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/system_stm32h7xx.h)(0x62629A1A)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62629A26)
-I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D01080)
+I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D39D71)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h)(0x62629A26)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x62629A26)
