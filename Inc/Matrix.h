@@ -2,6 +2,7 @@
 #define __Matirx_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 //需注意后面计算的A不能为奇异矩阵!!!
 #define STATION1_X 60
@@ -17,6 +18,7 @@
 #define STATION4_Y 0
 #define STATION4_Z 35
 
+#define FIFO_LEN 8
 
 typedef struct Matrix
 {
@@ -25,7 +27,22 @@ typedef struct Matrix
     int cols;
 } Matrix;
 
+typedef struct fifo
+{
+  uint8_t buf[FIFO_LEN];
+  int front, rear;
+} fifo;
+
+void init_fifo(fifo* p);
+bool is_empty_fifo(fifo* p);
+bool is_full_fifo(fifo* p);
+bool read_fifo(fifo* p, uint8_t* data);
+bool write_fifo(fifo* p, uint8_t data);
+
 void calculate_location(float d[], float location[]);
 void calculate_cxof(float location[], short d_location[]);
+void mid_filter(float raw_data, float* location_esm, float* array);
+
+void BubbleSort(float* array, int len);
 
 #endif

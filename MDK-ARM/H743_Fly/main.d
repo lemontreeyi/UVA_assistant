@@ -187,4 +187,5 @@ h743_fly\main.o: ../Inc/uart_api.h
 h743_fly\main.o: ../Inc/coderDecoder.h
 h743_fly\main.o: ../Inc/flyControl.h
 h743_fly\main.o: ../Inc/Matrix.h
+h743_fly\main.o: ../Inc/Kalman.h
 h743_fly\main.o: ../MAVLink_Decode/MAV_Altitude_Decode.h

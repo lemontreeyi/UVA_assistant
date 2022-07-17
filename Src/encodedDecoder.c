@@ -97,7 +97,7 @@ bool encodeDecode_Analysis_UWB(uint8_t *inBuf,float *outBuf,uint16_t Buflen)
 							//printf("%f ", outBuf[uwb_id - 1]);
 						}
 						flag = 0;
-						printf("distance:%f, uwb_id:%d\r\n", outBuf[uwb_id - 1], uwb_id);
+						// printf("distance:%f, uwb_id:++%d\r\n", outBuf[uwb_id - 1], uwb_id);
 					}
 				}
 			}	

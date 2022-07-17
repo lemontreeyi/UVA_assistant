@@ -108,6 +108,46 @@ Matrix matrix_inv3_3(Matrix m)
     return temp2;
 }
 
+void init_fifo(fifo* p)
+{
+  p->front = p->rear = 0;
+  memset(p->buf, 0, FIFO_LEN);
+}
+bool is_empty_fifo(fifo* p)
+{
+  if(p->front == p->rear)
+    return 1;
+  else
+    return 0;
+}
+bool is_full_fifo(fifo* p)
+{
+  if((p->rear - p->front + FIFO_LEN) % FIFO_LEN == FIFO_LEN - 1)
+    return 1;
+  else
+    return 0;
+}
+bool read_fifo(fifo* p, uint8_t* data)
+{
+  if(!is_empty_fifo(p))
+  {
+    *data = p->buf[p->front];
+    p->front = (p->front + 1) % FIFO_LEN;
+    return 1;
+  }
+  return 0;
+}
+bool write_fifo(fifo* p, uint8_t data)
+{
+  if(!is_full_fifo(p))
+  {
+    p->buf[p->rear] = data;
+    p->rear = (p->rear + 1) % FIFO_LEN;
+    return 1;
+  }
+  return 0;
+}
+
 //根据四边距离计算飞行器当前坐标
 //参数说明：
 //pamar1: 存放四个距离的数组
@@ -142,8 +182,10 @@ void calculate_location(float d[], float location[])
     location[2] = result.matrix[2][0];
     // print_matrix(b);print_matrix(A);print_matrix(A_T);print_matrix(m1);print_matrix(m2);print_matrix(m3);
     // delete_matrix(b);delete_matrix(A);delete_matrix(A_T);delete_matrix(m1);delete_matrix(m2);delete_matrix(m3);delete_matrix(result);
-    printf("x:%f y:%f z:%f", location[0], location[1], location[2]);
+    // printf("x:%f y:%f z:%f\r\n", location[0], location[1], location[2]);
     delete_matrix(A);delete_matrix(b);delete_matrix(A_inv);delete_matrix(result);
+    for(int i = 0; i < 4; ++i)
+        d[i] = 0;
 }
 
 /*
@@ -156,5 +198,77 @@ void calculate_cxof(float location[], short d_location[])
     d_location[1] = (short)(location[1] - pre_location[1]);
 
     pre_location[0] = location[0];
-    pre_location[1] = location[1]; 
+    pre_location[1] = location[1];
+}
+
+void mid_filter(float raw_data, float* location_esm, float* array)
+{
+    float temp[7];
+    for(int i = 0; i < 6; ++i)
+    {
+        array[i] = array[i + 1];
+        temp[i] = array[i];
+    }
+    array[6] = raw_data;
+    temp[6] = array[6];
+    BubbleSort(temp, 7);
+    *location_esm = temp[3];
+}
+
+// bool filter_distance(float* distance, float* disteance_esm)
+// {
+//     static int count = 0;
+//     static float temp[4][7];
+
+//     if(count < 7)
+//     {
+//         temp[0][count] = distance[0];
+//         temp[1][count] = distance[1];
+//         temp[2][count] = distance[2];
+//         temp[3][count] = distance[3];
+//         ++count;
+//         return false;
+//     } 
+//     else if(count == 7)
+//     {
+//         for(int i = 0; i < 4; ++i)
+//         {
+//             float temp1 = 0;
+//             bool flag = 0;
+//             for(int j = 0; j < 6; ++j)
+//             {
+//                 if(temp[i][j] > temp[i][j + 1])
+//                 {
+//                     temp1 = temp[i][j + 1];
+//                     temp[i][j + 1] = temp[i][j];
+//                     temp[i][j] = temp[i][j + 1];
+//                     flag = 1;
+//                 }
+//                 if(!flag) break;
+//             }
+//         }
+//     }
+//     disteance_esm[0] = temp[0][3];
+//     disteance_esm[1] = temp[1][3];
+//     disteance_esm[2] = temp[2][3];
+//     disteance_esm[3] = temp[3][3];
+//     count = 0;
+//     return true;
+// }
+
+void BubbleSort(float* array, int len)
+{
+    float temp = 0;
+    bool flag = 0;
+    for(int i = 0; i < len - 1; ++i)
+    {
+        if(array[i] > array[i + 1])
+        {
+            temp = array[i + 1];
+            array[i + 1] = array[i];
+            array[i] = temp;
+            flag = 1;
+        }
+        if(flag) break;
+    }
 }

@@ -37,6 +37,7 @@
 #include "coderDecoder.h"
 #include "flyControl.h"
 #include "Matrix.h"
+#include "Kalman.h"
 #include "MAV_Altitude_Decode.h"
 #define TAKEOFF
 
@@ -166,6 +167,9 @@ bool get_uwb_ready = 0;
 bool is_cxof_ready = 1;
 float distance_to_station[4] = {0, 0, 0, 0};
 float location[3] = {0, 0, 0};
+float x_array[7] = {0, 0, 0, 0, 0, 0, 0};
+float y_array[7] = {0, 0, 0, 0, 0, 0, 0};
+float location_esm[3] = {0, 0, 0};
 short d_location[2] = {0 ,0};
 bool Get_UWB_distance(float distance[]);
 
@@ -390,6 +394,8 @@ int main(void)
 	printf("test begin!!!\r\n");
   
   //先计算一次，舍弃掉此次
+  kalman_init(&kalman_x);
+  kalman_init(&kalman_y);
   Get_UWB_distance(distance_to_station);
   calculate_location(distance_to_station, location);
   calculate_cxof(location, d_location);
@@ -476,8 +482,8 @@ int main(void)
 				//rxlen_usart_5 = USART5_RX_STA & 0x7FFF;	//得到数据长度
         //printf("raw_len:%d\r\n", USART5_RX_STA);
         //printf("raw_len:%d\r\n", USART5_RX_STA);
-        if(USART5_RX_STA > 256)
-          rxlen_usart_5 = USART5_RX_STA & 0xFEFF;
+        if(USART5_RX_STA > 128)
+          rxlen_usart_5 = USART5_RX_STA & 0xFF7F;
         else
           rxlen_usart_5 = USART5_RX_STA;
         //printf("len:%d\r\n", (short)rxlen_usart_5);
@@ -493,6 +499,16 @@ int main(void)
         if(encodeDecode_Analysis_UWB(FreeBuffer_Encode_5,distance_to_station,rxlen_usart_5))
         {
           calculate_location(distance_to_station, location);
+          // printf("raw_x:%f raw_y:%f\r\n", location[0], location[1]);
+          mid_filter(location[0], location_esm, x_array);
+          mid_filter(location[1], location_esm + 1, y_array);
+          // printf("mid_x:%f mid_y:%f\r\n", location_esm[0], location_esm[1]);
+
+          // location_esm[0] = kalman_calc(&kalman_x, location[0]);
+          // location_esm[1] = kalman_calc(&kalman_x, location[1]);
+          // printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location[0]), kalman_calc(&kalman_y, location[1]));
+          printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location_esm[0]), kalman_calc(&kalman_y, location_esm[1]));
+
           calculate_cxof(location, d_location);
           Pack_cxof_buf(d_location[0], d_location[1], 100, cxof_buf);
           Send_cxof_buf(UART5, cxof_buf, 9);
@@ -1870,7 +1886,7 @@ void   USART_RxCallback(USART_TypeDef *huart)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart); //串口接收一个字节
 			// printf("%c",data);
-			if ((USART5_RX_STA & (1 << 9)) == 0)  //缓冲区还没满，继续接收数据。
+			if ((USART5_RX_STA & (1 << 8)) == 0)  //缓冲区还没满，继续接收数据。
 			{
 				// TIM12->CNT = 0;			    //定时器12清空
 				if (USART5_RX_STA == 0) //新一轮接收开始
@@ -1882,7 +1898,7 @@ void   USART_RxCallback(USART_TypeDef *huart)
 			}
 			else
 			{
-				USART5_RX_STA |= 1 << 9; //强制标记接收完成
+				USART5_RX_STA |= 1 << 8; //强制标记接收完成
         LL_USART_DisableIT_RXNE(USART2);
 			}
 		}

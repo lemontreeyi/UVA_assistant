@@ -9,6 +9,7 @@
         "stm32h7xx_hal.h": "c",
         "algorithm": "c",
         "xstring": "c",
-        "matrix.h": "c"
+        "matrix.h": "c",
+        "kalman.h": "c"
     }
 }

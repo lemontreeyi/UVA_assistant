@@ -50,7 +50,7 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_gpio.h)(0x62C2BFBB)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dma.h)(0x62C2BFBB)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dmamux.h)(0x62C2BFBB)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h)(0x62C2BFBB)
-F (..\Src\encodedDecoder.c)(0x62D3D7DC)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -I../Inc -I../MAVLink -I../MAVLink/common -I../MAVLink_Decode -I../vl53l1x/platform -I../vl53l1x/core-I d:\study\ardupilot\FlyAssistant_F743\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\encodeddecoder.o --omf_browse h743_fly\encodeddecoder.crf --depend h743_fly\encodeddecoder.d)
+F (..\Src\encodedDecoder.c)(0x62D3E2A8)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -I../Inc -I../MAVLink -I../MAVLink/common -I../MAVLink_Decode -I../vl53l1x/platform -I../vl53l1x/core-I d:\study\ardupilot\FlyAssistant_F743\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\encodeddecoder.o --omf_browse h743_fly\encodeddecoder.crf --depend h743_fly\encodeddecoder.d)
 I (../Inc/coderDecoder.h)(0x62D3BF88)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62C2BFBB)
 I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D3A6D9)
@@ -487,12 +487,13 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x55DB2B76)
 I (../Inc/coderDecoder.h)(0x62D3BF88)
 I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\arm_math.h)(0x5625A350)
 I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm7.h)(0x5625B70C)
-F (..\Src\Matrix.c)(0x62D3D1FF)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -I../Inc -I../MAVLink -I../MAVLink/common -I../MAVLink_Decode -I../vl53l1x/platform -I../vl53l1x/core-I d:\study\ardupilot\FlyAssistant_F743\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\matrix.o --omf_browse h743_fly\matrix.crf --depend h743_fly\matrix.d)
-I (../Inc/Matrix.h)(0x62D3D750)
+F (..\Src\Matrix.c)(0x62D40E74)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -I../Inc -I../MAVLink -I../MAVLink/common -I../MAVLink_Decode -I../vl53l1x/platform -I../vl53l1x/core-I d:\study\ardupilot\FlyAssistant_F743\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\matrix.o --omf_browse h743_fly\matrix.crf --depend h743_fly\matrix.d)
+I (../Inc/Matrix.h)(0x62D40E7E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DB2B80)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x55DB2B76)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x55DB2B78)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x55DB2B76)
-F (../Core/Src/main.c)(0x62D3D231)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -I../Inc -I../MAVLink -I../MAVLink/common -I../MAVLink_Decode -I../vl53l1x/platform -I../vl53l1x/core-I d:\study\ardupilot\FlyAssistant_F743\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\main.o --omf_browse h743_fly\main.crf --depend h743_fly\main.d)
+F (../Core/Src/main.c)(0x62D41930)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -I../Inc -I../MAVLink -I../MAVLink/common -I../MAVLink_Decode -I../vl53l1x/platform -I../vl53l1x/core-I d:\study\ardupilot\FlyAssistant_F743\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\main.o --omf_browse h743_fly\main.crf --depend h743_fly\main.d)
 I (../Core/Inc/main.h)(0x62D3A6D9)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h)(0x62C2BFBB)
 I (../Core/Inc/stm32h7xx_hal_conf.h)(0x62D3A6D9)
@@ -677,7 +678,8 @@ I (../Inc/beep.h)(0x62D23139)
 I (../Inc/uart_api.h)(0x62D23139)
 I (../Inc/coderDecoder.h)(0x62D3BF88)
 I (../Inc/flyControl.h)(0x62D23139)
-I (../Inc/Matrix.h)(0x62D3D750)
+I (../Inc/Matrix.h)(0x62D40E7E)
+I (../Inc/Kalman.h)(0x62D41563)
 I (../MAVLink_Decode/MAV_Altitude_Decode.h)(0x62D23139)
 F (../Core/Src/stm32h7xx_it.c)(0x62D3A6D9)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -I../Inc -I../MAVLink -I../MAVLink/common -I../MAVLink_Decode -I../vl53l1x/platform -I../vl53l1x/core-I d:\study\ardupilot\FlyAssistant_F743\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_it.o --omf_browse h743_fly\stm32h7xx_it.crf --depend h743_fly\stm32h7xx_it.d)
 I (../Core/Inc/main.h)(0x62D3A6D9)
@@ -778,6 +780,9 @@ I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_gpio.h)(0x62C2BFBB)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dma.h)(0x62C2BFBB)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dmamux.h)(0x62C2BFBB)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h)(0x62C2BFBB)
+F (..\Src\Kalman.c)(0x62D4154C)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -I../Inc -I../MAVLink -I../MAVLink/common -I../MAVLink_Decode -I../vl53l1x/platform -I../vl53l1x/core-I d:\study\ardupilot\FlyAssistant_F743\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\kalman.o --omf_browse h743_fly\kalman.crf --depend h743_fly\kalman.d)
+I (../Inc/Kalman.h)(0x62D41563)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x55DB2B7E)
 F (../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_exti.c)(0x62C2BFBB)(--c99 -c --cpu Cortex-M7.fp.dp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -I../Inc -I../MAVLink -I../MAVLink/common -I../MAVLink_Decode -I../vl53l1x/platform -I../vl53l1x/core-I d:\study\ardupilot\FlyAssistant_F743\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.4.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DUSE_FULL_LL_DRIVER-o h743_fly\stm32h7xx_ll_exti.o --omf_browse h743_fly\stm32h7xx_ll_exti.crf --depend h743_fly\stm32h7xx_ll_exti.d)
 I (../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h)(0x62C2BFBB)
 I (../Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h7xx.h)(0x62C2BFAD)

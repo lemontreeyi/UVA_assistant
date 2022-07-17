@@ -11,6 +11,7 @@
 "h743_fly\main.o"
 "h743_fly\stm32h7xx_it.o"
 "h743_fly\stm32h7xx_hal_msp.o"
+"h743_fly\kalman.o"
 "h743_fly\stm32h7xx_ll_exti.o"
 "h743_fly\stm32h7xx_hal_adc.o"
 "h743_fly\stm32h7xx_hal_adc_ex.o"
