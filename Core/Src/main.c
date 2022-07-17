@@ -396,18 +396,18 @@ int main(void)
 
   while (1)
   {
-    if(is_cxof_ready)
-    {
-      if(Get_UWB_distance(distance_to_station)) is_cxof_ready = 0;
-    }
-    else
-    {
-      calculate_location(distance_to_station, location);
-      calculate_cxof(location, d_location);
-      Pack_cxof_buf(d_location[0], d_location[1], 100, cxof_buf);
-      Send_cxof_buf(UART5, cxof_buf, 9);
-      is_cxof_ready = 1;
-    }
+    // if(is_cxof_ready)
+    // {
+    //   if(Get_UWB_distance(distance_to_station)) is_cxof_ready = 0;
+    // }
+    // else
+    // {
+    //   calculate_location(distance_to_station, location);
+    //   calculate_cxof(location, d_location);
+    //   Pack_cxof_buf(d_location[0], d_location[1], 100, cxof_buf);
+    //   Send_cxof_buf(UART5, cxof_buf, 9);
+    //   is_cxof_ready = 1;
+    // }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -474,26 +474,29 @@ int main(void)
 			{			 
         //printf("USART5 revd ...\r\n");
 				//rxlen_usart_5 = USART5_RX_STA & 0x7FFF;	//得到数据长度
-        printf("raw_len:%d\r\n", USART5_RX_STA);
-        printf("raw_len:%d\r\n", USART5_RX_STA);
+        //printf("raw_len:%d\r\n", USART5_RX_STA);
+        //printf("raw_len:%d\r\n", USART5_RX_STA);
         if(USART5_RX_STA > 256)
           rxlen_usart_5 = USART5_RX_STA & 0xFEFF;
         else
           rxlen_usart_5 = USART5_RX_STA;
-        printf("len:%d\r\n", (short)rxlen_usart_5);
+        //printf("len:%d\r\n", (short)rxlen_usart_5);
 				//printf("len = %d\r\n",rxlen_usart_5);
         //BSP_USART_SendArray_LL(USART5, USART5_RX_BUF, 11);
 				//printf("This is a USART1 test rxlen_usart_1 = %d USART1_RX_STA= %d\r\n" ,rxlen_usart_1 ,USART1_RX_STA);
 				for(i5=0;i5<rxlen_usart_5;i5++)
 				{
-					FreeBuffer_Encode_5[i5] = USART2_RX_BUF[i5];					//将串口2接收到的数据传输给自由缓冲区
+					FreeBuffer_Encode_5[i5] = USART5_RX_BUF[i5];					//将串口2接收到的数据传输给自由缓冲区
 				}
 
 				//BSP_USART_SendArray_LL(USART1, FreeBuffer_Encode, 11);
-        if(rxlen_usart_5 == 11) {
-          cmd = encodeDecode_Analysis_UWB(FreeBuffer_Encode_5,encodeAnswer,rxlen_usart_5);
-					// BSP_USART_SendArray_LL(UART5, encodeAnswer, 9);
-        } //分析字符串
+        if(encodeDecode_Analysis_UWB(FreeBuffer_Encode_5,distance_to_station,rxlen_usart_5))
+        {
+          calculate_location(distance_to_station, location);
+          calculate_cxof(location, d_location);
+          Pack_cxof_buf(d_location[0], d_location[1], 100, cxof_buf);
+          Send_cxof_buf(UART5, cxof_buf, 9);
+        }
 				rxlen_usart_5=0;
 				USART5_RX_STA=0;
 				BSP_USART_StartIT_LL(UART5); //启动下一次接收
@@ -1866,10 +1869,10 @@ void   USART_RxCallback(USART_TypeDef *huart)
 		else if (huart == UART5)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart); //串口接收一个字节
-			//printf("%c",data);
+			// printf("%c",data);
 			if ((USART5_RX_STA & (1 << 9)) == 0)  //缓冲区还没满，继续接收数据。
 			{
-				TIM14->CNT = 0;			    //定时器14清空
+				// TIM12->CNT = 0;			    //定时器12清空
 				if (USART5_RX_STA == 0) //新一轮接收开始
 				{
 					TIM12_Set(1);
@@ -1880,6 +1883,7 @@ void   USART_RxCallback(USART_TypeDef *huart)
 			else
 			{
 				USART5_RX_STA |= 1 << 9; //强制标记接收完成
+        LL_USART_DisableIT_RXNE(USART2);
 			}
 		}
 	}
@@ -1893,15 +1897,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	  static uint16_t tim12_1ms= 0;//中断次数计数器
 		static uint16_t tim13_1ms= 0;//中断次数计数器
 	  static uint16_t tim15_1ms= 0;//中断次数计数器
-	  static uint16_t tim17_1ms= 0;//中断次数计数器
+	  //static uint16_t tim17_1ms= 0;//中断次数计数器
 
 		/*****定时器12中断服务函数->在串口1中使用到更新中断*********/
 		if (htim->Instance == htim12.Instance) //是更新中断
 		{
 			tim12_1ms++;
-			if(tim12_1ms==2)		    //100ms内无CNT清空，则停止接收数据
+			if(tim12_1ms==500)		    //100ms内无CNT清空，则停止接收数据
 			{
-				USART1_RX_STA|= (1<<9);	//标记接收完成
+        //printf("o");
+				// USART5_RX_STA|= (1<<9);	//标记接收完成
 				TIM12->SR&=~(1<<0);		//清除中断标志位		   
 				TIM12_Set(0);			    //关闭TIM3
 				tim12_1ms=0;
@@ -1912,9 +1917,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		if (htim->Instance == htim13.Instance) //是更新中断
 		{
 			tim13_1ms++;
-			if(tim13_1ms==5)		    //20x2ms内无CNT清空，则停止接收数据
+			if(tim13_1ms==500)		    //20x2ms内无CNT清空，则停止接收数据
 			{
-				USART3_RX_STA |= (1<<15);	//标记接收完成
+				USART3_RX_STA |= (1<<9);	//标记接收完成
 				TIM13->SR&=~(1<<0);		//清除中断标志位		   
 				TIM13_Set(0);			    //关闭TIM5
 				tim13_1ms=0;

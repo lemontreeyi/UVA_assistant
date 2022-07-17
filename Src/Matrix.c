@@ -142,7 +142,7 @@ void calculate_location(float d[], float location[])
     location[2] = result.matrix[2][0];
     // print_matrix(b);print_matrix(A);print_matrix(A_T);print_matrix(m1);print_matrix(m2);print_matrix(m3);
     // delete_matrix(b);delete_matrix(A);delete_matrix(A_T);delete_matrix(m1);delete_matrix(m2);delete_matrix(m3);delete_matrix(result);
-    
+    printf("x:%f y:%f z:%f", location[0], location[1], location[2]);
     delete_matrix(A);delete_matrix(b);delete_matrix(A_inv);delete_matrix(result);
 }
 

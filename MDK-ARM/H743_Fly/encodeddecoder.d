@@ -49,10 +49,10 @@ h743_fly\encodeddecoder.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_gpio
 h743_fly\encodeddecoder.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dma.h
 h743_fly\encodeddecoder.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_dmamux.h
 h743_fly\encodeddecoder.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_ll_exti.h
+h743_fly\encodeddecoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 h743_fly\encodeddecoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 h743_fly\encodeddecoder.o: ../Inc/uart_api.h
 h743_fly\encodeddecoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 h743_fly\encodeddecoder.o: ../Inc/flyControl.h
 h743_fly\encodeddecoder.o: ../Inc/beep.h
 h743_fly\encodeddecoder.o: ../Inc/led.h
-h743_fly\encodeddecoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
