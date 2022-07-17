@@ -42,7 +42,7 @@
 
 /* 定义例程名和例程发布日期 */
 #define ABS(x) ((x<0)?-x:x)
-#define DEMO_VER		  "V-1.0"
+#define DEMO_VER "V-1.0"
 
   
 #define Flag_SendToUsart  1 
@@ -55,6 +55,8 @@
 #define USART1_MAX_RECV_LEN		256				//最大接收缓存字节数
 #define USART2_MAX_RECV_LEN		256	
 #define USART3_MAX_RECV_LEN		256	
+#define USART5_MAX_RECV_LEN		256	
+
 #define BUFFSIZE 5 
 
 //#define TAKEOFF
@@ -80,6 +82,8 @@ int PWM_Mode_N4 =7000;
 uint16_t    USART1_RX_STA=0; 
 uint16_t    USART2_RX_STA=0;
 uint16_t    USART3_RX_STA=0; 
+uint16_t    USART5_RX_STA=0; 
+
 static int Recv_Cnt_UART1 = 0;
 static int Recv_Cnt_UART2 = 0;
 static int Recv_Cnt_UART3 = 0;
@@ -94,9 +98,11 @@ static float height = 0;
 uint8_t USART1_RX_BUF [USART1_MAX_RECV_LEN]; 
 uint8_t USART2_RX_BUF [USART2_MAX_RECV_LEN]; 
 uint8_t USART3_RX_BUF [USART3_MAX_RECV_LEN];
+uint8_t USART5_RX_BUF [USART5_MAX_RECV_LEN];
+
 uint8_t FreeBuffer_Encode [USART1_MAX_RECV_LEN];
-uint8_t FreeBuffer_Encode_2 [USART2_MAX_RECV_LEN];
 uint8_t FreeBuffer_Encode_3[USART3_MAX_RECV_LEN];
+uint8_t FreeBuffer_Encode_5[USART3_MAX_RECV_LEN];
 uint8_t MAVLink_RECV_BUF[USART2_MAX_RECV_LEN];
 uint8_t MAVLink_TX_BUF [MAVLINK_MAX_PACKET_LEN];
 uint8_t MAVLink_RECV_BUF_FAKE [USART2_MAX_RECV_LEN] = {0};
@@ -127,10 +133,11 @@ float filter_av(char filter_id);
 void TIM3_Set(uint8_t sta);
 void TIM2_Set(uint8_t sta);
 int Filter_pwm(int position, int old, int max);
-void TIM5_Set(uint8_t sta);
 void TIM12_Set(uint8_t sta);
 void TIM13_Set(uint8_t sta);
 void TIM15_Set(uint8_t sta);
+void TIM17_Set(uint8_t sta);
+
 void Data_to_VisualScope(void);
 unsigned short CRC_CHECK(unsigned char *Buf, unsigned char CRC_CNT);
 
@@ -252,10 +259,12 @@ PUTCHAR_PROTOTYPE
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint16_t i1=0,i2=0,i3=0;
+	uint16_t i1=0,i2=0,i3=0,i5=0;
 	uint16_t rxlen_usart_1;
 	uint16_t rxlen_usart_2;
   uint16_t rxlen_usart_3;
+	uint16_t rxlen_usart_5;
+	
 	uint8_t cmd=0;
 	uint8_t key;
 	uint32_t RunTime=0;
@@ -359,9 +368,10 @@ int main(void)
 		BEEP_OFF();
 		HAL_Delay(1000);   
 		
-		BSP_USART_StartIT_LL( USART1 );
-	  BSP_USART_StartIT_LL( USART2 );
-    BSP_USART_StartIT_LL( USART3 );
+		BSP_USART_StartIT_LL(USART1);
+	  BSP_USART_StartIT_LL(USART2);
+    BSP_USART_StartIT_LL(USART3);
+		BSP_USART_StartIT_LL(UART5);
 	
 	  USART1_RX_STA=0;		//清零
 	  USART2_RX_STA=0;		//清零
@@ -459,6 +469,35 @@ int main(void)
         USART3_RX_STA = 0;
         BSP_USART_StartIT_LL( USART3 );   //启动下一次接收
       }
+			/********************************UART5接收并处理数据***********************************/
+			if(USART5_RX_STA & 0X0100)		  //接收到一次数据，且超过了预设长度
+			{			 
+        //printf("USART5 revd ...\r\n");
+				//rxlen_usart_5 = USART5_RX_STA & 0x7FFF;	//得到数据长度
+        printf("raw_len:%d\r\n", USART5_RX_STA);
+        printf("raw_len:%d\r\n", USART5_RX_STA);
+        if(USART5_RX_STA > 256)
+          rxlen_usart_5 = USART5_RX_STA & 0xFEFF;
+        else
+          rxlen_usart_5 = USART5_RX_STA;
+        printf("len:%d\r\n", (short)rxlen_usart_5);
+				//printf("len = %d\r\n",rxlen_usart_5);
+        //BSP_USART_SendArray_LL(USART5, USART5_RX_BUF, 11);
+				//printf("This is a USART1 test rxlen_usart_1 = %d USART1_RX_STA= %d\r\n" ,rxlen_usart_1 ,USART1_RX_STA);
+				for(i5=0;i5<rxlen_usart_5;i5++)
+				{
+					FreeBuffer_Encode_5[i5] = USART2_RX_BUF[i5];					//将串口2接收到的数据传输给自由缓冲区
+				}
+
+				//BSP_USART_SendArray_LL(USART1, FreeBuffer_Encode, 11);
+        if(rxlen_usart_5 == 11) {
+          cmd = encodeDecode_Analysis_UWB(FreeBuffer_Encode_5,encodeAnswer,rxlen_usart_5);
+					// BSP_USART_SendArray_LL(UART5, encodeAnswer, 9);
+        } //分析字符串
+				rxlen_usart_5=0;
+				USART5_RX_STA=0;
+				BSP_USART_StartIT_LL(UART5); //启动下一次接收
+			}
       //处理激光雷达传来的数据
       if(Receive_ok == 1)
       {
@@ -599,7 +638,7 @@ void SystemClock_Config(void)
 
   /** Configure the main internal regulator output voltage
   */
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE0);
 
   while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
 
@@ -612,7 +651,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 18;
+  RCC_OscInitStruct.PLL.PLLN = 54;
   RCC_OscInitStruct.PLL.PLLP = 2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
   RCC_OscInitStruct.PLL.PLLR = 8;
@@ -632,12 +671,12 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.SYSCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV1;
+  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV2;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2;
-  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV1;
+  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -784,7 +823,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x00808CD2;
+  hi2c1.Init.Timing = 0x20808DD4;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -836,7 +875,7 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 24-1;
+  htim2.Init.Prescaler = 72-1;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 60000-1;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -906,7 +945,7 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 24-1;
+  htim3.Init.Prescaler = 72-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 60000-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -976,7 +1015,7 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 24-1;
+  htim4.Init.Prescaler = 72-1;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim4.Init.Period = 60000-1;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -1050,7 +1089,7 @@ static void MX_TIM5_Init(void)
 
   /* USER CODE END TIM5_Init 1 */
   htim5.Instance = TIM5;
-  htim5.Init.Prescaler = 24-1;
+  htim5.Init.Prescaler = 72-1;
   htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim5.Init.Period = 60000-1;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -1122,9 +1161,9 @@ static void MX_TIM12_Init(void)
 
   /* USER CODE END TIM12_Init 1 */
   htim12.Instance = TIM12;
-  htim12.Init.Prescaler = 0;
+  htim12.Init.Prescaler = 72-1;
   htim12.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim12.Init.Period = 65535;
+  htim12.Init.Period = 3000;
   htim12.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim12.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim12) != HAL_OK)
@@ -1160,7 +1199,7 @@ static void MX_TIM13_Init(void)
   htim13.Instance = TIM13;
   htim13.Init.Prescaler = 0;
   htim13.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim13.Init.Period = 65535;
+  htim13.Init.Period = 3000;
   htim13.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim13.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim13) != HAL_OK)
@@ -1194,7 +1233,7 @@ static void MX_TIM15_Init(void)
   htim15.Instance = TIM15;
   htim15.Init.Prescaler = 0;
   htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim15.Init.Period = 65535;
+  htim15.Init.Period = 3000;
   htim15.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim15.Init.RepetitionCounter = 0;
   htim15.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -1763,43 +1802,13 @@ bool Get_UWB_distance(float distance[])
 /****************************串口接收中断回调*****************************/
 void   USART_RxCallback(USART_TypeDef *huart)
 { 
-	
 	if(LL_USART_IsActiveFlag_RXNE(huart) && LL_USART_IsEnabledIT_RXNE(huart))
   { 
-  //***********串口5中断**********************************
-		if(huart == UART5)
+		//  ***********串口1中断**********************************
+		if (huart == USART1)
 		{
+			printf("USART1 INT \n");
 			uint8_t data = LL_USART_ReceiveData8(huart);
-      printf("%c", data);
-      static uint8_t uart5_cnt = 0, uwb_id = 0;
-      if(!get_uwb_ready)
-      {
-        if(uart5_cnt < 10)
-        {
-          for(int i=0;i<4;i++) uwb_buf[i][uart5_cnt++] = data;
-          //用接收到的前三个字节作为校验位
-          if(uwb_buf[0][0] != 0x24) uart5_cnt = 0;
-          if(uart5_cnt==2 && uwb_buf[0][1]!=0x44) uart5_cnt = 0;
-          if(uart5_cnt==3 && uwb_buf[0][2]!=0x49) uart5_cnt = 0;
-        }
-        else if(uart5_cnt==10)
-        {
-          uwb_id = data;
-          uwb_buf[uwb_id][uart5_cnt++] = data;
-        }
-        else{
-          uwb_buf[uwb_id][uart5_cnt++] = data;
-          //接收完一个完整的通信包后清零计数
-          if(data == 0x0A && uwb_buf[uwb_id][uart5_cnt-2] == 0x0D) uart5_cnt = 0;
-        }
-      }
-      uwb_receive_ready = 1;
-      for(int i=0;i<4;i++)
-      {
-        uwb_receive_ready &= ((uwb_buf[i][16]==0x0D) && (uwb_buf[i][17]==0x0A)) ? true:false;
-      }
-      get_uwb_ready = uwb_receive_ready;    //如果4个基站都接收完成，则将uwb状态位置1，否则置0
-      if(get_uwb_ready) LL_USART_DisableIT_RXNE(UART5);     //每次接收完后中止接收中断
 		}
 	 //***********串口2中断*********************
 		else if(huart == USART2)
@@ -1854,6 +1863,25 @@ void   USART_RxCallback(USART_TypeDef *huart)
       }
     }
     /**************串口5中断待添加，调试成功后将串口1(type-c)替换成串口5即可********/
+		else if (huart == UART5)
+		{
+			uint8_t data = LL_USART_ReceiveData8(huart); //串口接收一个字节
+			//printf("%c",data);
+			if ((USART5_RX_STA & (1 << 9)) == 0)  //缓冲区还没满，继续接收数据。
+			{
+				TIM14->CNT = 0;			    //定时器14清空
+				if (USART5_RX_STA == 0) //新一轮接收开始
+				{
+					TIM12_Set(1);
+				}
+				USART5_RX_BUF[USART5_RX_STA++] = data; //存入接收缓冲区
+				// printf("USART5 INT =%d \r\n",USART5_RX_STA);
+			}
+			else
+			{
+				USART5_RX_STA |= 1 << 9; //强制标记接收完成
+			}
+		}
 	}
 }
 
@@ -1862,37 +1890,25 @@ void   USART_RxCallback(USART_TypeDef *huart)
 //*******定时器中断服务程序	*************************************//
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+	  static uint16_t tim12_1ms= 0;//中断次数计数器
 		static uint16_t tim13_1ms= 0;//中断次数计数器
 	  static uint16_t tim15_1ms= 0;//中断次数计数器
-    static uint16_t tim12_1ms= 0;//中断次数计数器
+	  static uint16_t tim17_1ms= 0;//中断次数计数器
 
 		/*****定时器12中断服务函数->在串口1中使用到更新中断*********/
 		if (htim->Instance == htim12.Instance) //是更新中断
 		{
 			tim12_1ms++;
-			if(tim12_1ms==5)		    //40ms内无CNT清空，则停止接收数据
+			if(tim12_1ms==2)		    //100ms内无CNT清空，则停止接收数据
 			{
-				USART1_RX_STA|= (1<<15);	//标记接收完成
+				USART1_RX_STA|= (1<<9);	//标记接收完成
 				TIM12->SR&=~(1<<0);		//清除中断标志位		   
 				TIM12_Set(0);			    //关闭TIM3
 				tim12_1ms=0;
 				//printf("TIME 4 INT \r\n");
 			} 
 		}
-		 //*****定时器15中断服务函数->用于串口2*********************
-		if (htim->Instance == htim15.Instance) //是更新中断
-		{
-			tim15_1ms++;
-			if(tim15_1ms==8)		    //40ms内无CNT清空，则停止接收数据
-			{
-				USART2_RX_STA |= (1<<15);	//标记接收完成
-				TIM15->SR&=~(1<<0);		//清除中断标志位		   
-				TIM15_Set(0);			    //关闭TIM5
-				tim15_1ms=0;
-				//printf("TIME 5 INT \r\n");
-			} 
-		}
-     //*****定时器13中断服务函数->用于串口3*********************
+		//*****定时器13中断服务函数->用于串口3*********************
 		if (htim->Instance == htim13.Instance) //是更新中断
 		{
 			tim13_1ms++;
@@ -1905,38 +1921,34 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				//printf("TIME 2 INT \r\n");
 			} 
 		}
+		//*****定时器15中断服务函数->用于串口2*********************
+		if (htim->Instance == htim15.Instance) //是更新中断
+		{
+			tim15_1ms++;
+			if(tim15_1ms==8)		    //40ms内无CNT清空，则停止接收数据
+			{
+				USART2_RX_STA |= (1<<15);	//标记接收完成
+				TIM15->SR&=~(1<<0);		//清除中断标志位		   
+				TIM15_Set(0);			    //关闭TIM5
+				tim15_1ms=0;
+				//printf("TIME 5 INT \r\n");
+			} 
+		}
+		// //*****定时器17中断服务函数->用于串口2*********************
+		// if (htim->Instance == htim17.Instance) //是更新中断
+		// {
+		// 	tim17_1ms++;
+		// 	if(tim17_1ms==200)		    //200ms内无CNT清空，则停止接收数据
+		// 	{
+		// 		USART5_RX_STA |= (1<<15);	//标记接收完成
+		// 		TIM17->SR&=~(1<<0);		//清除中断标志位		   
+		// 		TIM17_Set(0);			    //关闭TIM5
+		// 		tim17_1ms=0;
+		// 		//printf("TIME 17 INT \r\n");
+		// 	} 
+		// }
 }
 
-//定时器2
-void TIM2_Set(uint8_t sta)
-{
-	if(sta)
-	{
-		TIM2->CNT=0;                   //计数器清空
-		HAL_TIM_Base_Start_IT(&htim2); //使能定时器12
-	}else 
-		HAL_TIM_Base_Stop_IT(&htim2);  //关闭定时器12
-}
-//定时器3
-void TIM3_Set(uint8_t sta)
-{
-	if(sta)
-	{
-		TIM3->CNT=0;                   //计数器清空
-		HAL_TIM_Base_Start_IT(&htim3); //使能定时器12
-	}else 
-		HAL_TIM_Base_Stop_IT(&htim3);  //关闭定时器12
-}
-//定时器5
-void TIM5_Set(uint8_t sta)
-{
-	if(sta)
-	{
-		TIM5->CNT=0;                   //计数器清空
-		HAL_TIM_Base_Start_IT(&htim5); //使能定时器12
-	}else 
-		HAL_TIM_Base_Stop_IT(&htim5);  //关闭定时器12
-}
 //定时器12
 void TIM12_Set(uint8_t sta)
 {
@@ -1947,6 +1959,7 @@ void TIM12_Set(uint8_t sta)
 	}else 
 		HAL_TIM_Base_Stop_IT(&htim12);  //关闭定时器12
 }
+
 //定时器13
 void TIM13_Set(uint8_t sta)
 {
@@ -1957,16 +1970,29 @@ void TIM13_Set(uint8_t sta)
 	}else 
 		HAL_TIM_Base_Stop_IT(&htim13);  //关闭定时器13
 }
+
 //定时器15
 void TIM15_Set(uint8_t sta)
 {
 	if(sta)
 	{
 		TIM15->CNT=0;                   //计数器清空
-		HAL_TIM_Base_Start_IT(&htim15); //使能定时器2
+		HAL_TIM_Base_Start_IT(&htim15); //使能定时器15
 	}else 
-		HAL_TIM_Base_Stop_IT(&htim15);  //关闭定时器2
+		HAL_TIM_Base_Stop_IT(&htim15);  //关闭定时器15
 }
+
+// //定时器17
+// void TIM17_Set(uint8_t sta)
+// {
+// 	if(sta)
+// 	{
+// 		TIM17->CNT=0;                   //计数器清空
+// 		HAL_TIM_Base_Start_IT(&htim17); //使能定时器17
+// 	}else 
+// 		HAL_TIM_Base_Stop_IT(&htim17);  //关闭定时器17
+// }
+
 
 //定时器3
 //********************************

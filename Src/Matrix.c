@@ -120,7 +120,7 @@ void calculate_location(float d[], float location[])
         STATION3_X * STATION3_X - STATION4_X * STATION4_X + STATION3_Y * STATION3_Y - STATION4_Y * STATION4_Y + STATION3_Z * STATION3_Z - STATION4_Z * STATION4_Z - d[2] * d[2] + d[3] * d[3]
     };
     Matrix b = creat_matrix(e1, 3, 1);
-    print_matrix(b);
+    //print_matrix(b);
     float e2[9] = {
         2 * (STATION1_X - STATION4_X), 2 * (STATION1_Y - STATION4_Y), 2 * (STATION1_Z - STATION4_Z),
         2 * (STATION2_X - STATION4_X), 2 * (STATION2_Y - STATION4_Y), 2 * (STATION2_Z - STATION4_Z),

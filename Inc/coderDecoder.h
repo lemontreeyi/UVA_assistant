@@ -7,6 +7,7 @@
 //  Initialization
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen);
+uint8_t encodeDecode_Analysis_UWB(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen);
 void encodeDecode_UWBpacket(uint8_t inbuf[][20], float *dist);
 
 #endif
