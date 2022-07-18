@@ -5,18 +5,18 @@
 #include <stdbool.h>
 
 //需注意后面计算的A不能为奇异矩阵!!!
-#define STATION1_X 60
+#define STATION1_X 0
 #define STATION1_Y 0
-#define STATION1_Z 0
-#define STATION2_X 0
-#define STATION2_Y 500
-#define STATION2_Z 35
-#define STATION3_X 420
-#define STATION3_Y 500
-#define STATION3_Z 35
-#define STATION4_X 420
-#define STATION4_Y 0
-#define STATION4_Z 35
+#define STATION1_Z 85
+#define STATION2_X 490
+#define STATION2_Y 2
+#define STATION2_Z 120
+#define STATION3_X 0
+#define STATION3_Y 410
+#define STATION3_Z 100
+#define STATION4_X 490
+#define STATION4_Y 410
+#define STATION4_Z 125
 
 #define FIFO_LEN 8
 

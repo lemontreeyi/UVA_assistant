@@ -10,6 +10,7 @@
         "algorithm": "c",
         "xstring": "c",
         "matrix.h": "c",
-        "kalman.h": "c"
+        "kalman.h": "c",
+        "stdlib.h": "c"
     }
 }

@@ -476,26 +476,16 @@ int main(void)
         BSP_USART_StartIT_LL( USART3 );   //启动下一次接收
       }
 			/********************************UART5接收并处理数据***********************************/
-			if(USART5_RX_STA & 0X0100)		  //接收到一次数据，且超过了预设长度
+			if(USART5_RX_STA & 0X0080)		  //接收到一次数据，且超过了预设长度
 			{			 
-        //printf("USART5 revd ...\r\n");
-				//rxlen_usart_5 = USART5_RX_STA & 0x7FFF;	//得到数据长度
-        //printf("raw_len:%d\r\n", USART5_RX_STA);
-        //printf("raw_len:%d\r\n", USART5_RX_STA);
         if(USART5_RX_STA > 128)
           rxlen_usart_5 = USART5_RX_STA & 0xFF7F;
         else
           rxlen_usart_5 = USART5_RX_STA;
-        //printf("len:%d\r\n", (short)rxlen_usart_5);
-				//printf("len = %d\r\n",rxlen_usart_5);
-        //BSP_USART_SendArray_LL(USART5, USART5_RX_BUF, 11);
-				//printf("This is a USART1 test rxlen_usart_1 = %d USART1_RX_STA= %d\r\n" ,rxlen_usart_1 ,USART1_RX_STA);
 				for(i5=0;i5<rxlen_usart_5;i5++)
 				{
 					FreeBuffer_Encode_5[i5] = USART5_RX_BUF[i5];					//将串口2接收到的数据传输给自由缓冲区
 				}
-
-				//BSP_USART_SendArray_LL(USART1, FreeBuffer_Encode, 11);
         if(encodeDecode_Analysis_UWB(FreeBuffer_Encode_5,distance_to_station,rxlen_usart_5))
         {
           calculate_location(distance_to_station, location);
