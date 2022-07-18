@@ -170,6 +170,8 @@ float location[3] = {0, 0, 0};
 float x_array[7] = {0, 0, 0, 0, 0, 0, 0};
 float y_array[7] = {0, 0, 0, 0, 0, 0, 0};
 float location_esm[3] = {0, 0, 0};
+float location_esm_limit[3] = {0, 0, 0};
+float location_esm_kalma[3] = {0, 0, 0};
 short d_location[2] = {0 ,0};
 bool Get_UWB_distance(float distance[]);
 
@@ -396,9 +398,7 @@ int main(void)
   //先计算一次，舍弃掉此次
   kalman_init(&kalman_x);
   kalman_init(&kalman_y);
-  Get_UWB_distance(distance_to_station);
-  calculate_location(distance_to_station, location);
-  calculate_cxof(location, d_location);
+  init_A_matrix();
 
   while (1)
   {
@@ -493,13 +493,15 @@ int main(void)
           mid_filter(location[0], location_esm, x_array);
           mid_filter(location[1], location_esm + 1, y_array);
           // printf("mid_x:%f mid_y:%f\r\n", location_esm[0], location_esm[1]);
+          limit_filter(location_esm[0], location_esm_limit);
+          limit_filter(location_esm[1], location_esm_limit + 1);
 
-          // location_esm[0] = kalman_calc(&kalman_x, location[0]);
-          // location_esm[1] = kalman_calc(&kalman_x, location[1]);
+          location_esm_kalma[0] = kalman_calc(&kalman_x, location_esm_limit[0]);
+          location_esm_kalma[1] = kalman_calc(&kalman_y, location_esm_limit[1]);
           // printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location[0]), kalman_calc(&kalman_y, location[1]));
-          printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location_esm[0]), kalman_calc(&kalman_y, location_esm[1]));
+          printf("kal_x:%f kal_y:%f\r\n", location_esm_kalma[0], location_esm_kalma[1]);
 
-          calculate_cxof(location, d_location);
+          calculate_cxof(location_esm_kalma, d_location);
           Pack_cxof_buf(d_location[0], d_location[1], 100, cxof_buf);
           Send_cxof_buf(UART5, cxof_buf, 9);
         }
@@ -1876,7 +1878,7 @@ void   USART_RxCallback(USART_TypeDef *huart)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart); //串口接收一个字节
 			// printf("%c",data);
-			if ((USART5_RX_STA & (1 << 8)) == 0)  //缓冲区还没满，继续接收数据。
+			if ((USART5_RX_STA & (1 << 7)) == 0)  //缓冲区还没满，继续接收数据。
 			{
 				// TIM12->CNT = 0;			    //定时器12清空
 				if (USART5_RX_STA == 0) //新一轮接收开始
@@ -1888,7 +1890,7 @@ void   USART_RxCallback(USART_TypeDef *huart)
 			}
 			else
 			{
-				USART5_RX_STA |= 1 << 8; //强制标记接收完成
+				USART5_RX_STA |= 1 << 7; //强制标记接收完成
         LL_USART_DisableIT_RXNE(USART2);
 			}
 		}
@@ -1925,7 +1927,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			tim13_1ms++;
 			if(tim13_1ms==500)		    //20x2ms内无CNT清空，则停止接收数据
 			{
-				USART3_RX_STA |= (1<<9);	//标记接收完成
+				USART3_RX_STA |= (1<<7);	//标记接收完成
 				TIM13->SR&=~(1<<0);		//清除中断标志位		   
 				TIM13_Set(0);			    //关闭TIM5
 				tim13_1ms=0;
