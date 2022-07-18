@@ -9,6 +9,7 @@ typedef struct{
 }kalman_type;
 extern kalman_type kalman_x;
 extern kalman_type kalman_y;
+extern kalman_type kalman_d[4];
 //初始化卡尔曼滤波模块
 void kalman_init(kalman_type *kalman);
 /*

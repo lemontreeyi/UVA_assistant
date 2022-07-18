@@ -166,6 +166,7 @@ bool uwb_receive_ready = 1;
 bool get_uwb_ready = 0;
 bool is_cxof_ready = 1;
 float distance_to_station[4] = {0, 0, 0, 0};
+float distance_to_station_esm[4] = {0, 0, 0, 0};
 float location[3] = {0, 0, 0};
 float x_array[7] = {0, 0, 0, 0, 0, 0, 0};
 float y_array[7] = {0, 0, 0, 0, 0, 0, 0};
@@ -398,6 +399,8 @@ int main(void)
   //先计算一次，舍弃掉此次
   kalman_init(&kalman_x);
   kalman_init(&kalman_y);
+  for(int i = 0; i < 4; ++i)
+    kalman_init(&kalman_d[i]);
   init_A_matrix();
 
   while (1)
@@ -488,20 +491,22 @@ int main(void)
 				}
         if(encodeDecode_Analysis_UWB(FreeBuffer_Encode_5,distance_to_station,rxlen_usart_5))
         {
-          calculate_location(distance_to_station, location);
+          for(int i = 0; i < 4; ++i)
+            distance_to_station_esm[i] = kalman_calc(&kalman_d[i], distance_to_station[i]);
+          calculate_location(distance_to_station_esm, location);
           // printf("raw_x:%f raw_y:%f\r\n", location[0], location[1]);
-          mid_filter(location[0], location_esm, x_array);
-          mid_filter(location[1], location_esm + 1, y_array);
-          // printf("mid_x:%f mid_y:%f\r\n", location_esm[0], location_esm[1]);
-          limit_filter(location_esm[0], location_esm_limit);
-          limit_filter(location_esm[1], location_esm_limit + 1);
+          // mid_filter(location[0], location_esm, x_array);
+          // mid_filter(location[1], location_esm + 1, y_array);
+          // // printf("mid_x:%f mid_y:%f\r\n", location_esm[0], location_esm[1]);
+          // limit_filter(location_esm[0], location_esm_limit);
+          // limit_filter(location_esm[1], location_esm_limit + 1);
 
-          location_esm_kalma[0] = kalman_calc(&kalman_x, location_esm_limit[0]);
-          location_esm_kalma[1] = kalman_calc(&kalman_y, location_esm_limit[1]);
+          // location_esm_kalma[0] = kalman_calc(&kalman_x, location_esm_limit[0]);
+          // location_esm_kalma[1] = kalman_calc(&kalman_y, location_esm_limit[1]);
           // printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location[0]), kalman_calc(&kalman_y, location[1]));
-          printf("kal_x:%f kal_y:%f\r\n", location_esm_kalma[0], location_esm_kalma[1]);
+          printf("kal_x:%f kal_y:%f\r\n", location[0], location[1]);
 
-          calculate_cxof(location_esm_kalma, d_location);
+          calculate_cxof(location, d_location);
           Pack_cxof_buf(d_location[0], d_location[1], 100, cxof_buf);
           Send_cxof_buf(UART5, cxof_buf, 9);
         }
