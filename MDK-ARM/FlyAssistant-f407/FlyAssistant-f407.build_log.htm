@@ -1,0 +1,106 @@
+<html>
+<body>
+<pre>
+<h1>�Vision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ��Vision V5.23.0.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 2041729, HP Inc., LIC=P6F56-DKL4I-JPTZQ-NPAAZ-GJ9CY-5X6VK
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.23
+Toolchain Path:  F:\Tools\KEIL_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 4 (build 422)
+Assembler:       Armasm.exe V5.06 update 4 (build 422)
+Linker/Locator:  ArmLink.exe V5.06 update 4 (build 422)
+Library Manager: ArmAr.exe V5.06 update 4 (build 422)
+Hex Converter:   FromElf.exe V5.06 update 4 (build 422)
+CPU DLL:         SARMCM3.DLL V5.23
+Dialog DLL:      DCM.DLL V1.15.0.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
+Dialog DLL:      TCM.DLL V1.27.0.0
+ 
+<h2>Project:</h2>
+f:\User\lemon\Desktop\FlyAssistant-F407\MDK-ARM\FlyAssistant-f407.uvprojx
+Project File Date:  07/19/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
+Build target 'FlyAssistant-f407'
+compiling Matrix.c...
+..\Src\Matrix.c(166): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      d_location[0] = (short)((location[0] - pre_location[0]) * 100 * 1.5);
+..\Src\Matrix.c(167): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      d_location[1] = (short)((location[1] - pre_location[1]) * 100 * 1.5);
+..\Src\Matrix.c(190): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          *location_esm += (data - *location_esm) * 0.1;
+..\Src\Matrix.c(210): warning:  #1-D: last line of file ends without a newline
+  }
+..\Src\Matrix.c: 4 warnings, 0 errors
+compiling main.c...
+../Core/Src/main.c(224): warning:  #177-D: variable "i3"  was declared but never referenced
+  	uint16_t i1 = 0, i2 = 0, i3 = 0, i5 = 0;
+../Core/Src/main.c(225): warning:  #177-D: variable "len"  was declared but never referenced
+  	uint16_t len = 0;
+../Core/Src/main.c(228): warning:  #177-D: variable "rxlen_usart_3"  was declared but never referenced
+  	uint16_t rxlen_usart_3;
+../Core/Src/main.c(233): warning:  #550-D: variable "RunTime"  was set but never used
+  	uint32_t RunTime = 0;
+../Core/Src/main.c(234): warning:  #550-D: variable "ContrlTime_x"  was set but never used
+  	uint32_t ContrlTime_x = 0;
+../Core/Src/main.c(235): warning:  #550-D: variable "ContrlTime_y"  was set but never used
+  	uint32_t ContrlTime_y = 0;
+../Core/Src/main.c(240): warning:  #177-D: variable "Ctrl_flag_time"  was declared but never referenced
+  	uint32_t Ctrl_flag_time = 0;
+../Core/Src/main.c(242): warning:  #177-D: variable "decodetimer"  was declared but never referenced
+  	uint32_t decodetimer;
+../Core/Src/main.c(245): warning:  #177-D: variable "flag_rx2"  was declared but never referenced
+  	int flag_rx2 = 0;
+../Core/Src/main.c(252): warning:  #177-D: variable "str"  was declared but never referenced
+    uint8_t str[] = "hello world\r\n";
+../Core/Src/main.c(647): warning:  #870-D: invalid multibyte character sequence
+  	printf("* 固件库版�?? :STM32F40x_StdPeriph_Driver)\r\n");
+../Core/Src/main.c(650): warning:  #870-D: invalid multibyte character sequence
+  	printf("* 淘宝店地�?? : https://shop144519723.taobao.com/index.htm?spm=2013.1.w5002-13163471369.2.71db1223NyFC4j \r\n");
+../Core/Src/main.c(672): warning:  #870-D: invalid multibyte character sequence
+  	printf("  PA6       ------>   PWM1      与遥控器接收机油门相�?? \r\n");
+../Core/Src/main.c(820): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
+../Core/Src/main.c(820): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
+../Core/Src/main.c(1419): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;
+../Core/Src/main.c(1443): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;
+../Core/Src/main.c(1472): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;
+../Core/Src/main.c(99): warning:  #177-D: variable "height"  was declared but never referenced
+  static float height = 0;
+../Core/Src/main.c(639): warning:  #177-D: function "PrintfLogo"  was declared but never referenced
+  static void PrintfLogo(void)
+../Core/Src/main.c: 20 warnings, 0 errors
+linking...
+Program Size: Code=32208 RO-data=1240 RW-data=1428 ZI-data=4964  
+FromELF: creating hex file...
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 24 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.0.1.pack
+                ARM::CMSIS:CORE:5.0.1
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.0.1
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_FlyAssistant-f407
+  F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
+  F:\Tools\KEIL_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.0.1
+Build Time Elapsed:  00:00:04
+</pre>
+</body>
+</html>

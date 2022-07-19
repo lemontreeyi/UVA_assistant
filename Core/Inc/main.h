@@ -27,24 +27,23 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32h7xx_hal.h"
-#include "stm32h7xx_ll_usart.h"
-#include "stm32h7xx_ll_rcc.h"
-#include "stm32h7xx_ll_bus.h"
-#include "stm32h7xx_ll_cortex.h"
-#include "stm32h7xx_ll_system.h"
-#include "stm32h7xx_ll_utils.h"
-#include "stm32h7xx_ll_pwr.h"
-#include "stm32h7xx_ll_gpio.h"
-#include "stm32h7xx_ll_dma.h"
+#include "stm32f4xx_hal.h"
 
-#include "stm32h7xx_ll_exti.h"
+#include "stm32f4xx_ll_usart.h"
+#include "stm32f4xx_ll_rcc.h"
+#include "stm32f4xx_ll_bus.h"
+#include "stm32f4xx_ll_cortex.h"
+#include "stm32f4xx_ll_system.h"
+#include "stm32f4xx_ll_utils.h"
+#include "stm32f4xx_ll_pwr.h"
+#include "stm32f4xx_ll_gpio.h"
+#include "stm32f4xx_ll_dma.h"
+
+#include "stm32f4xx_ll_exti.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#ifndef ARM_MATH_CM7
-#define ARM_MATH_CM7
-#endif
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -59,10 +58,13 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-
+void TIM10_Set(uint8_t sta);
+void TIM11_Set(uint8_t sta);
+void TIM13_Set(uint8_t sta);
+void TIM14_Set(uint8_t sta);
+extern char UWB_data[4][8];
+extern int data_flag[4];
 /* USER CODE END EM */
-
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
@@ -102,24 +104,24 @@ void Error_Handler(void);
 #define Ctrl_In_GPIO_Port GPIOB
 #define Mode_In_Pin GPIO_PIN_11
 #define Mode_In_GPIO_Port GPIOB
-#define AUX2_Out_Pin GPIO_PIN_12
-#define AUX2_Out_GPIO_Port GPIOD
-#define AUX1_Out_Pin GPIO_PIN_13
-#define AUX1_Out_GPIO_Port GPIOD
-#define Ctrl_Out_Pin GPIO_PIN_14
-#define Ctrl_Out_GPIO_Port GPIOD
-#define Mode_Out_Pin GPIO_PIN_15
+#define Mode_Out_Pin GPIO_PIN_12
 #define Mode_Out_GPIO_Port GPIOD
-#define KEY1_Pin GPIO_PIN_0
-#define KEY1_GPIO_Port GPIOD
-#define KEY2_Pin GPIO_PIN_1
-#define KEY2_GPIO_Port GPIOD
-#define KEY3_Pin GPIO_PIN_2
-#define KEY3_GPIO_Port GPIOD
-#define KEY4_Pin GPIO_PIN_3
-#define KEY4_GPIO_Port GPIOD
+#define Ctrl_Out_Pin GPIO_PIN_13
+#define Ctrl_Out_GPIO_Port GPIOD
+#define AUX1_Out_Pin GPIO_PIN_14
+#define AUX1_Out_GPIO_Port GPIOD
+#define AUX2_Out_Pin GPIO_PIN_15
+#define AUX2_Out_GPIO_Port GPIOD
 #define AUX1_In_Pin GPIO_PIN_3
 #define AUX1_In_GPIO_Port GPIOB
+#define KEY2_Pin GPIO_PIN_4
+#define KEY2_GPIO_Port GPIOB
+#define KEY1_Pin GPIO_PIN_5
+#define KEY1_GPIO_Port GPIOB
+#define KEY3_Pin GPIO_PIN_8
+#define KEY3_GPIO_Port GPIOB
+#define KEY4_Pin GPIO_PIN_9
+#define KEY4_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 void   USART_RxCallback(USART_TypeDef *huart);
 /* USER CODE END Private defines */

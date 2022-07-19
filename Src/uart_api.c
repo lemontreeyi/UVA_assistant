@@ -1,5 +1,5 @@
-#include "stm32h7xx_hal.h"
-#include "stm32h7xx_ll_usart.h"
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_ll_usart.h"
 #include "uart_api.h"
 
 uint8_t cxof_buf[9] = {0};
@@ -31,6 +31,7 @@ func:用于将cxof通信包从指定串口发出
 */
 void Send_cxof_buf(USART_TypeDef* huart, uint8_t *buf, uint32_t size)
 {
+	//BSP_USART_SendArray_LL(USART1, buf, size);
     BSP_USART_SendArray_LL(huart, buf, size);
 }
 

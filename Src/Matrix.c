@@ -128,6 +128,7 @@ void init_A_matrix(void)
 //pamar2,pamar3: 计算出的飞行器的当前坐标
 void calculate_location(float d[], float location[])
 {
+		//printf("dis1=%f, dis2=%f, dis3=%f, dis4=%f\r\n", d[0], d[1], d[2], d[3]);
     float e1[3] = {
         STATION1_X * STATION1_X - STATION4_X * STATION4_X + STATION1_Y * STATION1_Y - STATION4_Y * STATION4_Y + STATION1_Z * STATION1_Z - STATION4_Z * STATION4_Z - d[0] * d[0] + d[3] * d[3],
         STATION2_X * STATION2_X - STATION4_X * STATION4_X + STATION2_Y * STATION2_Y - STATION4_Y * STATION4_Y + STATION2_Z * STATION2_Z - STATION4_Z * STATION4_Z - d[1] * d[1] + d[3] * d[3],
@@ -162,8 +163,8 @@ void calculate_location(float d[], float location[])
 void calculate_cxof(float location[], short d_location[])
 {
     static float pre_location[2] = {0, 0};
-    d_location[0] = (short)(location[0] - pre_location[0]);
-    d_location[1] = (short)(location[1] - pre_location[1]);
+    d_location[0] = (short)((location[0] - pre_location[0]) * 100 * 1.5);
+    d_location[1] = (short)((location[1] - pre_location[1]) * 100 * 1.5);
 
     pre_location[0] = location[0];
     pre_location[1] = location[1];

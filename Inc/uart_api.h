@@ -1,7 +1,7 @@
 #ifndef  __UART_API__
 #define  __UART_API__
 
-#include "stm32h7xx_hal.h"
+#include "stm32f4xx_hal.h"
 #include "stdio.h"
 #include "main.h"
 #include "string.h"

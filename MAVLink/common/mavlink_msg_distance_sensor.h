@@ -1,6 +1,8 @@
 // MESSAGE DISTANCE_SENSOR PACKING
 
 #define MAVLINK_MSG_ID_DISTANCE_SENSOR 132
+#include <stdint.h>
+#include "mavlink_types.h"
 
 typedef struct __mavlink_distance_sensor_t
 {

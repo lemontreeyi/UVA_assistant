@@ -96,6 +96,7 @@ bool encodeDecode_Analysis_UWB(uint8_t *inBuf,float *outBuf,uint16_t Buflen)
 							outBuf[uwb_id - 1] += inBuf[i - j] - '0';
 							//printf("%f ", outBuf[uwb_id - 1]);
 						}
+						outBuf[uwb_id - 1] /= 100.00;
 						flag = 0;
 						// printf("distance:%f, uwb_id:++%d\r\n", outBuf[uwb_id - 1], uwb_id);
 					}

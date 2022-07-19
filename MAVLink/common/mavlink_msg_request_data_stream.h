@@ -1,6 +1,7 @@
 // MESSAGE REQUEST_DATA_STREAM PACKING
 
 #define MAVLINK_MSG_ID_REQUEST_DATA_STREAM 66
+#include<stdint.h>
 
 typedef struct __mavlink_request_data_stream_t
 {
@@ -10,6 +11,7 @@ typedef struct __mavlink_request_data_stream_t
  uint8_t req_stream_id; ///< The ID of the requested data stream
  uint8_t start_stop; ///< 1 to start sending, 0 to stop sending.
 } mavlink_request_data_stream_t;
+
 
 #define MAVLINK_MSG_ID_REQUEST_DATA_STREAM_LEN 6
 #define MAVLINK_MSG_ID_66_LEN 6

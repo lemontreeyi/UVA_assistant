@@ -1,16 +1,6 @@
 {
     "files.associations": {
-        "flycontrol.h": "c",
-        "coderdecoder.h": "c",
-        "vl53l1_def.h": "c",
-        "cstdlib": "c",
-        "xutility": "c",
-        "uart_api.h": "c",
-        "stm32h7xx_hal.h": "c",
-        "algorithm": "c",
-        "xstring": "c",
-        "matrix.h": "c",
-        "kalman.h": "c",
-        "stdlib.h": "c"
+        "imu.h": "c",
+        "kalman.h": "c"
     }
 }

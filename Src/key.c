@@ -8,38 +8,61 @@
 #define S3  HAL_GPIO_ReadPin(KEY3_GPIO_Port,KEY3_Pin)
 #define S4  HAL_GPIO_ReadPin(KEY4_GPIO_Port,KEY4_Pin)
 
-//°´¼ü´¦Àíº¯Êı
-//·µ»Ø°´¼üÖµ
-//mode:0,²»Ö§³ÖÁ¬Ğø°´;1,Ö§³ÖÁ¬Ğø°´;
-//0£¬Ã»ÓĞÈÎºÎ°´¼ü°´ÏÂ
-//1£¬WKUP°´ÏÂ WK_UP
-//×¢Òâ´Ëº¯ÊıÓĞÏìÓ¦ÓÅÏÈ¼¶,KEY0>KEY1>KEY2>WK_UP!!
+void  KEY_Init() 
+{
+  GPIO_InitTypeDef  GPIO_InitStructure;
+  //RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//ä½¿èƒ½GPIOBæ—¶é’Ÿ
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  GPIO_InitStructure.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_8; //KEY1 KEY2 KEY3å¯¹åº”å¼•è„š
+  GPIO_InitStructure.Mode = GPIO_MODE_INPUT;                //æ™®é€šè¾“å…¥æ¨¡å¼
+  GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;     //100M
+  GPIO_InitStructure.Pull = GPIO_PULLUP;                    //ä¸Šæ‹‰
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);                //åˆå§‹åŒ–GPIOB4,5,8
+  GPIO_InitStructure.Pin = GPIO_PIN_9;                      //KEY4å¯¹åº”å¼•è„šPB9
+  GPIO_InitStructure.Pull = GPIO_PULLDOWN ;                 //ä¸‹æ‹‰
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);                //åˆå§‹åŒ–GPIOB9
+} 
+//æŒ‰é”®å¤„ç†å‡½æ•°
+//è¿”å›æŒ‰é”®å€¼
+//mode:0,ä¸æ”¯æŒè¿ç»­æŒ‰;1,æ”¯æŒè¿ç»­æŒ‰;
+//0ï¼Œæ²¡æœ‰ä»»ä½•æŒ‰é”®æŒ‰ä¸‹
+//1ï¼ŒWKUPæŒ‰ä¸‹ WK_UP
+//æ³¨æ„æ­¤å‡½æ•°æœ‰å“åº”ä¼˜å…ˆçº§,KEY0>KEY1>KEY2>WK_UP!!
 uint8_t KeyScanning(uint8_t mode)
 {
-    static uint8_t key_up=1;     //°´¼üËÉ¿ª±êÖ¾
-    if(mode==1)key_up=1;         //Ö§³ÖÁ¬°´
-    if(key_up&&(S1==GPIO_PIN_RESET||S2==GPIO_PIN_RESET))
+    static uint8_t key_up=1;     //æŒ‰é”®æ¾å¼€æ ‡å¿—
+    if(mode==1)key_up=1;         //æ”¯æŒè¿æŒ‰
+    if(key_up&&(S1==0||S2==0||S3==0||S4==1))
     {
-			  //printf(" KEY_Scan \r\n");
-        HAL_Delay(30);
-        key_up=0;	//±íÊ¾°´¼üÒÑ°´ÏÂ
-        if(S1==GPIO_PIN_RESET)        
+			  printf(" KEY_Scan \r\n");
+        HAL_Delay(10);
+        key_up=0;	//è¡¨ç¤ºæŒ‰é”®å·²æŒ‰ä¸‹
+        if(S1==0)        
 				{
 					printf("KEY1_PRES \r\n");
 					return  KEY1_PRES;
 				}
-        else if(S2==GPIO_PIN_RESET)
+        else if(S2==0)
 				{
 					printf("KEY2_PRES \r\n");
 					return  KEY2_PRES;
 				}
-    }
-	else if(S1==GPIO_PIN_SET&&S2==GPIO_PIN_SET)
+        else if(S3==0)   
+				{
+					printf("KEY3_PRES \r\n");
+					return  KEY3_PRES;
+				}					
+        else if(S4==1)   
+				{
+					printf("KEY4_PRES \r\n");
+				  return  KEY4_PRES;  
+				}  
+    }else if(S1==1&&S2==1&&S3==1&&S4==0)
 		{
 			key_up=1;
-			printf("no key pres...");
+			//printf("key_up=1 \r\n");
 		}
-    return 0;   //ÎŞ°´¼ü°´ÏÂ
+    return 0;   //æ— æŒ‰é”®æŒ‰ä¸‹
 }			
 
 
@@ -47,17 +70,17 @@ uint8_t KeyScanning(uint8_t mode)
 void GetKey_NUM(void)
 {
 	uint8_t key;
-	key=KeyScanning(0);            //°´¼üÉ¨Ãè
+	key=KeyScanning(0);            //æŒ‰é”®æ‰«æ
 	switch(key)
 	{				 
-		case  KEY1_PRES:	//¿ØÖÆLED0,LED1»¥³âµãÁÁ
-			LED2_Flash();
-			BEEP_ON();
-			break;
-		case  KEY2_PRES:	//¿ØÖÆLED0·­×ª
-			LED2_Flash();
-			BEEP_ON();
-			break;
+		case  KEY1_PRES:	//æ§åˆ¶LED0,LED1äº’æ–¥ç‚¹äº®
+          LED2_Flash();
+       	  BEEP_ON();
+					break;
+		case  KEY2_PRES:	//æ§åˆ¶LED0ç¿»è½¬
+					LED2_Flash();
+       	  BEEP_ON();
+					break;
 	}
 }
 	

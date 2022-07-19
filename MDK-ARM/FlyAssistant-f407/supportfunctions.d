@@ -1,0 +1,54 @@
+flyassistant-f407/supportfunctions.o: \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\SupportFunctions.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_barycenter_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Include\dsp\support_functions.h \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Include\arm_math_types.h \
+  ..\Drivers\CMSIS\Include\cmsis_compiler.h \
+  E:\Programs\Keil\Keil5\ARM\ARMCLANG\Bin\..\include\stdint.h \
+  ..\Drivers\CMSIS\Include\cmsis_armclang.h \
+  E:\Programs\Keil\Keil5\ARM\ARMCLANG\Bin\..\include\arm_compat.h \
+  E:\Programs\Keil\Keil5\ARM\ARMCLANG\Bin\..\include\arm_acle.h \
+  E:\Programs\Keil\Keil5\ARM\ARMCLANG\Bin\..\include\string.h \
+  E:\Programs\Keil\Keil5\ARM\ARMCLANG\Bin\..\include\math.h \
+  E:\Programs\Keil\Keil5\ARM\ARMCLANG\Bin\..\include\float.h \
+  E:\Programs\Keil\Keil5\ARM\ARMCLANG\Bin\..\include\limits.h \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Include\arm_math_memory.h \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Include\dsp\none.h \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Include\dsp\utils.h \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_bitonic_sort_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\PrivateInclude\arm_sorting.h \
+  ..\DSP_LIB\Include\arm_math.h ..\DSP_LIB\Include\core_cm4.h \
+  ..\DSP_LIB\Include\core_cmInstr.h ..\DSP_LIB\Include\core_cmFunc.h \
+  ..\DSP_LIB\Include\core_cm4_simd.h \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_bubble_sort_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_copy_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_copy_f64.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_copy_q15.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_copy_q31.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_copy_q7.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_fill_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_fill_f64.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_fill_q15.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_fill_q31.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_fill_q7.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_heap_sort_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_insertion_sort_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_merge_sort_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_merge_sort_init_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_quick_sort_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_selection_sort_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_sort_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_sort_init_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_weighted_sum_f32.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_float_to_q15.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_float_to_q31.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_float_to_q7.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_q15_to_float.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_q15_to_q31.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_q15_to_q7.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_q31_to_float.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_q31_to_q15.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_q31_to_q7.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_q7_to_float.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_q7_to_q15.c \
+  E:\Programs\Keil\Packs\ARM\CMSIS\5.9.0\CMSIS\DSP\Source\SupportFunctions\arm_q7_to_q31.c
