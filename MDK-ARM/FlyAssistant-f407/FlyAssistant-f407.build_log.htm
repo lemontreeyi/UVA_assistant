@@ -48,29 +48,23 @@ compiling main.c...
   	int flag_rx2 = 0;
 ../Core/Src/main.c(260): warning:  #177-D: variable "str"  was declared but never referenced
     uint8_t str[] = "hello world\r\n";
-../Core/Src/main.c(665): warning:  #870-D: invalid multibyte character sequence
-  	printf("* 固件库版�?? :STM32F40x_StdPeriph_Driver)\r\n");
-../Core/Src/main.c(668): warning:  #870-D: invalid multibyte character sequence
-  	printf("* 淘宝店地�?? : https://shop144519723.taobao.com/index.htm?spm=2013.1.w5002-13163471369.2.71db1223NyFC4j \r\n");
-../Core/Src/main.c(690): warning:  #870-D: invalid multibyte character sequence
+../Core/Src/main.c(666): warning:  #870-D: invalid multibyte character sequence
   	printf("  PA6       ------>   PWM1      与遥控器接收机油门相�?? \r\n");
-../Core/Src/main.c(838): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Core/Src/main.c(814): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
-../Core/Src/main.c(838): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Core/Src/main.c(814): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
+../Core/Src/main.c(1537): warning:  #550-D: variable "len"  was set but never used
+  	uint16_t len;
 ../Core/Src/main.c(1561): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;
-../Core/Src/main.c(1585): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(1590): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;
-../Core/Src/main.c(1614): warning:  #550-D: variable "len"  was set but never used
-  	uint16_t len;
-../Core/Src/main.c(657): warning:  #177-D: function "PrintfLogo"  was declared but never referenced
-  static void PrintfLogo(void)
-../Core/Src/main.c: 19 warnings, 0 errors
+../Core/Src/main.c: 16 warnings, 0 errors
 linking...
-Program Size: Code=43036 RO-data=1236 RW-data=1460 ZI-data=6180  
+Program Size: Code=43320 RO-data=1240 RW-data=1460 ZI-data=6220  
 FromELF: creating hex file...
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 19 Warning(s).
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 16 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -88,7 +82,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

@@ -25,9 +25,9 @@ typedef struct Matrix
     int cols;
 } Matrix;
 
-static Matrix A, A_inv;
+static Matrix A, A_resinv, A_T, A_temp, A_res;
 
-void calculate_location(float d[], float location[]);
+void calculate_location(float d[], float location[], float height);
 void calculate_cxof(float location[], short d_location[]);
 void mid_filter(float raw_data, float* location_esm, float* array);
 void limit_filter(float data, float* location_esm);
