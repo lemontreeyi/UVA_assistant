@@ -45,7 +45,8 @@
 #include "imu.h"
 #include "Matrix.h"
 #include "Kalman.h"
-
+#include "vl53l1_api.h"
+#include "vl53l1_platform.h"
 /* 定义例程名和例程发布日期 */
 #define EXAMPLE_NAME "V4梦创飞控室内自动飞行例程"
 #define EXAMPLE_DATE "2021-04-7 "
@@ -57,7 +58,7 @@
 #define N 3
 #define voltage_ratio 204 // 2.04
 
-#define USART1_MAX_RECV_LEN 256 //�?大接收缓存字节数
+#define USART1_MAX_RECV_LEN 256 //最大接收缓存字节数
 #define USART2_MAX_RECV_LEN 256
 #define USART3_MAX_RECV_LEN 256
 #define UART5_MAX_RECV_LEN 256
@@ -73,7 +74,7 @@ int CHANNEL_8_RISE = 0, CHANNEL_8_FALL = 0, CHANNEL_8_PULSE_WIDE = 0; // Thr通�
 
 int ICFLAG_1 = 1, ICFLAG_2 = 1, ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6 = 1, ICFLAG_7 = 1, ICFLAG_8 = 1;
 
-//直�?�或者自控模式切换参�?
+//控制直通或桥接模式
 int PWM_Ctrl_N1 = 2500;
 int PWM_Ctrl_N2 = 4500;
 int PWM_Ctrl_N3 = 5000;
@@ -96,7 +97,6 @@ static int UART2_Frame_Flag = 0;
 static int heartbeat = 0;
 // static int MAVLink_message_length = 0;
 // static mavlink_distance_sensor_t packet;
-static float height = 0;
 
 uint8_t USART1_RX_BUF[USART1_MAX_RECV_LEN];
 uint8_t USART2_RX_BUF[USART2_MAX_RECV_LEN];
@@ -110,7 +110,6 @@ uint8_t MAVLink_RECV_BUF[USART2_MAX_RECV_LEN];
 uint8_t MAVLink_TX_BUF[MAVLINK_MAX_PACKET_LEN];
 uint8_t MAVLink_RECV_BUF_FAKE[USART2_MAX_RECV_LEN] = {0};
 
-//回应 �? 消息�? 数据1 数据2 数据3 数据4 �?
 uint8_t encodeAnswer[11] = {'#', '1', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, '*'};
 
 float old_value;
@@ -143,6 +142,15 @@ void heartbeat_Mavlink(void);
 int  RC_Read(void);
 void Back_to_Center(void);
 void RC_Week_Bridge(void);
+
+//vl53L1x
+int32_t height;
+VL53L1_Dev_t Dev;
+VL53L1_RangingMeasurementData_t result_data;
+VL53L1_CalibrationData_t save;
+VL53L1_Error vl53l1x_init(VL53L1_DEV pDev);
+VL53L1_Error vl53l1x_Cali(VL53L1_DEV pDev, VL53L1_CalibrationData_t* save);
+VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev);
 
 void end(void)
 {
@@ -315,7 +323,7 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);
 
-	// 使能定时器输入捕�?
+	// 使能定时器输入捕获
 	printf("TIM 2 and 3 init\n");
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
@@ -343,11 +351,19 @@ int main(void)
 	BSP_USART_StartIT_LL(UART5);
 	
 	//kalman init
-	kalman_init(&kalman_x, 0.1, 0.85);
-  	kalman_init(&kalman_y, 0.1, 0.85);
+	kalman_init(&kalman_x, 0.2, 0.7);
+  	kalman_init(&kalman_y, 0.2, 0.7);
   	for(int i = 0; i < 4; ++i)
-  	  kalman_init(kalman_d+i, 0.1, 0.3);
+  		kalman_init(kalman_d+i, 0.1, 0.05);
   	init_A_matrix();
+	
+	//vl53L1x init
+	VL53L1_Error Status = VL53L1_ERROR_NONE;
+	Status = vl53l1x_init(&Dev);
+	if(Status != VL53L1_ERROR_NONE)
+	{
+		printf("%d\r\n", Status);
+	}
 
 	TIM11_Set(0);
 	TIM13_Set(0);
@@ -368,7 +384,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
+		vl53l1x_GetDistance(&Dev);
+		
 		//读取MPU6050
 		float inner_loop_time = 0.001;
 		float outer_loop_time = 0.001;
@@ -443,11 +460,12 @@ int main(void)
 				}
 				if(encodeDecode_Analysis_UWB(FreeBuffer_Encode_5,distance_to_station,rxlen_uart_5))
         		{
-					//printf("dis_real1=%f, dis_real2=%f, dis_real3=%f, dis_real4=%f\r\n", distance_to_station[0],distance_to_station[1],distance_to_station[2],distance_to_station[3]);
+					printf("dis_real1=%f, dis_real2=%f, dis_real3=%f, dis_real4=%f\r\n", distance_to_station[0],distance_to_station[1],distance_to_station[2],distance_to_station[3]);
           			for(int i = 0; i < 4; ++i)
             			distance_to_station_esm[i] = kalman_calc(&kalman_d[i], distance_to_station[i]);
 					//printf("dis1=%f, dis2=%f\r\n dis3=%f, dis4=%f\r\n", distance_to_station_esm[0],distance_to_station_esm[1],distance_to_station_esm[2],distance_to_station_esm[3]);
           			calculate_location(distance_to_station_esm, location);
+					//printf("z:%f\r\n", location[2]);
 					//printf("x:%f y:%f\r\n", location[0], location[1]);
           			// printf("raw_x:%f raw_y:%f\r\n", location[0], location[1]);
           			// mid_filter(location[0], location_esm, x_array);
@@ -741,10 +759,10 @@ void Data_to_VisualScope(void)
 
 /*
 *********************************************************************************************************
-*	�? �? �?: AD转化函数
+*	函 数 名: AD转化函数
 *	功能说明: 处理采样后的数据
-*	�?    参：�?
-*	�? �? �?: �?
+*	形    参：无
+*	返 回 值: 无
 *********************************************************************************************************
 */
 
@@ -771,10 +789,10 @@ float ADC_CvtVolt(void)
 
 /*
 *********************************************************************************************************
-*	�? �? �?: AD7606_Mak
+*	函 数 名: AD7606_Mak
 *	功能说明: 处理采样后的数据
-*	�?    参：�?
-*	�? �? �?: �?
+*	形    参：无
+*	返 回 值: 无
 *********************************************************************************************************
 */
 
@@ -801,7 +819,7 @@ float get_adc(char adc_id)
 	return volt;
 }
 
-//********算数平均滤波�?**************//
+//********算数平均滤波法**************//
 float filter_av(char filter_id)
 {
 	char count = 0;
@@ -838,6 +856,130 @@ float filter(float new_value)
 	return new_value;
 }
 
+//初始化测距模坿
+VL53L1_Error vl53l1x_init(VL53L1_DEV pDev)
+{
+  VL53L1_Error Status = VL53L1_ERROR_NONE;
+  pDev->I2cHandle = &hi2c1;
+  pDev->I2cDevAddr = 0x52;
+  pDev->comms_type = 1;
+  pDev->comms_speed_khz = 400;
+
+  Status = VL53L1_WaitDeviceBooted(pDev);
+  if(Status != VL53L1_ERROR_NONE)
+  {
+    printf("Wait device Boot failed!\r\n");
+		return Status;
+  }
+  HAL_Delay(2);
+
+  Status = VL53L1_DataInit(pDev);
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("datainit failed!\r\n");
+		return Status;
+	}
+  HAL_Delay(2);
+
+  Status = VL53L1_StaticInit(pDev);
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("static init failed!\r\n");
+		return Status;
+	}
+	HAL_Delay(2);
+
+  Status = VL53L1_SetDistanceMode(pDev, VL53L1_DISTANCEMODE_MEDIUM);//设置测距距离模式
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("set discance mode failed!\r\n");
+		return Status;
+	}
+	HAL_Delay(2);
+
+  Status = VL53L1_SetMeasurementTimingBudgetMicroSeconds(pDev, 50000);//设置超时时间
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+	HAL_Delay(2);
+
+	Status = VL53L1_SetInterMeasurementPeriodMilliSeconds(pDev, 50);//设置测量间隔
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("SetInterMeasurementPeriodMilliSeconds failed!\r\n");
+		return Status;
+	}
+	HAL_Delay(2);
+
+  Status = VL53L1_StartMeasurement(pDev);
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("start measurement failed!\r\n");
+		return Status;
+	}
+  
+  return Status;
+}
+//校准测距模块
+VL53L1_Error vl53l1x_Cali(VL53L1_DEV pDev, VL53L1_CalibrationData_t* save)
+{
+  VL53L1_Error Status = VL53L1_ERROR_NONE;
+  Status = VL53L1_StopMeasurement(pDev);
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+
+  Status = VL53L1_SetPresetMode(pDev, VL53L1_PRESETMODE_AUTONOMOUS);
+  if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+  
+  Status = VL53L1_PerformRefSpadManagement(pDev);//perform ref SPAD management
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+
+  Status = VL53L1_PerformOffsetSimpleCalibration(pDev,140);//14cm的出厂校验忿
+  if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+  
+  Status = VL53L1_PerformSingleTargetXTalkCalibration(pDev, 140);
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+  
+  Status = VL53L1_GetCalibrationData(pDev,save);
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+
+  //全部完成 重新打开测量
+  Status = VL53L1_StartMeasurement(pDev);
+  if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("start measurement failed!\r\n");
+		return Status;
+	}
+
+  return Status;
+}
+//获取测量的距离
+VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev)
+{
+  VL53L1_Error Status = VL53L1_ERROR_NONE;
+  uint8_t isDataReady=0;
+  //status = VL53L1_WaitMeasurementDataReady(pDev);//阻塞
+  Status = VL53L1_GetMeasurementDataReady(pDev,&isDataReady);//非阻塞测量
+  if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("Wait too long!\r\n");
+		return Status;
+	}
+  if(isDataReady)
+  {
+    Status = VL53L1_GetRangingMeasurementData(pDev, &result_data);
+    height = result_data.RangeMilliMeter;
+    printf("distance: %d mm\r\n", height);
+    Status = VL53L1_ClearInterruptAndStartMeasurement(pDev);
+  }
+  
+  return Status;
+}
+
 /****************************串口中断回调*****************************/
 void USART_RxCallback(USART_TypeDef *huart)
 {
@@ -872,16 +1014,16 @@ void USART_RxCallback(USART_TypeDef *huart)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
 			//printf("%c",data);
-			if(data == 0x23)    //根据自定义�?�信包格�?
+			if(data == 0x23)
 			{
 				UART2_Frame_Flag = 1;
 			}
       if(((USART2_RX_STA  & (1<<15))==0) && (UART2_Frame_Flag == 1))		//还可以接收数�? ,�?高位不为1.
 			{
-				TIM13->CNT=0;											//计数�?13清空
+				TIM13->CNT=0;											//计数器13清空
         if(USART2_RX_STA == 0)
 				{
-					TIM13_Set(1);	 	                //使能定时�?13的中�?
+					TIM13_Set(1);	 	                //使能定时器13的中断
 					Recv_Cnt_UART2 = 0;
 				}
 				USART2_RX_BUF[USART2_RX_STA++] = data;
@@ -898,11 +1040,11 @@ void USART_RxCallback(USART_TypeDef *huart)
 		// ******************串口3中断****************
 		else if (huart == USART3)
 		{
-			uint8_t data = LL_USART_ReceiveData8(huart); //串口接收�?个字�?
+			uint8_t data = LL_USART_ReceiveData8(huart); 
 			if ((USART3_RX_STA & (1 << 15)) == 0)
 			{
-				TIM14->CNT = 0;			//定时�?14清空
-				if (USART3_RX_STA == 0) //新一轮接收开�?
+				TIM14->CNT = 0;			//定时器14清空
+				if (USART3_RX_STA == 0) //新一轮接收开始
 				{
 					TIM14_Set(1);
 				}

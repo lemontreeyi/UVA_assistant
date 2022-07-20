@@ -164,7 +164,7 @@ void calculate_cxof(float location[], short d_location[])
 {
     static float pre_location[2] = {0, 0};
     d_location[0] = (short)((location[0] - pre_location[0]) * 100 * 1.5);
-    d_location[1] = (short)((location[1] - pre_location[1]) * 100 * 1.5);
+    d_location[1] = -(short)((location[1] - pre_location[1]) * 100 * 1.5);
 
     pre_location[0] = location[0];
     pre_location[1] = location[1];
