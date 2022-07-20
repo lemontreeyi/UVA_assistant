@@ -64,6 +64,7 @@
 
 [info] Log at : 2022/7/19|14:42:41|GMT+0800
 
+<<<<<<< HEAD
 [info] Log at : 2022/7/19|17:23:25|GMT+0800
 
 [info] Log at : 2022/7/19|17:23:36|GMT+0800
@@ -75,4 +76,32 @@
 [info] Log at : 2022/7/19|17:54:52|GMT+0800
 
 [info] Log at : 2022/7/19|19:54:02|GMT+0800
+=======
+[info] Log at : 2022/7/19|17:30:38|GMT+0800
 
+[info] project closed: FlyAssistant-f407
+[info] Log at : 2022/7/19|17:31:07|GMT+0800
+
+[info] Log at : 2022/7/19|17:31:10|GMT+0800
+
+[info] Log at : 2022/7/20|14:52:14|GMT+0800
+
+[info] project closed: FlyAssistant-f407
+[info] Log at : 2022/7/20|14:53:23|GMT+0800
+>>>>>>> 57b20dfad476ab000bf0c3d27dba33776fd194e1
+
+[info] Log at : 2022/7/20|19:42:35|GMT+0800
+
+[SyntaxError: Unexpected token < in JSON at position 111
+	at JSON.parse (<anonymous>)
+	at F.updateCppProperties (c:\Users\26281\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:10911)
+	at F.<anonymous> (c:\Users\26281\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:12641)
+	at Generator.next (<anonymous>)
+	at c:\Users\26281\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:4542
+	at new Promise (<anonymous>)
+	at r (c:\Users\26281\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:4287)
+	at F.load (c:\Users\26281\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:11372)
+	at w.<anonymous> (c:\Users\26281\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:8799)
+	at Generator.next (<anonymous>)
+	at a (c:\Users\26281\.vscode\extensions\cl.keil-assistant-1.7.0\dist\extension.js:1:4344)
+	at processTicksAndRejections (node:internal/process/task_queues:96:5)]

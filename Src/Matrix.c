@@ -110,36 +110,51 @@ Matrix matrix_inv3_3(Matrix m)
 }
 
 //初始化A矩阵
+/*
+A.shape  : 3x2, b.shape = 3x1
+[x,y].T  : (A_T * A)^(-1) * A_T * b，利用伪逆算子求解矩阵方程
+A_resinv : (A_T * A)^(-1)
+A_res    : (A_T * A)^(-1) * A_T
+*/
 void init_A_matrix(void)
 {
+    Matrix A, A_resinv, A_T, A_temp;
     float e2[9] = {
-        2 * (STATION1_X - STATION4_X), 2 * (STATION1_Y - STATION4_Y), 2 * (STATION1_Z - STATION4_Z),
-        2 * (STATION2_X - STATION4_X), 2 * (STATION2_Y - STATION4_Y), 2 * (STATION2_Z - STATION4_Z),
-        2 * (STATION3_X - STATION4_X), 2 * (STATION3_Y - STATION4_Y), 2 * (STATION3_Z - STATION4_Z)
+        2 * (STATION1_X - STATION4_X), 2 * (STATION1_Y - STATION4_Y),
+        2 * (STATION2_X - STATION4_X), 2 * (STATION2_Y - STATION4_Y),
+        2 * (STATION3_X - STATION4_X), 2 * (STATION3_Y - STATION4_Y)
     };
-    A = creat_matrix(e2, 3, 3);
-
-    A_inv = matrix_inv3_3(A);
+    A = creat_matrix(e2, 3, 2);
+    A_T = matrix_T(A);
+    A_temp = multiply_matrix(A_T, A);
+    A_resinv = matrix_inv2_2(A_temp);
+    A_res = multiply_matrix(A_resinv, A_T);
+    delete_matrix(A);delete_matrix(A_resinv);delete_matrix(A_T);delete_matrix(A_temp);
 }
 
 //根据四边距离计算飞行器当前坐标
 //参数说明：
 //pamar1: 存放四个距离的数组
 //pamar2,pamar3: 计算出的飞行器的当前坐标
-void calculate_location(float d[], float location[])
+void calculate_location(float d[], float location[], float height)
 {
-		//printf("dis1=%f, dis2=%f, dis3=%f, dis4=%f\r\n", d[0], d[1], d[2], d[3]);
+    // 先将三维距离转化为xy平面投影上的距离
+    // d_xy = sqrt(d**2 - dh**2)
+    float d1 = (float)sqrt(d[0]*d[0] - (STATION1_Z - height - 0.15)*(STATION1_Z - height - 0.15));
+    float d2 = (float)sqrt(d[1]*d[1] - (STATION2_Z - height - 0.15)*(STATION2_Z - height - 0.15));
+    float d3 = (float)sqrt(d[2]*d[2] - (STATION3_Z - height - 0.15)*(STATION3_Z - height - 0.15));
+    float d4 = (float)sqrt(d[3]*d[3] - (STATION4_Z - height - 0.15)*(STATION4_Z - height - 0.15));
     float e1[3] = {
-        STATION1_X * STATION1_X - STATION4_X * STATION4_X + STATION1_Y * STATION1_Y - STATION4_Y * STATION4_Y + STATION1_Z * STATION1_Z - STATION4_Z * STATION4_Z - d[0] * d[0] + d[3] * d[3],
-        STATION2_X * STATION2_X - STATION4_X * STATION4_X + STATION2_Y * STATION2_Y - STATION4_Y * STATION4_Y + STATION2_Z * STATION2_Z - STATION4_Z * STATION4_Z - d[1] * d[1] + d[3] * d[3],
-        STATION3_X * STATION3_X - STATION4_X * STATION4_X + STATION3_Y * STATION3_Y - STATION4_Y * STATION4_Y + STATION3_Z * STATION3_Z - STATION4_Z * STATION4_Z - d[2] * d[2] + d[3] * d[3]
+        STATION1_X * STATION1_X - STATION4_X * STATION4_X + STATION1_Y * STATION1_Y - STATION4_Y * STATION4_Y - d1 * d1 + d4 * d4,
+        STATION2_X * STATION2_X - STATION4_X * STATION4_X + STATION2_Y * STATION2_Y - STATION4_Y * STATION4_Y - d2 * d2 + d4 * d4,
+        STATION3_X * STATION3_X - STATION4_X * STATION4_X + STATION3_Y * STATION3_Y - STATION4_Y * STATION4_Y - d3 * d3 + d4 * d4
     };
     Matrix b = creat_matrix(e1, 3, 1);
     //print_matrix(b);
     
     //print_matrix(A);
     //print_matrix(A_inv);
-    Matrix result = multiply_matrix(A_inv, b);
+    Matrix result = multiply_matrix(A_res, b);
     //print_matrix(result);
     // Matrix A_T = matrix_T(A);
     // Matrix m1 = multiply_matrix(A_T, A);
@@ -148,11 +163,12 @@ void calculate_location(float d[], float location[])
     // Matrix result = multiply_matrix(m3, b);
     location[0] = result.matrix[0][0];
     location[1] = result.matrix[1][0];
-    location[2] = result.matrix[2][0];
+    location[2] = height;
     // print_matrix(b);print_matrix(A);print_matrix(A_T);print_matrix(m1);print_matrix(m2);print_matrix(m3);
     // delete_matrix(b);delete_matrix(A);delete_matrix(A_T);delete_matrix(m1);delete_matrix(m2);delete_matrix(m3);delete_matrix(result);
     // printf("x:%f y:%f z:%f\r\n", location[0], location[1], location[2]);
     delete_matrix(b);delete_matrix(result);
+    //重置测距数组
     for(int i = 0; i < 4; ++i)
         d[i] = 0;
 }
@@ -163,8 +179,8 @@ void calculate_location(float d[], float location[])
 void calculate_cxof(float location[], short d_location[])
 {
     static float pre_location[2] = {0, 0};
-    d_location[0] = (short)((location[0] - pre_location[0]) * 100 * 1.5);
-    d_location[1] = (short)((location[1] - pre_location[1]) * 100 * 1.5);
+    d_location[0] = (short)((location[0] - pre_location[0]) * 100 * 0.85);
+    d_location[1] = -(short)((location[1] - pre_location[1]) * 100 * 0.85);
 
     pre_location[0] = location[0];
     pre_location[1] = location[1];

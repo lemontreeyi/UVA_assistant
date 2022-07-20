@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "imu.h": "c",
-        "kalman.h": "c"
+        "kalman.h": "c",
+        "matrix.h": "c",
+        "stdint.h": "c",
+        "main.h": "c",
+        "stdio.h": "c",
+        "flycontrol.h": "c"
     }
 }

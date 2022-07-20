@@ -3,6 +3,8 @@
 kalman_type kalman_x;
 kalman_type kalman_y;
 kalman_type kalman_d[4];
+kalman_type kalman_h;
+
 void kalman_init(kalman_type *kalman, double Q_val, double R_val)
 {
     kalman->p_last = 0.2;

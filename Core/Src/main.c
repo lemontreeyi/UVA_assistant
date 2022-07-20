@@ -45,7 +45,8 @@
 #include "imu.h"
 #include "Matrix.h"
 #include "Kalman.h"
-
+#include "vl53l1_api.h"
+#include "vl53l1_platform.h"
 /* 定义例程名和例程发布日期 */
 #define EXAMPLE_NAME "V4梦创飞控室内自动飞行例程"
 #define EXAMPLE_DATE "2021-04-7 "
@@ -57,7 +58,7 @@
 #define N 3
 #define voltage_ratio 204 // 2.04
 
-#define USART1_MAX_RECV_LEN 256 //�?大接收缓存字节数
+#define USART1_MAX_RECV_LEN 256 //最大接收缓存字节数
 #define USART2_MAX_RECV_LEN 256
 #define USART3_MAX_RECV_LEN 256
 #define UART5_MAX_RECV_LEN 256
@@ -73,7 +74,7 @@ int CHANNEL_8_RISE = 0, CHANNEL_8_FALL = 0, CHANNEL_8_PULSE_WIDE = 0; // Thr通�
 
 int ICFLAG_1 = 1, ICFLAG_2 = 1, ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6 = 1, ICFLAG_7 = 1, ICFLAG_8 = 1;
 
-//直�?�或者自控模式切换参�?
+//控制直通或桥接模式
 int PWM_Ctrl_N1 = 2500;
 int PWM_Ctrl_N2 = 4500;
 int PWM_Ctrl_N3 = 5000;
@@ -96,7 +97,6 @@ static int UART2_Frame_Flag = 0;
 static int heartbeat = 0;
 // static int MAVLink_message_length = 0;
 // static mavlink_distance_sensor_t packet;
-static float height = 0;
 
 uint8_t USART1_RX_BUF[USART1_MAX_RECV_LEN];
 uint8_t USART2_RX_BUF[USART2_MAX_RECV_LEN];
@@ -110,7 +110,6 @@ uint8_t MAVLink_RECV_BUF[USART2_MAX_RECV_LEN];
 uint8_t MAVLink_TX_BUF[MAVLINK_MAX_PACKET_LEN];
 uint8_t MAVLink_RECV_BUF_FAKE[USART2_MAX_RECV_LEN] = {0};
 
-//回应 �? 消息�? 数据1 数据2 数据3 数据4 �?
 uint8_t encodeAnswer[11] = {'#', '1', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, '*'};
 
 float old_value;
@@ -144,6 +143,15 @@ int  RC_Read(void);
 void Back_to_Center(void);
 void RC_Week_Bridge(void);
 
+//vl53L1x
+int32_t height;
+VL53L1_Dev_t Dev;
+VL53L1_RangingMeasurementData_t result_data;
+VL53L1_CalibrationData_t save;
+VL53L1_Error vl53l1x_init(VL53L1_DEV pDev);
+VL53L1_Error vl53l1x_Cali(VL53L1_DEV pDev, VL53L1_CalibrationData_t* save);
+VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev);
+
 void end(void)
 {
 	printf("%c", 0xff);
@@ -165,10 +173,11 @@ float location_esm[3] = {0, 0, 0};
 float location_esm_limit[3] = {0, 0, 0};
 float location_esm_kalma[3] = {0, 0, 0};
 short d_location[2] = {0 ,0};
+float height_esm = 0;
 //bool Get_UWB_distance(float distance[]);
 
 /* 仅允许本文件内调用的函数声明 */
-static void PrintfLogo(void);
+//static void PrintfLogo(void);
 static void PrintfHardInfo(void);
 /* USER CODE END Includes */
 
@@ -315,7 +324,7 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);
 
-	// 使能定时器输入捕�?
+	// 使能定时器输入捕获
 	printf("TIM 2 and 3 init\n");
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
@@ -335,6 +344,7 @@ int main(void)
 	HAL_Delay(300);
 	BEEP_OFF();
 	HAL_Delay(100);
+
 	// tag: usart start
 	printf("USART Start\n");
 	BSP_USART_StartIT_LL(USART1);
@@ -343,11 +353,20 @@ int main(void)
 	BSP_USART_StartIT_LL(UART5);
 	
 	//kalman init
-	kalman_init(&kalman_x, 0.1, 0.85);
-  	kalman_init(&kalman_y, 0.1, 0.85);
+	kalman_init(&kalman_x, 0.2, 0.7);
+  	kalman_init(&kalman_y, 0.2, 0.7);
+	kalman_init(&kalman_h, 0.3, 0.0016);
   	for(int i = 0; i < 4; ++i)
-  	  kalman_init(kalman_d+i, 0.1, 0.3);
+  		kalman_init(kalman_d+i, 0.1, 0.01);
   	init_A_matrix();
+	
+	//vl53L1x init
+	VL53L1_Error Status = VL53L1_ERROR_NONE;
+	Status = vl53l1x_init(&Dev);
+	if(Status != VL53L1_ERROR_NONE)
+	{
+		printf("%d\r\n", Status);
+	}
 
 	TIM11_Set(0);
 	TIM13_Set(0);
@@ -368,7 +387,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
+		//读取激光雷达测距数据
+		vl53l1x_GetDistance(&Dev);
 		//读取MPU6050
 		float inner_loop_time = 0.001;
 		float outer_loop_time = 0.001;
@@ -393,29 +413,29 @@ int main(void)
 		
 		if (InitedFlag) //确保设备已初始化
 		{
-			/********************************UART1接收并处理数�?**********************************/
+			/********************************UART1接收并处理数据**********************************/
 			if (USART1_RX_STA & 0X8000) //接收到一次数据了
 			{
 				// printf("USART1 INT =%d \r\n",USART1_RX_STA);
 				rxlen_usart_1 = USART1_RX_STA & 0x7FFF; //得到数据长度
 				for (i1 = 0; i1 < rxlen_usart_1; i1++)
 				{
-					FreeBuffer_Encode[i1] = USART1_RX_BUF[i1]; //将串�?1接收到的数据传输给自由缓冲区
+					FreeBuffer_Encode[i1] = USART1_RX_BUF[i1]; //将串口1接收到的数据传输给自由缓冲区
 															   // BSP_USART_SendArray_LL( USART1,&FreeBuffer_Encode[i1],1);
 				}
-				cmd = encodeDecode_Analysis(FreeBuffer_Encode, encodeAnswer, rxlen_usart_1); //分析字符�?
+				cmd = encodeDecode_Analysis(FreeBuffer_Encode, encodeAnswer, rxlen_usart_1); //分析字符串
 				BSP_USART_StartIT_LL(USART1);
 				rxlen_usart_1 = 0;
-				USART1_RX_STA = 0; //启动下一次接�?
+				USART1_RX_STA = 0; //启动下一次接收
 			}
-			//********************************UART2接收并处理数�?(openmv传数�?) ***********************************/
+			//********************************UART2接收并处理数据***********************************/
 			if (USART2_RX_STA & 0X8000) //接收到一次数据，且超过了预设长度
 			{
         	//printf("USART2 revd ...\r\n");
 				rxlen_usart_2 = USART2_RX_STA & 0x7FFF;	//得到数据长度
 				for(i2=0;i2<rxlen_usart_2;i2++)
 				{
-					FreeBuffer_Encode[i2] = USART2_RX_BUF[i2];					//将串�?2接收到的数据传输给自由缓冲区
+					FreeBuffer_Encode[i2] = USART2_RX_BUF[i2];	//将串口2接收到的数据传输给自由缓冲区
 				}
         		if(rxlen_usart_2 == 11) {
 					cmd = encodeDecode_Analysis(FreeBuffer_Encode,encodeAnswer,rxlen_usart_2);
@@ -443,11 +463,15 @@ int main(void)
 				}
 				if(encodeDecode_Analysis_UWB(FreeBuffer_Encode_5,distance_to_station,rxlen_uart_5))
         		{
-					//printf("dis_real1=%f, dis_real2=%f, dis_real3=%f, dis_real4=%f\r\n", distance_to_station[0],distance_to_station[1],distance_to_station[2],distance_to_station[3]);
+					// printf("dis_real1=%f, dis_real2=%f, dis_real3=%f, dis_real4=%f\r\n", distance_to_station[0],distance_to_station[1],distance_to_station[2],distance_to_station[3]);
           			for(int i = 0; i < 4; ++i)
             			distance_to_station_esm[i] = kalman_calc(&kalman_d[i], distance_to_station[i]);
+					height_esm = kalman_calc(&kalman_h, height / 1000.0);
 					//printf("dis1=%f, dis2=%f\r\n dis3=%f, dis4=%f\r\n", distance_to_station_esm[0],distance_to_station_esm[1],distance_to_station_esm[2],distance_to_station_esm[3]);
-          			calculate_location(distance_to_station_esm, location);
+          			printf("raw_d1 %f raw_d2 %f raw_d3 %f raw_d4 %f kal_d1 %f kal_d2 %f kal_d3 %f kal_d4 %f\r\n", distance_to_station[0], distance_to_station[1], distance_to_station[2], distance_to_station[3], distance_to_station_esm[0], distance_to_station_esm[1], distance_to_station_esm[2], distance_to_station_esm[3]);
+					// printf("%f\r\n", height/1000.0);
+					calculate_location(distance_to_station_esm, location, height/1000.0);
+					//printf("z:%f\r\n", location[2]);
 					//printf("x:%f y:%f\r\n", location[0], location[1]);
           			// printf("raw_x:%f raw_y:%f\r\n", location[0], location[1]);
           			// mid_filter(location[0], location_esm, x_array);
@@ -458,12 +482,14 @@ int main(void)
 
           			// location_esm_kalma[0] = kalman_calc(&kalman_x, location_esm_limit[0]);
           			// location_esm_kalma[1] = kalman_calc(&kalman_y, location_esm_limit[1]);
-					kalman_calc(&kalman_x, location[0]);
-					kalman_calc(&kalman_y, location[1]);
+					location_esm[0] = kalman_calc(&kalman_x, location[0]);
+					location_esm[1] = kalman_calc(&kalman_y, location[1]);
           			//printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location[0]), kalman_calc(&kalman_y, location[1]));
-          			printf("kal_x:%f kal_y:%f\r\n", location[0], location[1]);
+          			printf("raw_x %f raw_y %f kal_x %f kal_y %f raw_h %f kal_h %f\r\n", location[0], location[1], location_esm[0], location_esm[1], height/1000.0, height_esm);
+					
 
-          			calculate_cxof(location, d_location);
+
+          			calculate_cxof(location_esm, d_location);
           			Pack_cxof_buf(d_location[0], d_location[1], 100, cxof_buf);
           			Send_cxof_buf(USART3, cxof_buf, 9);
         		}
@@ -519,29 +545,29 @@ int main(void)
 					//RC_Week_Bridge();			//测试时方便手动控制，正式使用时可注释
 					heartbeat = 0;
 					break;
-				case 2: //向右�?
+				case 2: //向右
 					printf("right \r\n");
 					Go_right(4500 + 10);
 					// RC_bridge_Test();
 					heartbeat = 0;
 					break;
-				case 3: //向左�?
+				case 3: //向左
 					printf("left \r\n");
 					Go_left(4500 + 10);
 					// RC_bridge_Test();
 					heartbeat = 0;
 					break;
-				case 4: //向前�?
+				case 4: //向前
 					printf("ahead \r\n");
 					Go_ahead(4500 + 10);
 					heartbeat = 0;
 					break;
-				case 5: //向后�?
+				case 5: //向后
 					printf("back \r\n");
 					Go_back(4500 + 10);
 					heartbeat = 0;
 					break;
-				default: //各道通回�?
+				default: //各道通回中
 					printf("default\r\n");
 					RC_Week_Bridge();
 					//Back_to_Center(); //没有UART数据输入时各通道回中
@@ -561,7 +587,7 @@ int main(void)
 				Set_PWM_Roll(4500);
 				Set_PWM_Yaw(4500);
 			}
-			else if (1 == RC_Read())//遥控器控�?
+			else if (1 == RC_Read())//遥控器控制
 			{
 				//桥接模式
 				RC_bridge();
@@ -627,37 +653,12 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 /*
 *********************************************************************************************************
-*	�? �? �?: PrintfLogo
-*	功能说明: 打印例程名称和例程发布日�?, 接上串口线后，打�?PC机的超级终端软件可以观察结果
-*	�?    参：�?
-*	�? �? �?: �?
-*********************************************************************************************************
-*/
-static void PrintfLogo(void)
-{
-	printf("*************************************************************\n\r");
-	printf("* 例程名称   : %s\r\n", EXAMPLE_NAME); /* 打印例程名称  */
-	printf("* 例程版本   : %s\r\n", DEMO_VER);	   /* 打印例程版本  */
-	printf("* 发布日期   : %s\r\n", EXAMPLE_DATE); /* 打印例程日期  */
-
-	/* 打印ST固件库版本，�?3个定义宏在stm32f40x.h文件�? */
-	printf("* 固件库版�? :STM32F40x_StdPeriph_Driver)\r\n");
-	printf("* \n\r"); /* 打印�?行空�? */
-	printf("* QQ    : 665836518 \r\n");
-	printf("* 淘宝店地�? : https://shop144519723.taobao.com/index.htm?spm=2013.1.w5002-13163471369.2.71db1223NyFC4j \r\n");
-	printf("* 梦创电子 \r\n");
-	printf("*************************************************************\n\r");
-}
-
-/*
-*********************************************************************************************************
-*	�? �? �?: PrintfHardInfo
+*	函 数 名: PrintfHardInfo
 *	功能说明: 打印硬件接线信息
-*	�?    参：�?
-*	�? �? �?: �?
+*	形    参：无
+*	返 回 值: 无
 *********************************************************************************************************
 */
 static void PrintfHardInfo(void)
@@ -724,7 +725,7 @@ void OutPut_Data(void)
 	for (i = 0; i < 10; i++)
 	{
 		BSP_USART_SendArray_LL(USART1, databuf, sizeof(databuf));
-		// HAL_UART_Transmit(&huart1,(uint8_t *)&databuf[i],1,10);       //串口发�??
+		// HAL_UART_Transmit(&huart1,(uint8_t *)&databuf[i],1,10);       //串口发送
 	}
 }
 
@@ -741,10 +742,10 @@ void Data_to_VisualScope(void)
 
 /*
 *********************************************************************************************************
-*	�? �? �?: AD转化函数
+*	函 数 名: AD转化函数
 *	功能说明: 处理采样后的数据
-*	�?    参：�?
-*	�? �? �?: �?
+*	形    参：无
+*	返 回 值: 无
 *********************************************************************************************************
 */
 
@@ -771,10 +772,10 @@ float ADC_CvtVolt(void)
 
 /*
 *********************************************************************************************************
-*	�? �? �?: AD7606_Mak
+*	函 数 名: AD7606_Mak
 *	功能说明: 处理采样后的数据
-*	�?    参：�?
-*	�? �? �?: �?
+*	形    参：无
+*	返 回 值: 无
 *********************************************************************************************************
 */
 
@@ -801,7 +802,7 @@ float get_adc(char adc_id)
 	return volt;
 }
 
-//********算数平均滤波�?**************//
+//********算数平均滤波法**************//
 float filter_av(char filter_id)
 {
 	char count = 0;
@@ -816,7 +817,7 @@ float filter_av(char filter_id)
 //************************************数据处理函数********************************//
 float DataProcessing(float IN_Data)			//权重滤波
 {
-	static float out_Data = 0, last_Data = 0, filter_Data = 0; // static只初始化�?�?
+	static float out_Data = 0, last_Data = 0, filter_Data = 0;
 	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
 	filter_Data = filter(out_Data);
 	last_Data = filter_Data;
@@ -836,6 +837,131 @@ float filter(float new_value)
 	}
 	old_value = new_value;
 	return new_value;
+}
+
+//初始化测距模坿
+VL53L1_Error vl53l1x_init(VL53L1_DEV pDev)
+{
+  VL53L1_Error Status = VL53L1_ERROR_NONE;
+  pDev->I2cHandle = &hi2c1;
+  pDev->I2cDevAddr = 0x52;
+  pDev->comms_type = 1;
+  pDev->comms_speed_khz = 400;
+
+  Status = VL53L1_WaitDeviceBooted(pDev);
+  if(Status != VL53L1_ERROR_NONE)
+  {
+    printf("Wait device Boot failed!\r\n");
+		return Status;
+  }
+  HAL_Delay(2);
+
+  Status = VL53L1_DataInit(pDev);
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("datainit failed!\r\n");
+		return Status;
+	}
+  HAL_Delay(2);
+
+  Status = VL53L1_StaticInit(pDev);
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("static init failed!\r\n");
+		return Status;
+	}
+	HAL_Delay(2);
+
+  Status = VL53L1_SetDistanceMode(pDev, VL53L1_DISTANCEMODE_MEDIUM);//设置测距距离模式
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("set discance mode failed!\r\n");
+		return Status;
+	}
+	HAL_Delay(2);
+
+  Status = VL53L1_SetMeasurementTimingBudgetMicroSeconds(pDev, 50000);//设置超时时间
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+	HAL_Delay(2);
+
+	Status = VL53L1_SetInterMeasurementPeriodMilliSeconds(pDev, 50);//设置测量间隔
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("SetInterMeasurementPeriodMilliSeconds failed!\r\n");
+		return Status;
+	}
+	HAL_Delay(2);
+
+  Status = VL53L1_StartMeasurement(pDev);
+	if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("start measurement failed!\r\n");
+		return Status;
+	}
+  
+  return Status;
+}
+//校准测距模块
+VL53L1_Error vl53l1x_Cali(VL53L1_DEV pDev, VL53L1_CalibrationData_t* save)
+{
+  VL53L1_Error Status = VL53L1_ERROR_NONE;
+  Status = VL53L1_StopMeasurement(pDev);
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+
+  Status = VL53L1_SetPresetMode(pDev, VL53L1_PRESETMODE_AUTONOMOUS);
+  if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+  
+  Status = VL53L1_PerformRefSpadManagement(pDev);//perform ref SPAD management
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+
+  Status = VL53L1_PerformOffsetSimpleCalibration(pDev,140);//14cm的出厂校验忿
+  if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+  
+  Status = VL53L1_PerformSingleTargetXTalkCalibration(pDev, 140);
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+  
+  Status = VL53L1_GetCalibrationData(pDev,save);
+	if(Status!=VL53L1_ERROR_NONE) 
+		return Status;
+
+  //全部完成 重新打开测量
+  Status = VL53L1_StartMeasurement(pDev);
+  if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("start measurement failed!\r\n");
+		return Status;
+	}
+
+  return Status;
+}
+//获取测量的距离
+VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev)
+{
+  VL53L1_Error Status = VL53L1_ERROR_NONE;
+  uint8_t isDataReady=0;
+  //status = VL53L1_WaitMeasurementDataReady(pDev);//阻塞
+  Status = VL53L1_GetMeasurementDataReady(pDev,&isDataReady);//非阻塞测量
+  if(Status!=VL53L1_ERROR_NONE) 
+	{
+		printf("Wait too long!\r\n");
+		return Status;
+	}
+  if(isDataReady)
+  {
+    Status = VL53L1_GetRangingMeasurementData(pDev, &result_data);
+    height = result_data.RangeMilliMeter;
+    // printf("distance: %d mm\r\n", height);
+	// printf("%f\r\n", height / 1000.0);
+    Status = VL53L1_ClearInterruptAndStartMeasurement(pDev);
+  }
+  
+  return Status;
 }
 
 /****************************串口中断回调*****************************/
@@ -867,21 +993,21 @@ void USART_RxCallback(USART_TypeDef *huart)
 				}
 			}
 		}
-		// ***********串口2中断，用于与openmv连接*********************
+		// ***********串口2中断，用于与视觉模块连接*********************
 		else if (huart == USART2)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
 			//printf("%c",data);
-			if(data == 0x23)    //根据自定义�?�信包格�?
+			if(data == 0x23)
 			{
 				UART2_Frame_Flag = 1;
 			}
-      if(((USART2_RX_STA  & (1<<15))==0) && (UART2_Frame_Flag == 1))		//还可以接收数�? ,�?高位不为1.
+      if(((USART2_RX_STA  & (1<<15))==0) && (UART2_Frame_Flag == 1))		//还可以接收数据，最高位不为1.
 			{
-				TIM13->CNT=0;											//计数�?13清空
+				TIM13->CNT=0;											//计数器13清空
         if(USART2_RX_STA == 0)
 				{
-					TIM13_Set(1);	 	                //使能定时�?13的中�?
+					TIM13_Set(1);	 	                //使能定时器13的中断
 					Recv_Cnt_UART2 = 0;
 				}
 				USART2_RX_BUF[USART2_RX_STA++] = data;
@@ -898,15 +1024,15 @@ void USART_RxCallback(USART_TypeDef *huart)
 		// ******************串口3中断****************
 		else if (huart == USART3)
 		{
-			uint8_t data = LL_USART_ReceiveData8(huart); //串口接收�?个字�?
+			uint8_t data = LL_USART_ReceiveData8(huart); 
 			if ((USART3_RX_STA & (1 << 15)) == 0)
 			{
-				TIM14->CNT = 0;			//定时�?14清空
-				if (USART3_RX_STA == 0) //新一轮接收开�?
+				TIM14->CNT = 0;			//定时器14清空
+				if (USART3_RX_STA == 0) //新一轮接收开始
 				{
 					TIM14_Set(1);
 				}
-				USART3_RX_BUF[USART3_RX_STA++] = data; //存入接收缓冲�?
+				USART3_RX_BUF[USART3_RX_STA++] = data; //存入接收缓冲区
 				// printf("USART3 INT =%d \r\n",USART3_RX_STA);
 			}
 			else
@@ -934,44 +1060,44 @@ void USART_RxCallback(USART_TypeDef *huart)
 	}
 }
 
-//*******定时器中断服务程�?	*************************************//
+//*******定时器中断服务程序	*************************************//
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	static uint16_t tim11_1ms = 0; //中断次数计数�?
-	static uint16_t tim13_1ms = 0; //中断次数计数�?
-	static uint16_t tim14_1ms = 0; //中断次数计数�?
-	static uint16_t tim10_1ms = 0; //中断次数计数�?
+	static uint16_t tim11_1ms = 0; //中断次数计数
+	static uint16_t tim13_1ms = 0; //中断次数计数
+	static uint16_t tim14_1ms = 0; //中断次数计数
+	static uint16_t tim10_1ms = 0; //中断次数计数
 
-	//*****定时�?10中断服务函数->用于延时*********
+	//*****定时器10中断服务函数->用于延时*********
 	if (htim->Instance == htim10.Instance) //更新中断
 	{
 		tim10_1ms++;
-		if (tim10_1ms == 10) //�?5次中断执行一�?,20ms X 5 -> 与其他模块发送数据的间隔相符合即�?
+		if (tim10_1ms == 10) 
 		{
 			// printf("TIME 10 INT \r\n");
 		}
 	}
-	//*****定时�?11中断服务函数->在串�?1中使用到更新中断*********
+	//*****定时器11中断服务函数->在串口1中使用到更新中断*********
 	if (htim->Instance == htim11.Instance) //更新中断
 	{
 		tim11_1ms++;
-		if (tim11_1ms == 50) //�?5次中断执行一�?,20ms X 5 -> 与其他模块发送数据的间隔相符合即�?
+		if (tim11_1ms == 50) 
 		{
 			USART1_RX_STA |= (1 << 15); //标记接收完成
-			TIM11->SR &= ~(1 << 0);		//清除中断标志�?
+			TIM11->SR &= ~(1 << 0);		//清除中断标志
 			TIM11_Set(0);				//关闭TIM11
 			tim11_1ms = 0;
 			// printf("TIME 11 INT \r\n");
 		}
 	}
 	//*****定时�?13中断服务函数->用于串口2*********************
-	if (htim->Instance == htim13.Instance) //是更新中�?
+	if (htim->Instance == htim13.Instance) 
 	{
 		tim13_1ms++;
-		if (tim13_1ms == 40) //1ms进行�?次中断，40ms无数据则终止接收
+		if (tim13_1ms == 40) 
 		{
 			USART2_RX_STA |= (1 << 15); //标记接收完成
-			TIM13->SR &= ~(1 << 0);		//清除中断标志�?
+			TIM13->SR &= ~(1 << 0);		//清除中断标志
 			TIM13_Set(0);				//关闭TIM13
 			tim13_1ms = 0;
 			// printf("TIME 13 INT \r\n");
@@ -981,10 +1107,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == htim14.Instance) //更新中断
 	{
 		tim14_1ms++;
-		if (tim14_1ms == 50) //�?5次中断执行一�?,20ms
+		if (tim14_1ms == 50) 
 		{
 			USART3_RX_STA |= (1 << 15); //标记接收完成
-			TIM14->SR &= ~(1 << 0);		//清除中断标志�?
+			TIM14->SR &= ~(1 << 0);		//清除中断标志
 			TIM14_Set(0);				//关闭TIM14
 			tim14_1ms = 0;
 			// printf("TIME 14 INT \r\n");
@@ -1003,19 +1129,19 @@ void TIM10_Set(uint8_t sta)
 		HAL_TIM_Base_Stop_IT(&htim10);
 }
 
-//定时�?11
+//定时器11
 void TIM11_Set(uint8_t sta)
 {
 	if (sta)
 	{
-		TIM11->CNT = 0;					//计数器清�?
-		HAL_TIM_Base_Start_IT(&htim11); //使能定时�?11
+		TIM11->CNT = 0;					//计数器清空计数
+		HAL_TIM_Base_Start_IT(&htim11); //使能定时器11
 	}
 	else
-		HAL_TIM_Base_Stop_IT(&htim11); //关闭定时�?11
+		HAL_TIM_Base_Stop_IT(&htim11); //关闭定时器11
 }
 
-//定时�?13
+//定时器13
 void TIM13_Set(uint8_t sta)
 {
 	if (sta)

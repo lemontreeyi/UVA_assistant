@@ -373,7 +373,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx,ARM_MATH_CM4,USE_FULL_LL_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Inc;./MAVLink_Decode;../MAVLink;../MAVLink/common;../DSP_LIB;../DSP_LIB/Include</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;../Inc;./MAVLink_Decode;../MAVLink;../MAVLink/common;../DSP_LIB;../DSP_LIB/Include;..\vl53l1x\core;..\vl53l1x\platform</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -760,6 +760,11 @@
               <FileName>stm32f4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_platform.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\platform\vl53l1_platform.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1187,6 +1192,71 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>vl53L1x</GroupName>
+          <Files>
+            <File>
+              <FileName>vl53l1_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_api_calibration.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_api_calibration.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_api_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_api_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_api_debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_api_debug.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_api_preset_modes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_api_preset_modes.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_api_strings.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_api_strings.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_core_support.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_core_support.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_error_strings.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_error_strings.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_register_funcs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_register_funcs.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_silicon_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_silicon_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l1_wait.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\vl53l1x\core\vl53l1_wait.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -14,6 +14,8 @@
                 "d:\\study\\ardupilot\\UVA_assistant\\MAVLink\\common",
                 "d:\\study\\ardupilot\\UVA_assistant\\DSP_LIB",
                 "d:\\study\\ardupilot\\UVA_assistant\\DSP_LIB\\Include",
+                "d:\\study\\ardupilot\\UVA_assistant\\vl53l1x\\core",
+                "d:\\study\\ardupilot\\UVA_assistant\\vl53l1x\\platform",
                 "C:\\Keil_v5\\ARM\\ARMCC\\include",
                 "C:\\Keil_v5\\ARM\\ARMCC\\include\\rw",
                 "d:\\study\\ardupilot\\UVA_assistant\\Src",

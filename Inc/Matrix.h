@@ -8,15 +8,15 @@
 #define STATION1_X 0
 #define STATION1_Y 0.03
 #define STATION1_Z 0.90
-#define STATION2_X 4.90
+#define STATION2_X 4.85
 #define STATION2_Y 0.02
-#define STATION2_Z 1.25
-#define STATION3_X 0
+#define STATION2_Z 1.55
+#define STATION3_X 0.04
 #define STATION3_Y 4.10
-#define STATION3_Z 1.05
+#define STATION3_Z 0.70
 #define STATION4_X 4.90
 #define STATION4_Y 4.10
-#define STATION4_Z 1.25
+#define STATION4_Z 1.45
 
 typedef struct Matrix
 {
@@ -25,9 +25,9 @@ typedef struct Matrix
     int cols;
 } Matrix;
 
-static Matrix A, A_inv;
+static Matrix A_res;
 
-void calculate_location(float d[], float location[]);
+void calculate_location(float d[], float location[], float height);
 void calculate_cxof(float location[], short d_location[]);
 void mid_filter(float raw_data, float* location_esm, float* array);
 void limit_filter(float data, float* location_esm);
