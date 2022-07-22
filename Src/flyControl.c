@@ -42,6 +42,9 @@ PID         PID_Control_Pitch;
 PID         PID_Control_Roll;
 PID_TIME 	PID_Pitch_Time;
 PID_TIME  	PID_Roll_Time;
+PID_LOCATION PID_Location_x;
+PID_LOCATION PID_Location_y;
+
 /*==================================================================================================== 
     PID Function 
      
@@ -150,6 +153,22 @@ int PID_GetTime(PID_TIME *pp, int CurrentPoint, int SetPoint)
 	return out;
 }
 
+int PID_location(PID_LOCATION* pp, int current_location, int target_location)
+{
+    
+    int Error, dError;
+	int out;
+	pp->SetPoint = target_location;
+	Error = current_location - pp->SetPoint;
+	pp->PreviousError = Error;
+	dError = pp->PreviousError - pp->LastError;
+	pp->LastError = Error;
+	out = pp->Proportion * Error
+			+ pp->Derivative * dError;
+	out = range(out, -pp->Max, pp->Max);
+	return (int)out;
+}
+
 /*==================================================================================================== 
    Initialize PID Structure 
 =====================================================================================================*/ 
@@ -199,7 +218,25 @@ void PIDInit (PID *pp)
 	PID_Roll_Time.LastError = 0;
 	PID_Roll_Time.PreviousError = 0;
 	PID_Roll_Time.SumError = 0;
-     	
+    
+	PID_Location_x.Max = 400;
+	PID_Location_x.Proportion = 2;
+	PID_Location_x.Integral = 0;
+	PID_Location_x.Derivative = 0;
+	PID_Location_x.SetPoint = 0;
+	PID_Location_x.LastError = 0;
+	PID_Location_x.PreviousError = 0;
+	PID_Location_x.SumError = 0;
+
+	PID_Location_y.Max = 400;
+	PID_Location_y.Proportion = -2;
+	PID_Location_y.Integral = 0;
+	PID_Location_y.Derivative = 0;
+	PID_Location_y.SetPoint = 0;
+	PID_Location_y.LastError = 0;
+	PID_Location_y.PreviousError = 0;
+	PID_Location_y.SumError = 0;
+
 } 
 
 /*==================================================================================================== 
@@ -381,6 +418,30 @@ void Fly_Moder(int16_t FlyMode)
 	}
 }
 
+void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
+{
+	int pwm_pitch_clc=0;
+	int pwm_roll_clc=0;
+	int deadZoneX = 0;
+	int deadZoneY = 0;
+
+	deadZoneX = point_x - SetPoint_x;
+	deadZoneY = point_y - SetPoint_y;
+
+	if(myabs(deadZoneX) >= 20)
+	{
+		pwm_roll_clc = PID_location(&PID_Location_x, point_x, SetPoint_x);
+		pwm_roll_out = PWM_Roll_mid + pwm_roll_clc;
+	}
+	else pwm_roll_out = PWM_Roll_mid;
+
+	if(myabs(deadZoneY) >= 20)
+	{
+		pwm_pitch_clc = PID_location(&PID_Location_y, point_y, SetPoint_y);
+		pwm_pitch_out = PWM_Pitch_mid + pwm_pitch_clc;
+	}
+	else pwm_pitch_out = PWM_Pitch_mid;
+}
 
 /*==================================================================================================== 
    悬停
@@ -523,5 +584,13 @@ void RC_bridge_Test(void)
 	Set_PWM_Yaw(CHANNEL_5_PULSE_WIDE);
 	Set_PWM_Mode(CHANNEL_4_PULSE_WIDE);
 	Set_PWM_Ctrl(CHANNEL_3_PULSE_WIDE);
+}
+
+//各通道回中
+void Back2Center(void)
+{
+	Set_PWM_Roll(4500);
+	Set_PWM_Pitch(4500);
+	Set_PWM_Thr(4500);
 }
 

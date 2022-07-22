@@ -57,6 +57,20 @@ typedef struct PID_TIME{
         float SumError; 
 } PID_TIME;
 
+typedef struct PID_LOCATION
+{
+        int Max;
+        float SetPoint;
+
+        float Proportion;
+        float Integral;
+        float Derivative;
+
+        float LastError;
+        float PreviousError;
+        float SumError;
+} PID_LOCATION;
+
 typedef struct ATTITUDE { 
         float  Pitch;        
         float  Roll;          
@@ -76,6 +90,8 @@ extern int pwm_pitch_time;
 extern int pwm_roll_time;
 extern PID_TIME 	PID_Pitch_Time;
 extern PID_TIME         PID_Roll_Time;
+extern PID_LOCATION PID_Location_x;
+extern PID_LOCATION PID_Location_y;
 
 extern int CHANNEL_1_RISE,CHANNEL_1_FALL,CHANNEL_1_PULSE_WIDE;
 extern int CHANNEL_2_RISE,CHANNEL_2_FALL,CHANNEL_2_PULSE_WIDE;
@@ -102,10 +118,13 @@ void Turn_left(uint16_t pulse);
 void Turn_right(uint16_t pulse);
 void Fly_Moder(int16_t FlyMode);
 void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, float roll);
+void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y);
+void Back2Center(void);
 void AltAdj(float high);
 int PIDCalc( PID *pp, int CurrentPoint ,int SetPoint, bool flag);
 int PID_GetTime(PID_TIME *pp, int CurrentPoint, int SetPoint);
-	
+int PID_location(PID_LOCATION* pp, int current_location, int target_location);
+
 //***********”Õ√≈*********************************************//
 void Set_PWM_Thr(uint16_t pulse);
 //***********∏©—ˆ**********************************************//

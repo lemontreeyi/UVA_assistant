@@ -1,3 +1,25 @@
-Load "FlyAssistant-f407\\FlyAssistant-f407.axf" 
-Erase Done.Programming Done.Verify OK.Application running ...
-Flash Load finished at 15:42:51
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
+Build target 'FlyAssistant-f407'
+compiling flyControl.c...
+..\Src\flyControl.c(119): warning:  #223-D: function "abs" declared implicitly
+  		PID_Control_param = (abs(CurrentPoint - SetPoint) > 85)?  1.3  : 1.0;
+..\Src\flyControl.c(132): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  		if(flag) out *= 0.5;
+..\Src\flyControl.c(151): warning:  #223-D: function "abs" declared implicitly
+  	out = abs((int)out);
+..\Src\flyControl.c(311): warning:  #223-D: function "abs" declared implicitly
+  	if(abs(current_height - target_height) < 100)
+..\Src\flyControl.c(469): warning:  #223-D: function "abs" declared implicitly
+  		if(abs(point_x - SetPoint_x) < 45)
+..\Src\flyControl.c(486): warning:  #223-D: function "abs" declared implicitly
+  		if(abs(point_y - SetPoint_y) < 45)
+..\Src\flyControl.c(458): warning:  #550-D: variable "x"  was set but never used
+  	int x = 0;
+..\Src\flyControl.c(459): warning:  #550-D: variable "y"  was set but never used
+  	int y = 0;
+..\Src\flyControl.c: 8 warnings, 0 errors
+linking...
+Program Size: Code=44072 RO-data=1240 RW-data=1480 ZI-data=6288  
+FromELF: creating hex file...
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 8 Warning(s).
+Build Time Elapsed:  00:00:05

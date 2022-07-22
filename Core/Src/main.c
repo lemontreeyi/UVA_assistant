@@ -172,6 +172,7 @@ float y_array[7] = {0, 0, 0, 0, 0, 0, 0};
 float location_esm[3] = {0, 0, 0};
 float location_esm_limit[3] = {0, 0, 0};
 float location_esm_kalma[3] = {0, 0, 0};
+int   target_location[2] = {0, 0};	//cm为单位
 short d_location[2] = {0 ,0};
 float speed[2] = {0.0, 0.0};
 
@@ -492,7 +493,7 @@ int main(void)
           			printf("raw_x %f raw_y %f kal_x %f kal_y %f raw_h %f kal_h %f\r\n", location[0], location[1], location_esm[0], location_esm[1], height/1000.0, height_esm);
 					Dtime = HAL_GetTick() - Cxof_Time;
           			calculate_cxof(location_esm, d_location, speed, Dtime);
-								printf("vx:%f, vy:%f\r\n",speed[0], speed[1]);
+					printf("vx:%f, vy:%f\r\n",speed[0], speed[1]);
           			Pack_cxof_buf(speed, 100, cxof_buf);
 					Cxof_Time = HAL_GetTick();
           			Send_cxof_buf(USART3, cxof_buf, 9);
@@ -503,7 +504,25 @@ int main(void)
 			}
 
 			if (3 == RC_Read()) //飞控助手控制
-			{
+			{	
+				target_location[0] = 245;
+				target_location[1] = 205;
+				//将UWB无线定位后的坐标结果传入PID外环，进行控制
+				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
+				if(ContriGetDataTime >= 1000)
+				{
+					Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),target_location[0],target_location[1]);
+					printf("roll_out:%d, pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
+					ContriGetDataStart = HAL_GetTick();
+				}
+				else if(ContriGetDataTime < 150)
+				{
+					Set_PWM_Roll(pwm_roll_out);
+					Set_PWM_Pitch(pwm_pitch_out);
+				}
+				else{
+					Back2Center();		//Thr, Roll, Pitch三个通道回中
+				}
 				switch (cmd)
 				{
 				case 1: //悬停->前往目标点
@@ -572,8 +591,8 @@ int main(void)
 					heartbeat = 0;
 					break;
 				default: //各道通回中
-					printf("default\r\n");
-					RC_Week_Bridge();
+					//printf("default\r\n");
+					//RC_Week_Bridge();
 					//Back_to_Center(); //没有UART数据输入时各通道回中
 					break;
 				}
