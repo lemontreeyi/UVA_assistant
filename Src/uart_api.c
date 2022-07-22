@@ -8,10 +8,12 @@ uint8_t cxof_buf[9] = {0};
 通信包格式：0xFE, 0x04, x_L, x_H, y_L, y_H, check_sum, quality, 0xAA
 func:用于将位置差打包成光流数据传入飞控
 */
-void Pack_cxof_buf(uint16_t dx, uint16_t dy, uint8_t quality, uint8_t *cxof_buf)
+void Pack_cxof_buf(float *speed, uint8_t quality, uint8_t *cxof_buf)
 {
+    short dx,dy;
+    dx =  (short)(speed[0] * 100 * 0.15);
+    dy = -(short)(speed[1] * 100 * 0.15);
     uint8_t check_sum = 0;
-    memset(cxof_buf, 0, 9);
     cxof_buf[0] = 0xFE;
     cxof_buf[1] = 0x04;
     cxof_buf[2] = dx & 0xFF;        //x低八位
@@ -33,6 +35,7 @@ void Send_cxof_buf(USART_TypeDef* huart, uint8_t *buf, uint32_t size)
 {
 	//BSP_USART_SendArray_LL(USART1, buf, size);
     BSP_USART_SendArray_LL(huart, buf, size);
+    memset(buf, 0, 9);
 }
 
 void BSP_USART_SendData_LL(USART_TypeDef* huart, uint8_t Data)

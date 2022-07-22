@@ -3,124 +3,58 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¶ÃVision V5.17.0.0
-Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: X Kraft, XKraft, LIC=RC9X7-EPC47-AQ80M-XPAKG-NX0RT-V0U3E
+IDE-Version: ¶ÃVision V5.23.0.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 2041729, HP Inc., LIC=P6F56-DKL4I-JPTZQ-NPAAZ-GJ9CY-5X6VK
  
 Tool Versions:
-Toolchain:       MDK-ARM Standard  Version: 5.17
-Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
-C Compiler:      Armcc.exe V5.06 update 1 (build 61)
-Assembler:       Armasm.exe V5.06 update 1 (build 61)
-Linker/Locator:  ArmLink.exe V5.06 update 1 (build 61)
-Library Manager: ArmAr.exe V5.06 update 1 (build 61)
-Hex Converter:   FromElf.exe V5.06 update 1 (build 61)
-CPU DLL:         SARMCM3.DLL V5.17
-Dialog DLL:      DCM.DLL V1.13.4.0
+Toolchain:       MDK-ARM Professional  Version: 5.23
+Toolchain Path:  F:\Tools\KEIL_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 4 (build 422)
+Assembler:       Armasm.exe V5.06 update 4 (build 422)
+Linker/Locator:  ArmLink.exe V5.06 update 4 (build 422)
+Library Manager: ArmAr.exe V5.06 update 4 (build 422)
+Hex Converter:   FromElf.exe V5.06 update 4 (build 422)
+CPU DLL:         SARMCM3.DLL V5.23
+Dialog DLL:      DCM.DLL V1.15.0.0
 Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
-Dialog DLL:      TCM.DLL V1.14.6.0
+Dialog DLL:      TCM.DLL V1.27.0.0
  
 <h2>Project:</h2>
-d:\study\ardupilot\UVA_assistant\MDK-ARM\FlyAssistant-f407.uvprojx
-Project File Date:  07/20/2022
+F:\User\lemon\Desktop\UVA_assistant\MDK-ARM\FlyAssistant-f407.uvprojx
+Project File Date:  07/21/2022
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant-f407'
-compiling Matrix.c...
-..\Src\Matrix.c(143): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d1 = (float)sqrt(d[0]*d[0] - (
-TATION1_Z - height - 0.15)*(STATION1_Z - height - 0.15));
-..\Src\Matrix.c(143): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d1 = (float)sqrt(d[0]*d[0] - (
-TATION1_Z - height - 0.15)*(
-TATION1_Z - height - 0.15));
-..\Src\Matrix.c(144): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d2 = (float)sqrt(d[1]*d[1] - (
-TATION2_Z - height - 0.15)*(STATION2_Z - height - 0.15));
-..\Src\Matrix.c(144): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d2 = (float)sqrt(d[1]*d[1] - (
-TATION2_Z - height - 0.15)*(
-TATION2_Z - height - 0.15));
-..\Src\Matrix.c(145): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d3 = (float)sqrt(d[2]*d[2] - (
-TATION3_Z - height - 0.15)*(STATION3_Z - height - 0.15));
-..\Src\Matrix.c(145): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d3 = (float)sqrt(d[2]*d[2] - (
-TATION3_Z - height - 0.15)*(
-TATION3_Z - height - 0.15));
-..\Src\Matrix.c(146): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d4 = (float)sqrt(d[3]*d[3] - (
-TATION4_Z - height - 0.15)*(STATION4_Z - height - 0.15));
-..\Src\Matrix.c(146): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d4 = (float)sqrt(d[3]*d[3] - (
-TATION4_Z - height - 0.15)*(
-TATION4_Z - height - 0.15));
-..\Src\Matrix.c(182): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      d_location[0] = (short)((location[0] - pre_location[0]) * 100 * 0.85);
-..\Src\Matrix.c(183): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      d_location[1] = -(short)((location[1] - pre_location[1]) * 100 * 0.85);
-..\Src\Matrix.c(206): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-          *location_esm += (data - *location_esm) * 0.1;
-..\Src\Matrix.c(226): warning:  #1-D: last line of file ends without a newline
-  }
-..\Src\Matrix.c: 12 warnings, 0 errors
-compiling main.c...
-../Core/Src/main.c(233): warning:  #177-D: variable "i3" was declared but never referenced
-  	uint16_t i1 = 0, i2 = 0, i3 = 0, i5 = 0;
-../Core/Src/main.c(234): warning:  #177-D: variable "len" was declared but never referenced
-  	uint16_t len = 0;
-../Core/Src/main.c(237): warning:  #177-D: variable "rxlen_usart_3" was declared but never referenced
-  	uint16_t rxlen_usart_3;
-../Core/Src/main.c(242): warning:  #550-D: variable "RunTime" was set but never used
-  	uint32_t RunTime = 0;
-../Core/Src/main.c(243): warning:  #550-D: variable "ContrlTime_x" was set but never used
-  	uint32_t ContrlTime_x = 0;
-../Core/Src/main.c(244): warning:  #550-D: variable "ContrlTime_y" was set but never used
-  	uint32_t ContrlTime_y = 0;
-../Core/Src/main.c(249): warning:  #177-D: variable "Ctrl_flag_time" was declared but never referenced
-  	uint32_t Ctrl_flag_time = 0;
-../Core/Src/main.c(251): warning:  #177-D: variable "decodetimer" was declared but never referenced
-  	uint32_t decodetimer;
-../Core/Src/main.c(254): warning:  #177-D: variable "flag_rx2" was declared but never referenced
-  	int flag_rx2 = 0;
-../Core/Src/main.c(261): warning:  #177-D: variable "str" was declared but never referenced
-    uint8_t str[] = "hello world\r\n";
-../Core/Src/main.c(673): warning:  #870-D: invalid multibyte character sequence
-  	printf("  PA6       ------>   PWM1      ‰∏?ÈÅ?Êé?Âô?Êé?Êî?Êú?Ê≤?Èó?Áõ?Ôø?? \r\n");
-../Core/Src/main.c(821): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
-../Core/Src/main.c(821): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
-../Core/Src/main.c(1545): warning:  #550-D: variable "len" was set but never used
-  	uint16_t len;
-../Core/Src/main.c(1569): warning:  #550-D: variable "len" was set but never used
-  	uint16_t len;
-../Core/Src/main.c(1598): warning:  #550-D: variable "len" was set but never used
-  	uint16_t len;
-../Core/Src/main.c: 16 warnings, 0 errors
+compiling uart_api.c...
+..\Src\uart_api.c(14): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      dx =  (short)(speed[0] * 100 * 0.15);
+..\Src\uart_api.c(15): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      dy = -(short)(speed[1] * 100 * 0.15);
+..\Src\uart_api.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=43564 RO-data=1320 RW-data=1464 ZI-data=6224  
+Program Size: Code=43668 RO-data=1236 RW-data=1472 ZI-data=6224  
 FromELF: creating hex file...
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 28 Warning(s).
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
 Package Vendor: ARM
-                http://www.keil.com/pack/ARM.CMSIS.4.5.0.pack
-                ARM::CMSIS:CORE:4.3.0
+                http://www.keil.com/pack/ARM.CMSIS.5.0.1.pack
+                ARM::CMSIS:CORE:5.0.1
                 CMSIS (Cortex Microcontroller Software Interface Standard)
-   * Component: CORE Version: 4.3.0
+   * Component: CORE Version: 5.0.1
 
 <h2>Collection of Component include folders:</h2>
-  d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE
-  C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
-  C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+  .\RTE\_FlyAssistant-f407
+  F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
+  F:\Tools\KEIL_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
 
-   * Component: ARM::CMSIS:CORE:4.3.0
-Build Time Elapsed:  00:00:06
+   * Component: ARM::CMSIS:CORE:5.0.1
+Build Time Elapsed:  00:00:12
 </pre>
 </body>
 </html>

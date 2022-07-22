@@ -176,14 +176,20 @@ void calculate_location(float d[], float location[], float height)
 /*
 根据飞行器的位置计算光流
 */
-void calculate_cxof(float location[], short d_location[])
+void calculate_cxof(float location[], short d_location[], float *speed, uint32_t Dtime)
 {
-    static float pre_location[2] = {0, 0};
-    d_location[0] = (short)((location[0] - pre_location[0]) * 100 * 0.85);
-    d_location[1] = -(short)((location[1] - pre_location[1]) * 100 * 0.85);
+    static float pre_location[2] = {2.45, 2.05};
+    //将dx，dy转化为mm为单位，方便求速度
+    d_location[0] = (short)((location[0] - pre_location[0]) * 1000);
+    d_location[1] = (short)((location[1] - pre_location[1]) * 1000);
 
-    pre_location[0] = location[0];
-    pre_location[1] = location[1];
+    //求得速度单位为m/s
+    speed[0] = ((location[0] - pre_location[0]) * 1000) / Dtime;
+    speed[1] = ((location[1] - pre_location[1]) * 1000) / Dtime;
+    //printf("vx:%f, vy:%f\r\n", speed[0], speed[1]);
+
+//    pre_location[0] = location[0];
+//    pre_location[1] = location[1];
 }
 
 void mid_filter(float raw_data, float* location_esm, float* array)

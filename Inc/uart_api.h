@@ -14,7 +14,7 @@ void BSP_USART_StartIT_LL(USART_TypeDef* huart);
 void USART_Send_Check(USART_TypeDef* huart, uint8_t *Buffer, uint8_t len);
 void USART_Send_out(USART_TypeDef* huart, uint16_t *data, uint8_t len, uint8_t send);
 
-void Pack_cxof_buf(uint16_t dx, uint16_t dy, uint8_t quality, uint8_t *cxof_buf);
+void Pack_cxof_buf(float *speed, uint8_t quality, uint8_t *cxof_buf);
 void Send_cxof_buf(USART_TypeDef* huart, uint8_t *buf, uint32_t size);
 
 #endif

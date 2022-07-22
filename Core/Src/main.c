@@ -173,6 +173,8 @@ float location_esm[3] = {0, 0, 0};
 float location_esm_limit[3] = {0, 0, 0};
 float location_esm_kalma[3] = {0, 0, 0};
 short d_location[2] = {0 ,0};
+float speed[2] = {0.0, 0.0};
+
 float height_esm = 0;
 //bool Get_UWB_distance(float distance[]);
 
@@ -251,6 +253,8 @@ int main(void)
 	uint32_t decodetimer;
 	uint32_t tickstart = HAL_GetTick();
 	uint32_t ticklast = HAL_GetTick();
+	uint32_t Cxof_Time = HAL_GetTick();
+	uint32_t Dtime = 0;
 	int flag_rx2 = 0;
 //	mavlink_message_t msg1;
 //	mavlink_message_t msg2;
@@ -353,8 +357,8 @@ int main(void)
 	BSP_USART_StartIT_LL(UART5);
 	
 	//kalman init
-	kalman_init(&kalman_x, 0.2, 0.7);
-  	kalman_init(&kalman_y, 0.2, 0.7);
+	kalman_init(&kalman_x, 0.2, 0.5);
+  	kalman_init(&kalman_y, 0.2, 0.5);
 	kalman_init(&kalman_h, 0.3, 0.0016);
   	for(int i = 0; i < 4; ++i)
   		kalman_init(kalman_d+i, 0.1, 0.01);
@@ -468,7 +472,7 @@ int main(void)
             			distance_to_station_esm[i] = kalman_calc(&kalman_d[i], distance_to_station[i]);
 					height_esm = kalman_calc(&kalman_h, height / 1000.0);
 					//printf("dis1=%f, dis2=%f\r\n dis3=%f, dis4=%f\r\n", distance_to_station_esm[0],distance_to_station_esm[1],distance_to_station_esm[2],distance_to_station_esm[3]);
-          			printf("raw_d1 %f raw_d2 %f raw_d3 %f raw_d4 %f kal_d1 %f kal_d2 %f kal_d3 %f kal_d4 %f\r\n", distance_to_station[0], distance_to_station[1], distance_to_station[2], distance_to_station[3], distance_to_station_esm[0], distance_to_station_esm[1], distance_to_station_esm[2], distance_to_station_esm[3]);
+          			//printf("raw_d1 %f raw_d2 %f raw_d3 %f raw_d4 %f kal_d1 %f kal_d2 %f kal_d3 %f kal_d4 %f\r\n", distance_to_station[0], distance_to_station[1], distance_to_station[2], distance_to_station[3], distance_to_station_esm[0], distance_to_station_esm[1], distance_to_station_esm[2], distance_to_station_esm[3]);
 					// printf("%f\r\n", height/1000.0);
 					calculate_location(distance_to_station_esm, location, height/1000.0);
 					//printf("z:%f\r\n", location[2]);
@@ -486,11 +490,11 @@ int main(void)
 					location_esm[1] = kalman_calc(&kalman_y, location[1]);
           			//printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location[0]), kalman_calc(&kalman_y, location[1]));
           			printf("raw_x %f raw_y %f kal_x %f kal_y %f raw_h %f kal_h %f\r\n", location[0], location[1], location_esm[0], location_esm[1], height/1000.0, height_esm);
-					
-
-
-          			calculate_cxof(location_esm, d_location);
-          			Pack_cxof_buf(d_location[0], d_location[1], 100, cxof_buf);
+					Dtime = HAL_GetTick() - Cxof_Time;
+          			calculate_cxof(location_esm, d_location, speed, Dtime);
+								printf("vx:%f, vy:%f\r\n",speed[0], speed[1]);
+          			Pack_cxof_buf(speed, 100, cxof_buf);
+					Cxof_Time = HAL_GetTick();
           			Send_cxof_buf(USART3, cxof_buf, 9);
         		}
 				rxlen_uart_5 = 0;
@@ -957,7 +961,7 @@ VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev)
     Status = VL53L1_GetRangingMeasurementData(pDev, &result_data);
     height = result_data.RangeMilliMeter;
     // printf("distance: %d mm\r\n", height);
-	// printf("%f\r\n", height / 1000.0);
+	//printf("%f m\r\n", height / 1000.0);
     Status = VL53L1_ClearInterruptAndStartMeasurement(pDev);
   }
   

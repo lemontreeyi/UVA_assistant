@@ -28,7 +28,7 @@ typedef struct Matrix
 static Matrix A_res;
 
 void calculate_location(float d[], float location[], float height);
-void calculate_cxof(float location[], short d_location[]);
+void calculate_cxof(float location[], short d_location[], float *speed, uint32_t Dtime);
 void mid_filter(float raw_data, float* location_esm, float* array);
 void limit_filter(float data, float* location_esm);
 void init_A_matrix(void);
