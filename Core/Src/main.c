@@ -509,13 +509,13 @@ int main(void)
 				target_location[1] = 205;
 				//将UWB无线定位后的坐标结果传入PID外环，进行控制
 				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
-				if(ContriGetDataTime >= 1000)
+				if(ContriGetDataTime >= 450)
 				{
 					Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),target_location[0],target_location[1]);
 					printf("roll_out:%d, pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
 					ContriGetDataStart = HAL_GetTick();
 				}
-				else if(ContriGetDataTime < 150)
+				else if(ContriGetDataTime < 120)
 				{
 					Set_PWM_Roll(pwm_roll_out);
 					Set_PWM_Pitch(pwm_pitch_out);
