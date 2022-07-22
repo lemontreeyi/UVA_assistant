@@ -11,8 +11,8 @@ func:用于将位置差打包成光流数据传入飞控
 void Pack_cxof_buf(float *speed, uint8_t quality, uint8_t *cxof_buf)
 {
     short dx,dy;
-    dx =  (short)(speed[0] * 100 * 0.15);
-    dy = -(short)(speed[1] * 100 * 0.15);
+    dx =  (short)(speed[0] * 100 * 0.09);
+    dy = -(short)(speed[1] * 100 * 0.09);
     uint8_t check_sum = 0;
     cxof_buf[0] = 0xFE;
     cxof_buf[1] = 0x04;
