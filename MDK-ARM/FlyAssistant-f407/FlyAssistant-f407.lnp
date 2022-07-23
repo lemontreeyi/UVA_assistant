@@ -22,6 +22,7 @@
 "flyassistant-f407\stm32f4xx_it.o"
 "flyassistant-f407\stm32f4xx_hal_msp.o"
 "flyassistant-f407\vl53l1_platform.o"
+"flyassistant-f407\patrol.o"
 "flyassistant-f407\stm32f4xx_hal_adc.o"
 "flyassistant-f407\stm32f4xx_hal_adc_ex.o"
 "flyassistant-f407\stm32f4xx_ll_adc.o"

@@ -45,6 +45,7 @@
 #include "imu.h"
 #include "Matrix.h"
 #include "Kalman.h"
+#include "patrol.h"
 #include "vl53l1_api.h"
 #include "vl53l1_platform.h"
 /* 定义例程名和例程发布日期 */
@@ -373,6 +374,9 @@ int main(void)
 		printf("%d\r\n", Status);
 	}
 
+	//patrol init
+	init_flypath();
+
 	TIM11_Set(0);
 	TIM13_Set(0);
 	TIM14_Set(0);
@@ -490,13 +494,13 @@ int main(void)
 					location_esm[0] = kalman_calc(&kalman_x, location[0]);
 					location_esm[1] = kalman_calc(&kalman_y, location[1]);
           			//printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location[0]), kalman_calc(&kalman_y, location[1]));
-          			printf("raw_x %f raw_y %f kal_x %f kal_y %f raw_h %f kal_h %f\r\n", location[0], location[1], location_esm[0], location_esm[1], height/1000.0, height_esm);
 					Dtime = HAL_GetTick() - Cxof_Time;
           			calculate_cxof(location_esm, d_location, speed, Dtime);
-					printf("vx:%f, vy:%f\r\n",speed[0], speed[1]);
+					//printf("vx:%f, vy:%f\r\n",speed[0], speed[1]);
           			Pack_cxof_buf(speed, 100, cxof_buf);
 					Cxof_Time = HAL_GetTick();
           			Send_cxof_buf(USART3, cxof_buf, 9);
+					//printf("send cxof finished!\r\n");
         		}
 				rxlen_uart_5 = 0;
 				UART5_RX_STA = 0;
@@ -505,24 +509,38 @@ int main(void)
 
 			if (3 == RC_Read()) //飞控助手控制
 			{	
-				target_location[0] = 245;
-				target_location[1] = 205;
+				target_location[0] = 345;
+				target_location[1] = 305;
+				Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),target_location[0],target_location[1]);
+				
+				Set_PWM_Roll(pwm_roll_out);
+				Set_PWM_Pitch(pwm_pitch_out);
+				// getCurrentTarget(location_esm, target_location);
 				//将UWB无线定位后的坐标结果传入PID外环，进行控制
 				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
-				if(ContriGetDataTime >= 450)
+				if(ContriGetDataTime >= 500)
 				{
-					Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),target_location[0],target_location[1]);
+					printf("tar_x:%d, tar_y:%d\r\n", target_location[0], target_location[1]);
 					printf("roll_out:%d, pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
-					ContriGetDataStart = HAL_GetTick();
+					printf("kal_x %f kal_y %f kal_h %f\r\n", location_esm[0], location_esm[1], height_esm);
+					ContriGetDataStart = HAL_GetTick();	
 				}
-				else if(ContriGetDataTime < 120)
-				{
-					Set_PWM_Roll(pwm_roll_out);
-					Set_PWM_Pitch(pwm_pitch_out);
-				}
-				else{
-					Back2Center();		//Thr, Roll, Pitch三个通道回中
-				}
+				// if(ContriGetDataTime >= 200)
+				// {
+				// 	Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),target_location[0],target_location[1]);
+				// 	printf("tar_x:%d, tar_y:%d\r\n", target_location[0], target_location[1]);
+				// 	printf("roll_out:%d, pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
+				// 	printf("kal_x %f kal_y %f kal_h %f\r\n", location_esm[0], location_esm[1], height_esm);
+				// 	ContriGetDataStart = HAL_GetTick();
+				// }
+				// else if(ContriGetDataTime < 190)
+				// {
+				// 	Set_PWM_Roll(pwm_roll_out);
+				// 	Set_PWM_Pitch(pwm_pitch_out);
+				// }
+				// else{
+				// 	Back2Center();		//Thr, Roll, Pitch三个通道回中
+				// }
 				switch (cmd)
 				{
 				case 1: //悬停->前往目标点

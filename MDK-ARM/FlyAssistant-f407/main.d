@@ -195,6 +195,7 @@ flyassistant-f407\main.o: ../Inc/imu.h
 flyassistant-f407\main.o: ../Inc/mymath.h
 flyassistant-f407\main.o: ../Inc/Matrix.h
 flyassistant-f407\main.o: ../Inc/Kalman.h
+flyassistant-f407\main.o: ../Inc/patrol.h
 flyassistant-f407\main.o: ..\vl53l1x\core\vl53l1_api.h
 flyassistant-f407\main.o: ..\vl53l1x\core\vl53l1_api_strings.h
 flyassistant-f407\main.o: ..\vl53l1x\core\vl53l1_def.h

@@ -7,6 +7,7 @@
         "main.h": "c",
         "stdio.h": "c",
         "flycontrol.h": "c",
-        "stm32f4xx_hal.h": "c"
+        "stm32f4xx_hal.h": "c",
+        "patrol.h": "c"
     }
 }

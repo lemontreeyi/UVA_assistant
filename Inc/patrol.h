@@ -6,6 +6,6 @@
 #define FLYPATH_LEN 4
 
 void init_flypath();
-void getCurrentTarget(float* current_location, float* target_location);
+void getCurrentTarget(float* current_location, int* target_location);
 
 #endif
