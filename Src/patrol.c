@@ -20,12 +20,13 @@ uint8_t cmd_buf[3];
 /*
 param:
 Length:路径点的个数
-Threshold:到目标点的更新阈值
+Threshold:到目标点的更新阈值（cm为单位）
 return:遍历过点的个数
 */
 int getCurrentTarget(float* current_location, int* target_location, int Length, bool* path_flag, int path[][2], float Threshold)
 {
     int have_arrive = 0;
+    //转到cm为单位
     int cur_x = (int)(current_location[0]*100);
     int cur_y = (int)(current_location[1]*100);
     //根据目标点顺序遍历flag
@@ -54,10 +55,31 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
     return have_arrive;
 }
 
-void Rectangle(int *start, int width_x, int width_y)
+/*
+func:让无人机飞一个矩形路径,默认将起始点设在左下角，可按需求调整
+param：width_x->x方向的边长，width_y->y方向的边长，start->起始点
+6     5   4
+7         3
+0(8)  1   2
+*/
+bool Rectangle(int *start, int width_x, int width_y, float *current_location)
 {
     int path[9][2];
-    path[0][1] = 
+    path[0][1] = start[0]; path[0][1] = start[1];
+    path[1][0] = start[0] - (int)(width_x / 2.0); path[1][1] = start[1];
+    path[2][0] = start[0] - width_x; path[2][1] = start[1];
+    path[3][0] = path[2][0]; path[3][1] = start[1] - (int)(width_y / 2.0);
+    path[4][0] = path[2][0]; path[4][1] = start[1] - width_y;
+    path[5][0] = path[1][0]; path[5][1] = path[4][1];
+    path[6][0] = start[0];   path[6][1] = path[4][1];
+    path[7][0] = start[0];   path[7][1] = path[3][1];
+    path[8][0] = start[0];   path[8][1] = start[1];
+    bool path_flag[9] = {0};
+    int next_target[2], index = 0;
+    index = getCurrentTarget(current_location,next_target,9,path_flag,path,15);
+    Loiter_location((int)(current_location[0]*100),(int)(current_location[1]*100),next_target[0],next_target[1]);
+    if(index == 8) return true;
+    else return false;
 }
 
 /*
@@ -121,7 +143,7 @@ bool takeoff(int height, float* current_location)
     }
 
     Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), target_location[0], target_location[1]);
-    //printf("height = %d\r\n", height);
+    printf("height = %d\r\n", height);
     if(abs(height - 1500) > 100 && is_takeoff==1)
     {
         Take_off(1500, height);

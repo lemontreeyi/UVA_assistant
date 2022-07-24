@@ -182,6 +182,11 @@ bool  patrol_flag = 0;
 float height_esm = 0;
 
 int task = 0;
+//校准坐标数据
+float kx = 1.0078536923765482;
+float dx = -0.091023393141628;
+float ky = 0.9807397784555684;
+float dy = 0.07220428891557518;
 
 //bool Get_UWB_distance(float distance[]);
 
@@ -485,19 +490,9 @@ int main(void)
 					height_esm = kalman_calc(&kalman_h, height / 1000.0);
 					//printf("dis1=%f, dis2=%f\r\n dis3=%f, dis4=%f\r\n", distance_to_station_esm[0],distance_to_station_esm[1],distance_to_station_esm[2],distance_to_station_esm[3]);
           			//printf("raw_d1 %f raw_d2 %f raw_d3 %f raw_d4 %f kal_d1 %f kal_d2 %f kal_d3 %f kal_d4 %f\r\n", distance_to_station[0], distance_to_station[1], distance_to_station[2], distance_to_station[3], distance_to_station_esm[0], distance_to_station_esm[1], distance_to_station_esm[2], distance_to_station_esm[3]);
-					// printf("%f\r\n", height/1000.0);
 					calculate_location(distance_to_station_esm, location, height/1000.0);
-					//printf("z:%f\r\n", location[2]);
-					//printf("x:%f y:%f\r\n", location[0], location[1]);
-          			// printf("raw_x:%f raw_y:%f\r\n", location[0], location[1]);
-          			// mid_filter(location[0], location_esm, x_array);
-          			// mid_filter(location[1], location_esm + 1, y_array);
-          			// // printf("mid_x:%f mid_y:%f\r\n", location_esm[0], location_esm[1]);
-          			// limit_filter(location_esm[0], location_esm_limit);
-          			// limit_filter(location_esm[1], location_esm_limit + 1);
-
-          			// location_esm_kalma[0] = kalman_calc(&kalman_x, location_esm_limit[0]);
-          			// location_esm_kalma[1] = kalman_calc(&kalman_y, location_esm_limit[1]);
+					location[0] = kx * location[0] + dx;
+					location[1] = ky * location[1] + dy;
 					location_esm[0] = kalman_calc(&kalman_x, location[0]);
 					location_esm[1] = kalman_calc(&kalman_y, location[1]);
           			//printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location[0]), kalman_calc(&kalman_y, location[1]));
@@ -509,22 +504,19 @@ int main(void)
 					Cxof_Wait = HAL_GetTick();
 					BEEP_OFF();
           			Send_cxof_buf(USART3, cxof_buf, 9);
-					//printf("send cxof finished!\r\n");
         		}
 				rxlen_uart_5 = 0;
 				UART5_RX_STA = 0;
 				BSP_USART_StartIT_LL(UART5); //启动下一次接收
 			}
-
 			if(HAL_GetTick() - Cxof_Wait >= 300)			//超过300ms未接收到uwb的数据，蜂鸣器响起报警
 				BEEP_ON();
-
 			if (3 == RC_Read()) //飞控助手控制
 			{	
 				switch (task)
 				{
 				case 0:
-					if(takeoff(height_esm, location_esm))
+					if(takeoff(height, location_esm))
 					{
 						BEEP_ON();
 						HAL_Delay(1000);
@@ -533,18 +525,25 @@ int main(void)
 					}
 					break;
 				case 1:
-
+					target_location[0] = 375;   target_location[1] = 325;
+					if(Rectangle(target_location,200,180,location_esm))
+					{
+						BEEP_ON();
+						HAL_Delay(1000);
+						BEEP_OFF();
+						task = 2;
+					}
 				default:
 					Back2Center();
 					break;
 				}
-
 				//将UWB无线定位后的坐标结果传入PID外环，进行控制
 				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
-				if(ContriGetDataTime >= 500)
+				if(ContriGetDataTime >= 300)
 				{
-					printf("next_x:%d, next_y:%d\r\n", next_location[0], next_location[1]);
-					printf("roll_out:%d, pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
+					// printf("next_x:%d, next_y:%d\r\n", next_location[0], next_location[1]);
+					// printf("roll_out:%d, pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
+					printf("real_x:%f, real_y:%f, ", location[0], location[1]);
 					printf("kal_x %f kal_y %f kal_h %f\r\n", location_esm[0], location_esm[1], height_esm);
 					ContriGetDataStart = HAL_GetTick();	
 				}

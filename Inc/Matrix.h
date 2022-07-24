@@ -5,18 +5,18 @@
 #include <stdbool.h>
 
 //需注意后面计算的A不能为奇异矩阵!!!
-#define STATION1_X 0
-#define STATION1_Y 0.03
-#define STATION1_Z 0.90
-#define STATION2_X 4.85
-#define STATION2_Y 0.02
-#define STATION2_Z 1.55
-#define STATION3_X 0.04
-#define STATION3_Y 4.10
-#define STATION3_Z 0.70
-#define STATION4_X 4.90
-#define STATION4_Y 4.10
-#define STATION4_Z 1.45
+#define STATION1_X 0.0
+#define STATION1_Y 0.0
+#define STATION1_Z 1.50
+#define STATION2_X 4.95
+#define STATION2_Y 0.0
+#define STATION2_Z 1.30
+#define STATION3_X 0.0
+#define STATION3_Y 4.95
+#define STATION3_Z 1.60
+#define STATION4_X 4.95
+#define STATION4_Y 4.95
+#define STATION4_Z 1.47
 
 typedef struct Matrix
 {

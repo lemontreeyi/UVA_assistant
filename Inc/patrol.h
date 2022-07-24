@@ -9,6 +9,7 @@
 
 // void init_flypath();
 int getCurrentTarget(float* current_location, int* target_location, int Length, bool* path_flag, int path[][2], float Threshold);
+bool Rectangle(int *start, int width_x, int width_y, float *current_location);
 int Get_circle_1(float *current_location, int *target_location, int *begin, int *end);
 int Get_circle_2(int current_height, int target_height);
 bool takeoff(int height, float* current_location);

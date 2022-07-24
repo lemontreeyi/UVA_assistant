@@ -307,18 +307,18 @@ void Take_off_Preper(void)
 =====================================================================================================*/ 
 void Take_off(float target_height, float current_height)//mm
 {	
-	if(fabs(current_height - target_height) < 100.0){
+	if(fabs(current_height - target_height) < 50.0){
 		Set_PWM_Thr(4500);
 		//printf("get thr mid!\r\n");
 	}
-	else if(fabs(current_height - target_height) > 100.0)
+	else if(fabs(current_height - target_height) > 50.0)
 	{	
 		//printf("get in thr control!\r\n");
 		if(current_height < target_height) {
-			Set_PWM_Thr((int)(4500 + 750 * exp((-current_height / target_height)*0.75)));
+			Set_PWM_Thr((int)(4500 + 750 * exp((-current_height / target_height)*0.71)));
 			//printf("cur_distance = %f\r\n", current_height);
 		}
-		else Set_PWM_Thr((int)(4500 - 750 * exp((-current_height / target_height)*0.75)));
+		else Set_PWM_Thr((int)(4500 - 750 * (exp(((current_height - target_height) / target_height)*0.71) - 1)));
 	}	
 }
 
