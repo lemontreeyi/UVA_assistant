@@ -220,18 +220,18 @@ void PIDInit (PID *pp)
 	PID_Roll_Time.SumError = 0;
     
 	PID_Location_x.Max = 900;
-	PID_Location_x.Proportion = 2.2;
+	PID_Location_x.Proportion = 2.15;
 	PID_Location_x.Integral = 0;
-	PID_Location_x.Derivative = 1.2;//2.8;
+	PID_Location_x.Derivative = 1.5;//2.8;
 	PID_Location_x.SetPoint = 0;
 	PID_Location_x.LastError = 0;
 	PID_Location_x.PreviousError = 0;
 	PID_Location_x.SumError = 0;
 
 	PID_Location_y.Max = 900;			//
-	PID_Location_y.Proportion = -2.2;
+	PID_Location_y.Proportion = -2.15;
 	PID_Location_y.Integral = 0;
-	PID_Location_y.Derivative = -1.2;//-2.8;.
+	PID_Location_y.Derivative = -1.5;//-2.8;.
 	PID_Location_y.SetPoint = 0;
 	PID_Location_y.LastError = 0;
 	PID_Location_y.PreviousError = 0;
@@ -307,13 +307,18 @@ void Take_off_Preper(void)
 =====================================================================================================*/ 
 void Take_off(float target_height, float current_height)//mm
 {	
-	printf("cur_distance = %f\r\n", current_height);
-	if(abs(current_height - target_height) < 100)
+	if(fabs(current_height - target_height) < 100.0){
 		Set_PWM_Thr(4500);
-	else if(abs(current_height - target_height) > 100)
-	{
-		if(current_height < target_height) Set_PWM_Thr((int)(4500 + 650 * exp(-current_height / target_height)));
-		else Set_PWM_Thr((int)(4500 - 650 * exp(-current_height / target_height)));
+		//printf("get thr mid!\r\n");
+	}
+	else if(fabs(current_height - target_height) > 100.0)
+	{	
+		//printf("get in thr control!\r\n");
+		if(current_height < target_height) {
+			Set_PWM_Thr((int)(4500 + 750 * exp((-current_height / target_height)*0.75)));
+			//printf("cur_distance = %f\r\n", current_height);
+		}
+		else Set_PWM_Thr((int)(4500 - 750 * exp((-current_height / target_height)*0.75)));
 	}	
 }
 
@@ -428,7 +433,7 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 	deadZoneX = point_x - SetPoint_x;
 	deadZoneY = point_y - SetPoint_y;
 
-	if(myabs(deadZoneX) >= 15)
+	if(abs(deadZoneX) >= 15)
 	{
 		pwm_roll_clc = PID_location(&PID_Location_x, point_x, SetPoint_x);
 		pwm_roll_out = PWM_Roll_mid + pwm_roll_clc;
@@ -438,7 +443,7 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 		pwm_roll_out = PWM_Roll_mid;
 		Set_PWM_Roll(pwm_roll_out);
 	}
-	if(myabs(deadZoneY) >= 15)
+	if(abs(deadZoneY) >= 15)
 	{
 		pwm_pitch_clc = PID_location(&PID_Location_y, point_y, SetPoint_y);
 		pwm_pitch_out = PWM_Pitch_mid + pwm_pitch_clc;
@@ -471,7 +476,7 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 	deadZoneY = point_y - SetPoint_y;
 
 	//roll方向
-	if(myabs(deadZoneX)>=DeadThreShold)
+	if(abs(deadZoneX)>=DeadThreShold)
 	{
 		if(abs(point_x - SetPoint_x) < 45)
 			pwm_roll_clc  = PIDCalc(&PID_Control_Roll  ,point_x,SetPoint_x, 1);
@@ -483,12 +488,12 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 		// HAL_Delay(pwm_roll_time);
 		// Set_PWM_Roll(PWM_Roll_mid);
 	}
-	if(myabs(deadZoneX)<DeadThreShold)
+	if(abs(deadZoneX)<DeadThreShold)
 	{
 		Set_PWM_Roll(PWM_Roll_mid);
 	}
 	//pitch方向
-	if(myabs(deadZoneY)>=DeadThreShold)
+	if(abs(deadZoneY)>=DeadThreShold)
 	{
 		if(abs(point_y - SetPoint_y) < 45)
 			pwm_pitch_clc = PIDCalc(&PID_Control_Pitch ,point_y,SetPoint_y, 1);
@@ -500,7 +505,7 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 		// HAL_Delay(pwm_pitch_time);
 		// Set_PWM_Pitch(PWM_Pitch_mid);
 	} 
-	if(myabs(deadZoneY) < DeadThreShold)
+	if(abs(deadZoneY) < DeadThreShold)
 	{
 		Set_PWM_Pitch(PWM_Pitch_mid);
 	}

@@ -18,7 +18,7 @@
 #define min(a, b)			(a<b? a:b)
 #define range(x, a, b)		(min(max(x, a), b))
 #define exchange(a, b, tmp) (tmp=a, a=b, b=tmp)
-#define myabs(x)			((x<0) ? -x:x)
+#define myabs(x)			((x<0) ? -(x):x)
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef enum  Fly_ModerDef

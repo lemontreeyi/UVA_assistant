@@ -398,6 +398,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		Set_PWM_Ctrl(CHANNEL_3_PULSE_WIDE);		//便于在地面站观察直通或桥接模式
 		//读取激光雷达测距数据
 		vl53l1x_GetDistance(&Dev);
 		//读取MPU6050
@@ -512,20 +513,21 @@ int main(void)
 			}
 
 			if(HAL_GetTick() - Cxof_Wait >= 300)			//超过300ms未接收到uwb的数据，蜂鸣器响起报警
-				BEEP_OFF();
+				BEEP_ON();
 
 			if (3 == RC_Read()) //飞控助手控制
 			{	
-				if(takeoff(height, location_esm))
-				{
-					BEEP_ON();
-					HAL_Delay(500);
-					BEEP_OFF();
-				}
-				// target_location[0] = 345;
-				// target_location[1] = 305;
-				// set_NextLocation(location_esm, target_location, next_location);
-				// Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),next_location[0],next_location[1]);
+				// 1.定点起飞
+				// if(takeoff(height, location_esm))
+				// {
+				// 	BEEP_ON();
+				// 	HAL_Delay(500);
+				// 	BEEP_OFF();
+				// }
+				target_location[0] = 275;
+				target_location[1] = 234;
+				set_NextLocation(location_esm, target_location, next_location);
+				Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),next_location[0],next_location[1]);
 
 				//将UWB无线定位后的坐标结果传入PID外环，进行控制
 				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;

@@ -114,7 +114,7 @@ bool takeoff(int height, float* current_location)
     }
 
     Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), target_location[0], target_location[1]);
-    printf("height = %d\r\n", height);
+    //printf("height = %d\r\n", height);
     if(abs(height - 1500) > 100 && is_takeoff==1)
     {
         Take_off(1500, height);

@@ -27,46 +27,50 @@ Project File Date:  07/23/2022
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant-f407'
-compiling main.c...
-../Inc/patrol.h(17): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/Src/main.c(238): warning:  #177-D: variable "i3"  was declared but never referenced
-  	uint16_t i1 = 0, i2 = 0, i3 = 0, i5 = 0;
-../Core/Src/main.c(239): warning:  #177-D: variable "len"  was declared but never referenced
-  	uint16_t len = 0;
-../Core/Src/main.c(242): warning:  #177-D: variable "rxlen_usart_3"  was declared but never referenced
-  	uint16_t rxlen_usart_3;
-../Core/Src/main.c(247): warning:  #550-D: variable "RunTime"  was set but never used
-  	uint32_t RunTime = 0;
-../Core/Src/main.c(248): warning:  #550-D: variable "ContrlTime_x"  was set but never used
-  	uint32_t ContrlTime_x = 0;
-../Core/Src/main.c(249): warning:  #550-D: variable "ContrlTime_y"  was set but never used
-  	uint32_t ContrlTime_y = 0;
-../Core/Src/main.c(254): warning:  #177-D: variable "Ctrl_flag_time"  was declared but never referenced
-  	uint32_t Ctrl_flag_time = 0;
-../Core/Src/main.c(256): warning:  #177-D: variable "decodetimer"  was declared but never referenced
-  	uint32_t decodetimer;
-../Core/Src/main.c(262): warning:  #177-D: variable "flag_rx2"  was declared but never referenced
-  	int flag_rx2 = 0;
-../Core/Src/main.c(269): warning:  #177-D: variable "str"  was declared but never referenced
-    uint8_t str[] = "hello world\r\n";
-../Core/Src/main.c(725): warning:  #870-D: invalid multibyte character sequence
-  	printf("  PA6       ------>   PWM1      与遥控器接收机油门相�?? \r\n");
-../Core/Src/main.c(873): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
-../Core/Src/main.c(873): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
-../Core/Src/main.c(1597): warning:  #550-D: variable "len"  was set but never used
-  	uint16_t len;
-../Core/Src/main.c(1621): warning:  #550-D: variable "len"  was set but never used
-  	uint16_t len;
-../Core/Src/main.c(1650): warning:  #550-D: variable "len"  was set but never used
-  	uint16_t len;
-../Core/Src/main.c: 17 warnings, 0 errors
+compiling Matrix.c...
+..\Src\Matrix.c(143): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float d1 = (float)sqrt(d[0]*d[0] - (
+TATION1_Z - height - 0.15)*(STATION1_Z - height - 0.15));
+..\Src\Matrix.c(143): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float d1 = (float)sqrt(d[0]*d[0] - (
+TATION1_Z - height - 0.15)*(
+TATION1_Z - height - 0.15));
+..\Src\Matrix.c(144): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float d2 = (float)sqrt(d[1]*d[1] - (
+TATION2_Z - height - 0.15)*(STATION2_Z - height - 0.15));
+..\Src\Matrix.c(144): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float d2 = (float)sqrt(d[1]*d[1] - (
+TATION2_Z - height - 0.15)*(
+TATION2_Z - height - 0.15));
+..\Src\Matrix.c(145): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float d3 = (float)sqrt(d[2]*d[2] - (
+TATION3_Z - height - 0.15)*(STATION3_Z - height - 0.15));
+..\Src\Matrix.c(145): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float d3 = (float)sqrt(d[2]*d[2] - (
+TATION3_Z - height - 0.15)*(
+TATION3_Z - height - 0.15));
+..\Src\Matrix.c(146): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float d4 = (float)sqrt(d[3]*d[3] - (
+TATION4_Z - height - 0.15)*(STATION4_Z - height - 0.15));
+..\Src\Matrix.c(146): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float d4 = (float)sqrt(d[3]*d[3] - (
+TATION4_Z - height - 0.15)*(
+TATION4_Z - height - 0.15));
+..\Src\Matrix.c(212): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          *location_esm += (data - *location_esm) * 0.1;
+..\Src\Matrix.c(237): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float tar_x = (float)target_location[0] / 100.0;
+..\Src\Matrix.c(238): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float tar_y = (float)target_location[1] / 100.0;
+..\Src\Matrix.c(255): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          next_location[1] = (int)((current_location[1] + 0.8 * flag_y * sin) * 100);
+..\Src\Matrix.c(257): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          next_location[0] = (int)((current_location[0] + 0.8 * flag_x * cos) * 100);
+..\Src\Matrix.c: 13 warnings, 0 errors
 linking...
-Program Size: Code=45324 RO-data=1324 RW-data=1508 ZI-data=6284  
+Program Size: Code=44420 RO-data=1236 RW-data=1488 ZI-data=6288  
 FromELF: creating hex file...
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 17 Warning(s).
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 13 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -84,7 +88,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:07
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

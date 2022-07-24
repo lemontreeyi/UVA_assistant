@@ -13,6 +13,7 @@
         "xstring": "c",
         "xutility": "c",
         "string": "c",
-        "uart_api.h": "c"
+        "uart_api.h": "c",
+        "cstdlib": "c"
     }
 }
