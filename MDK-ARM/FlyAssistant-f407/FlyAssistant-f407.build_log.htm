@@ -28,47 +28,45 @@ Project File Date:  07/23/2022
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant-f407'
 compiling main.c...
-../Inc/patrol.h(8): warning:  #1295-D: Deprecated declaration init_flypath - give arg types
-  void init_flypath();
-../Inc/patrol.h(11): warning:  #1-D: last line of file ends without a newline
+../Inc/patrol.h(17): warning:  #1-D: last line of file ends without a newline
   #endif
-../Core/Src/main.c(237): warning:  #177-D: variable "i3"  was declared but never referenced
+../Core/Src/main.c(238): warning:  #177-D: variable "i3"  was declared but never referenced
   	uint16_t i1 = 0, i2 = 0, i3 = 0, i5 = 0;
-../Core/Src/main.c(238): warning:  #177-D: variable "len"  was declared but never referenced
+../Core/Src/main.c(239): warning:  #177-D: variable "len"  was declared but never referenced
   	uint16_t len = 0;
-../Core/Src/main.c(241): warning:  #177-D: variable "rxlen_usart_3"  was declared but never referenced
+../Core/Src/main.c(242): warning:  #177-D: variable "rxlen_usart_3"  was declared but never referenced
   	uint16_t rxlen_usart_3;
-../Core/Src/main.c(246): warning:  #550-D: variable "RunTime"  was set but never used
+../Core/Src/main.c(247): warning:  #550-D: variable "RunTime"  was set but never used
   	uint32_t RunTime = 0;
-../Core/Src/main.c(247): warning:  #550-D: variable "ContrlTime_x"  was set but never used
+../Core/Src/main.c(248): warning:  #550-D: variable "ContrlTime_x"  was set but never used
   	uint32_t ContrlTime_x = 0;
-../Core/Src/main.c(248): warning:  #550-D: variable "ContrlTime_y"  was set but never used
+../Core/Src/main.c(249): warning:  #550-D: variable "ContrlTime_y"  was set but never used
   	uint32_t ContrlTime_y = 0;
-../Core/Src/main.c(253): warning:  #177-D: variable "Ctrl_flag_time"  was declared but never referenced
+../Core/Src/main.c(254): warning:  #177-D: variable "Ctrl_flag_time"  was declared but never referenced
   	uint32_t Ctrl_flag_time = 0;
-../Core/Src/main.c(255): warning:  #177-D: variable "decodetimer"  was declared but never referenced
+../Core/Src/main.c(256): warning:  #177-D: variable "decodetimer"  was declared but never referenced
   	uint32_t decodetimer;
-../Core/Src/main.c(260): warning:  #177-D: variable "flag_rx2"  was declared but never referenced
+../Core/Src/main.c(262): warning:  #177-D: variable "flag_rx2"  was declared but never referenced
   	int flag_rx2 = 0;
-../Core/Src/main.c(267): warning:  #177-D: variable "str"  was declared but never referenced
+../Core/Src/main.c(269): warning:  #177-D: variable "str"  was declared but never referenced
     uint8_t str[] = "hello world\r\n";
-../Core/Src/main.c(714): warning:  #870-D: invalid multibyte character sequence
+../Core/Src/main.c(725): warning:  #870-D: invalid multibyte character sequence
   	printf("  PA6       ------>   PWM1      与遥控器接收机油门相�?? \r\n");
-../Core/Src/main.c(862): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Core/Src/main.c(873): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
-../Core/Src/main.c(862): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+../Core/Src/main.c(873): warning:  #1035-D: single-precision operand implicitly converted to double-precision
   	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
-../Core/Src/main.c(1586): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(1597): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;
-../Core/Src/main.c(1610): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(1621): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;
-../Core/Src/main.c(1639): warning:  #550-D: variable "len"  was set but never used
+../Core/Src/main.c(1650): warning:  #550-D: variable "len"  was set but never used
   	uint16_t len;
-../Core/Src/main.c: 18 warnings, 0 errors
+../Core/Src/main.c: 17 warnings, 0 errors
 linking...
-Program Size: Code=44028 RO-data=1236 RW-data=1484 ZI-data=6316  
+Program Size: Code=45324 RO-data=1324 RW-data=1508 ZI-data=6284  
 FromELF: creating hex file...
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 18 Warning(s).
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 17 Warning(s).
 
 <h2>Software Packages used:</h2>
 

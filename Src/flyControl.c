@@ -220,18 +220,18 @@ void PIDInit (PID *pp)
 	PID_Roll_Time.SumError = 0;
     
 	PID_Location_x.Max = 900;
-	PID_Location_x.Proportion = 2.6;
+	PID_Location_x.Proportion = 2.2;
 	PID_Location_x.Integral = 0;
-	PID_Location_x.Derivative = 0;//2.8;
+	PID_Location_x.Derivative = 1.2;//2.8;
 	PID_Location_x.SetPoint = 0;
 	PID_Location_x.LastError = 0;
 	PID_Location_x.PreviousError = 0;
 	PID_Location_x.SumError = 0;
 
 	PID_Location_y.Max = 900;			//
-	PID_Location_y.Proportion = -2.6;
+	PID_Location_y.Proportion = -2.2;
 	PID_Location_y.Integral = 0;
-	PID_Location_y.Derivative = 0;//-2.8;.
+	PID_Location_y.Derivative = -1.2;//-2.8;.
 	PID_Location_y.SetPoint = 0;
 	PID_Location_y.LastError = 0;
 	PID_Location_y.PreviousError = 0;
@@ -307,7 +307,7 @@ void Take_off_Preper(void)
 =====================================================================================================*/ 
 void Take_off(float target_height, float current_height)//mm
 {	
-	//printf("cur_distance = %d\r\n", current_height);
+	printf("cur_distance = %f\r\n", current_height);
 	if(abs(current_height - target_height) < 100)
 		Set_PWM_Thr(4500);
 	else if(abs(current_height - target_height) > 100)
@@ -428,19 +428,26 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 	deadZoneX = point_x - SetPoint_x;
 	deadZoneY = point_y - SetPoint_y;
 
-	if(myabs(deadZoneX) >= 10)
+	if(myabs(deadZoneX) >= 15)
 	{
 		pwm_roll_clc = PID_location(&PID_Location_x, point_x, SetPoint_x);
 		pwm_roll_out = PWM_Roll_mid + pwm_roll_clc;
+		Set_PWM_Roll(pwm_roll_out);
 	}
-	else pwm_roll_out = PWM_Roll_mid;
-
-	if(myabs(deadZoneY) >= 10)
+	else {
+		pwm_roll_out = PWM_Roll_mid;
+		Set_PWM_Roll(pwm_roll_out);
+	}
+	if(myabs(deadZoneY) >= 15)
 	{
 		pwm_pitch_clc = PID_location(&PID_Location_y, point_y, SetPoint_y);
 		pwm_pitch_out = PWM_Pitch_mid + pwm_pitch_clc;
+		Set_PWM_Pitch(pwm_pitch_out);
 	}
-	else pwm_pitch_out = PWM_Pitch_mid;
+	else {
+		pwm_pitch_out = PWM_Pitch_mid;
+		Set_PWM_Pitch(pwm_pitch_out);
+	}
 }
 
 /*==================================================================================================== 

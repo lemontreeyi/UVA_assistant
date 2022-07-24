@@ -174,6 +174,7 @@ float location_esm[3] = {0, 0, 0};
 float location_esm_limit[3] = {0, 0, 0};
 float location_esm_kalma[3] = {0, 0, 0};
 int   target_location[2] = {0, 0};	//cm为单位
+int   next_location[2] = {0, 0};
 short d_location[2] = {0 ,0};
 float speed[2] = {0.0, 0.0};
 
@@ -256,6 +257,7 @@ int main(void)
 	uint32_t tickstart = HAL_GetTick();
 	uint32_t ticklast = HAL_GetTick();
 	uint32_t Cxof_Time = HAL_GetTick();
+	uint32_t Cxof_Wait = HAL_GetTick();
 	uint32_t Dtime = 0;
 	int flag_rx2 = 0;
 //	mavlink_message_t msg1;
@@ -359,11 +361,11 @@ int main(void)
 	BSP_USART_StartIT_LL(UART5);
 	
 	//kalman init
-	kalman_init(&kalman_x, 0.2, 0.5);
-  	kalman_init(&kalman_y, 0.2, 0.5);
+	kalman_init(&kalman_x, 0.4, 0.5);
+  	kalman_init(&kalman_y, 0.4, 0.5);
 	kalman_init(&kalman_h, 0.3, 0.0016);
   	for(int i = 0; i < 4; ++i)
-  		kalman_init(kalman_d+i, 0.1, 0.01);
+  		kalman_init(kalman_d+i, 0.3, 0.01);
   	init_A_matrix();
 	
 	//vl53L1x init
@@ -375,7 +377,7 @@ int main(void)
 	}
 
 	//patrol init
-	init_flypath();
+	//init_flypath();
 
 	TIM11_Set(0);
 	TIM13_Set(0);
@@ -499,6 +501,8 @@ int main(void)
 					//printf("vx:%f, vy:%f\r\n",speed[0], speed[1]);
           			Pack_cxof_buf(speed, 100, cxof_buf);
 					Cxof_Time = HAL_GetTick();
+					Cxof_Wait = HAL_GetTick();
+					BEEP_OFF();
           			Send_cxof_buf(USART3, cxof_buf, 9);
 					//printf("send cxof finished!\r\n");
         		}
@@ -507,20 +511,27 @@ int main(void)
 				BSP_USART_StartIT_LL(UART5); //启动下一次接收
 			}
 
+			if(HAL_GetTick() - Cxof_Wait >= 300)			//超过300ms未接收到uwb的数据，蜂鸣器响起报警
+				BEEP_OFF();
+
 			if (3 == RC_Read()) //飞控助手控制
 			{	
-				target_location[0] = 345;
-				target_location[1] = 305;
-				Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),target_location[0],target_location[1]);
-				
-				Set_PWM_Roll(pwm_roll_out);
-				Set_PWM_Pitch(pwm_pitch_out);
-				// getCurrentTarget(location_esm, target_location);
+				if(takeoff(height, location_esm))
+				{
+					BEEP_ON();
+					HAL_Delay(500);
+					BEEP_OFF();
+				}
+				// target_location[0] = 345;
+				// target_location[1] = 305;
+				// set_NextLocation(location_esm, target_location, next_location);
+				// Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),next_location[0],next_location[1]);
+
 				//将UWB无线定位后的坐标结果传入PID外环，进行控制
 				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
 				if(ContriGetDataTime >= 500)
 				{
-					printf("tar_x:%d, tar_y:%d\r\n", target_location[0], target_location[1]);
+					printf("next_x:%d, next_y:%d\r\n", next_location[0], next_location[1]);
 					printf("roll_out:%d, pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
 					printf("kal_x %f kal_y %f kal_h %f\r\n", location_esm[0], location_esm[1], height_esm);
 					ContriGetDataStart = HAL_GetTick();	

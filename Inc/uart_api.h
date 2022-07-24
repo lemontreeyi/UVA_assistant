@@ -17,4 +17,6 @@ void USART_Send_out(USART_TypeDef* huart, uint16_t *data, uint8_t len, uint8_t s
 void Pack_cxof_buf(float *speed, uint8_t quality, uint8_t *cxof_buf);
 void Send_cxof_buf(USART_TypeDef* huart, uint8_t *buf, uint32_t size);
 
+void Pack_cmd_buf(uint8_t cmd, uint8_t* buf);
+
 #endif

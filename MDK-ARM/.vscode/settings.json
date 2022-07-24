@@ -8,6 +8,11 @@
         "stdio.h": "c",
         "flycontrol.h": "c",
         "stm32f4xx_hal.h": "c",
-        "patrol.h": "c"
+        "patrol.h": "c",
+        "initializer_list": "c",
+        "xstring": "c",
+        "xutility": "c",
+        "string": "c",
+        "uart_api.h": "c"
     }
 }
