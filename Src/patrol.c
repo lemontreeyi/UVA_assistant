@@ -21,6 +21,7 @@ uint8_t cmd_buf[3];
 param:
 Length:路径点的个数
 Threshold:到目标点的更新阈值
+return:遍历过点的个数
 */
 int getCurrentTarget(float* current_location, int* target_location, int Length, bool* path_flag, int path[][2], float Threshold)
 {
@@ -51,6 +52,12 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
         target_location[1] = (int)(path[Length - 1][1]);
     }
     return have_arrive;
+}
+
+void Rectangle(int *start, int width_x, int width_y)
+{
+    int path[9][2];
+    path[0][1] = 
 }
 
 /*

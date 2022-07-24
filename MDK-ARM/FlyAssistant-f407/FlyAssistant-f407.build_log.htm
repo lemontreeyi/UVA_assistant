@@ -27,50 +27,16 @@ Project File Date:  07/23/2022
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant-f407'
-compiling Matrix.c...
-..\Src\Matrix.c(143): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d1 = (float)sqrt(d[0]*d[0] - (
-TATION1_Z - height - 0.15)*(STATION1_Z - height - 0.15));
-..\Src\Matrix.c(143): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d1 = (float)sqrt(d[0]*d[0] - (
-TATION1_Z - height - 0.15)*(
-TATION1_Z - height - 0.15));
-..\Src\Matrix.c(144): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d2 = (float)sqrt(d[1]*d[1] - (
-TATION2_Z - height - 0.15)*(STATION2_Z - height - 0.15));
-..\Src\Matrix.c(144): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d2 = (float)sqrt(d[1]*d[1] - (
-TATION2_Z - height - 0.15)*(
-TATION2_Z - height - 0.15));
-..\Src\Matrix.c(145): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d3 = (float)sqrt(d[2]*d[2] - (
-TATION3_Z - height - 0.15)*(STATION3_Z - height - 0.15));
-..\Src\Matrix.c(145): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d3 = (float)sqrt(d[2]*d[2] - (
-TATION3_Z - height - 0.15)*(
-TATION3_Z - height - 0.15));
-..\Src\Matrix.c(146): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d4 = (float)sqrt(d[3]*d[3] - (
-TATION4_Z - height - 0.15)*(STATION4_Z - height - 0.15));
-..\Src\Matrix.c(146): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float d4 = (float)sqrt(d[3]*d[3] - (
-TATION4_Z - height - 0.15)*(
-TATION4_Z - height - 0.15));
-..\Src\Matrix.c(212): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-          *location_esm += (data - *location_esm) * 0.1;
-..\Src\Matrix.c(237): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float tar_x = (float)target_location[0] / 100.0;
-..\Src\Matrix.c(238): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-      float tar_y = (float)target_location[1] / 100.0;
-..\Src\Matrix.c(255): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-          next_location[1] = (int)((current_location[1] + 0.8 * flag_y * sin) * 100);
-..\Src\Matrix.c(257): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-          next_location[0] = (int)((current_location[0] + 0.8 * flag_x * cos) * 100);
-..\Src\Matrix.c: 13 warnings, 0 errors
+compiling uart_api.c...
+..\Src\uart_api.c(14): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      dx =  (short)(speed[0] * 100 * 0.715);
+..\Src\uart_api.c(15): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      dy = -(short)(speed[1] * 100 * 0.715);
+..\Src\uart_api.c: 2 warnings, 0 errors
 linking...
 Program Size: Code=44420 RO-data=1236 RW-data=1488 ZI-data=6288  
 FromELF: creating hex file...
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 13 Warning(s).
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -88,7 +54,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

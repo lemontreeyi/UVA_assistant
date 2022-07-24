@@ -231,7 +231,7 @@ void BubbleSort(float* array, int len)
     }
 }
 
-void set_NextLocation(float* current_location, int* target_location, int *next_location)
+bool set_NextLocation(float* current_location, int* target_location, int *next_location)
 {
     //转化到m为单位
     float tar_x = (float)target_location[0] / 100.0;
@@ -244,6 +244,7 @@ void set_NextLocation(float* current_location, int* target_location, int *next_l
     {
         next_location[0] = target_location[0];
         next_location[1] = target_location[1];
+        return true;
     }
     else
     {
@@ -252,8 +253,9 @@ void set_NextLocation(float* current_location, int* target_location, int *next_l
         float cos = sqrt(1 / (1 + tan * tan));
         //转化到cm为单位
         //next_y
-        next_location[1] = (int)((current_location[1] + 0.8 * flag_y * sin) * 100);
+        next_location[1] = (int)((current_location[1] + 0.4 * flag_y * sin) * 100);
         //next_x
-        next_location[0] = (int)((current_location[0] + 0.8 * flag_x * cos) * 100);
+        next_location[0] = (int)((current_location[0] + 0.4 * flag_x * cos) * 100);
+        return false;
     }
 }

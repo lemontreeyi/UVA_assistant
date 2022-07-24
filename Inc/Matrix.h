@@ -34,5 +34,5 @@ void limit_filter(float data, float* location_esm);
 void init_A_matrix(void);
 
 void BubbleSort(float* array, int len);
-void set_NextLocation(float* current_location, int* target_location, int *next_location);
+bool set_NextLocation(float* current_location, int* target_location, int *next_location);
 #endif

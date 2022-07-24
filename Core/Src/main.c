@@ -177,6 +177,7 @@ int   target_location[2] = {0, 0};	//cm为单位
 int   next_location[2] = {0, 0};
 short d_location[2] = {0 ,0};
 float speed[2] = {0.0, 0.0};
+bool  patrol_flag = 0;
 
 float height_esm = 0;
 //bool Get_UWB_distance(float distance[]);
@@ -519,14 +520,12 @@ int main(void)
 			{	
 				// 1.定点起飞
 				// if(takeoff(height, location_esm))
-				// {
-				// 	BEEP_ON();
-				// 	HAL_Delay(500);
-				// 	BEEP_OFF();
-				// }
 				target_location[0] = 275;
 				target_location[1] = 234;
-				set_NextLocation(location_esm, target_location, next_location);
+				if(!patrol_flag)
+				{
+					patrol_flag = set_NextLocation(location_esm, target_location, next_location);
+				}
 				Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),next_location[0],next_location[1]);
 
 				//将UWB无线定位后的坐标结果传入PID外环，进行控制
