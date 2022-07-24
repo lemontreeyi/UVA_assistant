@@ -180,6 +180,9 @@ float speed[2] = {0.0, 0.0};
 bool  patrol_flag = 0;
 
 float height_esm = 0;
+
+int task = 0;
+
 //bool Get_UWB_distance(float distance[]);
 
 /* 仅允许本文件内调用的函数声明 */
@@ -518,15 +521,23 @@ int main(void)
 
 			if (3 == RC_Read()) //飞控助手控制
 			{	
-				// 1.定点起飞
-				// if(takeoff(height, location_esm))
-				target_location[0] = 275;
-				target_location[1] = 234;
-				if(!patrol_flag)
+				switch (task)
 				{
-					patrol_flag = set_NextLocation(location_esm, target_location, next_location);
+				case 0:
+					if(takeoff(height_esm, location_esm))
+					{
+						BEEP_ON();
+						HAL_Delay(1000);
+						BEEP_OFF();
+						task = 1;
+					}
+					break;
+				case 1:
+
+				default:
+					Back2Center();
+					break;
 				}
-				Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),next_location[0],next_location[1]);
 
 				//将UWB无线定位后的坐标结果传入PID外环，进行控制
 				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
@@ -536,101 +547,6 @@ int main(void)
 					printf("roll_out:%d, pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
 					printf("kal_x %f kal_y %f kal_h %f\r\n", location_esm[0], location_esm[1], height_esm);
 					ContriGetDataStart = HAL_GetTick();	
-				}
-				// if(ContriGetDataTime >= 200)
-				// {
-				// 	Loiter_location((int)(location_esm[0]*100),(int)(location_esm[1]*100),target_location[0],target_location[1]);
-				// 	printf("tar_x:%d, tar_y:%d\r\n", target_location[0], target_location[1]);
-				// 	printf("roll_out:%d, pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
-				// 	printf("kal_x %f kal_y %f kal_h %f\r\n", location_esm[0], location_esm[1], height_esm);
-				// 	ContriGetDataStart = HAL_GetTick();
-				// }
-				// else if(ContriGetDataTime < 190)
-				// {
-				// 	Set_PWM_Roll(pwm_roll_out);
-				// 	Set_PWM_Pitch(pwm_pitch_out);
-				// }
-				// else{
-				// 	Back2Center();		//Thr, Roll, Pitch三个通道回中
-				// }
-				switch (cmd)
-				{
-				case 1: //悬停->前往目标点
-					//更新状态 时间控制分开执行
-					ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
-					if(ContriGetDataTime >= 80)
-					{
-						ContriGetDataStart = HAL_GetTick();
-						Loiter(Attitude.Position_x,Attitude.Position_y,112,112, 0.0, 0.0);    //224x224
-						pwm_pitch_time = PID_GetTime(&PID_Pitch_Time, Attitude.Position_y, 112);
-						pwm_roll_time  = PID_GetTime(&PID_Roll_Time, Attitude.Position_x, 112);
-						printf("pitch_time:%d, roll_time:%d \r\n", pwm_pitch_time, pwm_roll_time);
-					}
-					//Set_PWM_Thr(4500);
-					// if(ContrlTime_y>=680)
-					// {
-					// 	ctrlstart_y = HAL_GetTick();
-					// }
-					// else if(ContrlTime_y <= pwm_pitch_time)
-					// {
-					//   //Set_PWM_Roll(pwm_roll_out);
-					//   Set_PWM_Pitch(pwm_pitch_out);
-					// }
-					// else
-					// {
-					//   Set_PWM_Pitch(4500);
-					// }
-	
-					// if(ContrlTime_x>=680)
-					// {
-					//   ctrlstart_x = HAL_GetTick();
-					// }
-					// else if(ContrlTime_x <= pwm_roll_time)
-					// {
-					//   Set_PWM_Roll(pwm_roll_out);
-					// }
-					// else
-					// {
-					//   Set_PWM_Roll(4500);
-					// }
-					ContrlTime_x = HAL_GetTick() - ctrlstart_x;
-					ContrlTime_y = HAL_GetTick() - ctrlstart_y;
-					//RC_Week_Bridge();			//测试时方便手动控制，正式使用时可注释
-					heartbeat = 0;
-					break;
-				case 2: //向右
-					printf("right \r\n");
-					Go_right(4500 + 10);
-					// RC_bridge_Test();
-					heartbeat = 0;
-					break;
-				case 3: //向左
-					printf("left \r\n");
-					Go_left(4500 + 10);
-					// RC_bridge_Test();
-					heartbeat = 0;
-					break;
-				case 4: //向前
-					printf("ahead \r\n");
-					Go_ahead(4500 + 10);
-					heartbeat = 0;
-					break;
-				case 5: //向后
-					printf("back \r\n");
-					Go_back(4500 + 10);
-					heartbeat = 0;
-					break;
-				default: //各道通回中
-					//printf("default\r\n");
-					//RC_Week_Bridge();
-					//Back_to_Center(); //没有UART数据输入时各通道回中
-					break;
-				}
-				heartbeat++;
-				if (heartbeat > 3000)
-				{
-					//cmd = 0;
-					heartbeat = 0;
 				}
 			}
 			else if (2 == RC_Read())//通道回中
@@ -644,6 +560,7 @@ int main(void)
 			{
 				//桥接模式
 				RC_bridge();
+				task = 0;
 			}
 		}
 
