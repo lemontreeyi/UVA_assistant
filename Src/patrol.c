@@ -1,4 +1,5 @@
 #include "patrol.h"
+#include <math.h>
 
 uint8_t cmd_buf[3];
 bool path_flag[9] = {0};
@@ -34,7 +35,7 @@ bool set_NextLocation(float* current_location, int* target_location, int *next_l
     float flag_y = (tar_y - current_location[1] > 0)?1.0:-1.0;
     float flag_x = (tar_x - current_location[0] > 0)?1.0:-1.0;
 
-    if((tar_x - current_location[0]) * (tar_x - current_location[0]) + (tar_y - current_location[1]) * (tar_y - current_location[1]) < 0.15*0.15)
+    if((tar_x - current_location[0]) * (tar_x - current_location[0]) + (tar_y - current_location[1]) * (tar_y - current_location[1]) < 0.20*0.20)
     {
         next_location[0] = target_location[0];
         next_location[1] = target_location[1];
@@ -45,11 +46,13 @@ bool set_NextLocation(float* current_location, int* target_location, int *next_l
         float tan = (tar_y - current_location[1]) / (tar_x - current_location[0]);
         float sin = sqrt(tan * tan / (1 + tan * tan));
         float cos = sqrt(1 / (1 + tan * tan));
+				//printf("tan:%f sin:%f cos:%f flag_x:%f flag_y:%f\r\n", tan, sin, cos, flag_x, flag_y);
         //转化到cm为单位
         //next_y
-        next_location[1] = (int)((current_location[1] + 0.4 * flag_y * sin) * 100);
+        next_location[1] = (int)((current_location[1] + 0.35 * flag_y * sin) * 100);
         //next_x
-        next_location[0] = (int)((current_location[0] + 0.4 * flag_x * cos) * 100);
+        next_location[0] = (int)((current_location[0] + 0.35 * flag_x * cos) * 100);
+				//printf("%f %d\r\n", (current_location[1] + 0.35 * flag_y * sin) * 100, (int)((current_location[1] + 0.35 * flag_y * sin) * 100));
         return false;
     }
 }
@@ -105,7 +108,7 @@ param：width_x->x方向的边长，width_y->y方向的边长，start->起始点
 bool Rectangle(int *start, int width_x, int width_y, float *current_location)
 {
     int path[9][2];
-    printf("start_x:%d start_y:%d\r\n", start[0], start[1]);
+    //printf("start_x:%d start_y:%d\r\n", start[0], start[1]);
     path[0][0] = start[0]; path[0][1] = start[1];
     path[1][0] = start[0] - (int)(width_x / 2.0); path[1][1] = start[1];
     path[2][0] = start[0] - width_x; path[2][1] = start[1];
@@ -120,9 +123,11 @@ bool Rectangle(int *start, int width_x, int width_y, float *current_location)
     index = getCurrentTarget(current_location,next_target,9,path_flag,path,20);
     // printf("cur_x:%f cur_y:%f\r\n", current_location[0], current_location[1]);
     // printf("index:%d\r\n", index);
-    // printf("target_x:%d target_y:%d\r\n", next_target[0], next_target[1]);
-    // Loiter_location((int)(current_location[0]*100),(int)(current_location[1]*100),next_target[0],next_target[1]);
+    printf("target_x:%d target_y:%d\r\n", next_target[0], next_target[1]);
     set_NextLocation(current_location, next_target, auto_next_target);
+    printf("next_x:%d, next_y:%d\r\n", auto_next_target[0], auto_next_target[1]);
+    Loiter_location((int)(current_location[0]*100),(int)(current_location[1]*100),auto_next_target[0],auto_next_target[1]);
+    printf("roll_out:%d, pitch_out:%d\r\n",pwm_roll_out, pwm_pitch_out);
     if(index == 9) return true;
     else return false;
 }
@@ -186,7 +191,7 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
     }
 
     Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), target_location[0], target_location[1]);
-    printf("height = %d\r\n", height);
+    //printf("height = %d\r\n", height);
     if(abs(height - 1500) > 100 && *is_takeoff==1)
     {
         Take_off(1500, height);
@@ -205,21 +210,22 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
 }
 
 //降落
-void landon(float height, float* current_location)
+bool landon(int height, float* current_location, bool *is_settarget)
 {
-    static bool is_settarget = 0;
     static float target_location[2];
 
-    if(!is_settarget)
+    if(!(*is_settarget))
     {
         target_location[0] = current_location[0];
         target_location[1] = current_location[1];
-        is_settarget = 1;
+        *is_settarget = 1;
     }
 
     Loiter_location(current_location[0], current_location[1], target_location[0], target_location[1]);
 
     land(height);
+	if(height < 80) return true;
+	else return false;
 }
 
 //拍照片

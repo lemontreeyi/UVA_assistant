@@ -35,9 +35,7 @@ compiling flyControl.c...
 ..\Src\flyControl.c(151): warning:  #223-D: function "abs" declared implicitly
   	out = abs((int)out);
 ..\Src\flyControl.c(318): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  			Set_PWM_Thr((int)(4500 + 750 * exp((-current_height / target_height)*0.71)));
-..\Src\flyControl.c(321): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  		else Set_PWM_Thr((int)(4500 - 750 * (exp(((current_height - target_height) / target_height)*0.71) - 1)));
+  			Set_PWM_Thr((int)(4500 + 750 * exp((-current_height / target_height) * 0.75)));
 ..\Src\flyControl.c(436): warning:  #223-D: function "abs" declared implicitly
   	if(abs(deadZoneX) >= 15)
 ..\Src\flyControl.c(446): warning:  #223-D: function "abs" declared implicitly
@@ -54,11 +52,11 @@ compiling flyControl.c...
   	int x = 0;
 ..\Src\flyControl.c(471): warning:  #550-D: variable "y"  was set but never used
   	int y = 0;
-..\Src\flyControl.c: 13 warnings, 0 errors
+..\Src\flyControl.c: 12 warnings, 0 errors
 linking...
-Program Size: Code=43148 RO-data=1028 RW-data=1504 ZI-data=6304  
+Program Size: Code=43460 RO-data=1028 RW-data=1504 ZI-data=6304  
 FromELF: creating hex file...
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 13 Warning(s).
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 12 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -76,7 +74,7 @@ Package Vendor: ARM
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:05
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

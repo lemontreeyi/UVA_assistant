@@ -15,6 +15,6 @@ bool Rectangle(int *start, int width_x, int width_y, float *current_location);
 int Get_circle_1(float *current_location, int *target_location, int *begin, int *end);
 int Get_circle_2(int current_height, int target_height);
 bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_settarget);
-void landon(float height, float* current_location);
+bool landon(int height, float* current_location, bool *is_settarget);
 bool shootphoto(float target_x, float target_y, float* current_location, USART_TypeDef* huart);
 #endif

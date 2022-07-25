@@ -493,8 +493,8 @@ int main(void)
 					//printf("dis1=%f, dis2=%f\r\n dis3=%f, dis4=%f\r\n", distance_to_station_esm[0],distance_to_station_esm[1],distance_to_station_esm[2],distance_to_station_esm[3]);
           			//printf("raw_d1 %f raw_d2 %f raw_d3 %f raw_d4 %f kal_d1 %f kal_d2 %f kal_d3 %f kal_d4 %f\r\n", distance_to_station[0], distance_to_station[1], distance_to_station[2], distance_to_station[3], distance_to_station_esm[0], distance_to_station_esm[1], distance_to_station_esm[2], distance_to_station_esm[3]);
 					calculate_location(distance_to_station_esm, location, height/1000.0);
-					location[0] = kx * location[0] + dx;
-					location[1] = ky * location[1] + dy;
+					// location[0] = kx * location[0] + dx;
+					// location[1] = ky * location[1] + dy;
 					location_esm[0] = kalman_calc(&kalman_x, location[0]);
 					location_esm[1] = kalman_calc(&kalman_y, location[1]);
           			//printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location[0]), kalman_calc(&kalman_y, location[1]));
@@ -511,19 +511,21 @@ int main(void)
 				UART5_RX_STA = 0;
 				BSP_USART_StartIT_LL(UART5); //启动下一次接收
 			}
-			if(HAL_GetTick() - Cxof_Wait >= 300)			//超过300ms未接收到uwb的数据，蜂鸣器响起报警
+			if(HAL_GetTick() - Cxof_Wait >= 500)			//超过300ms未接收到uwb的数据，蜂鸣器响起报警
 				BEEP_ON();
 			if (3 == RC_Read()) //飞控助手控制
 			{	
 				switch (task)
 				{
 				case 0:
+					//if(height > 300) Set_PWM_Mode(4500);		//Loiter -> 1500 x 3
 					if(takeoff(height, location_esm, &is_takeoff, &is_settarget))
 					{
 						BEEP_ON();
 						HAL_Delay(1000);
 						BEEP_OFF();
 						task = 1;
+						is_settarget = 0;
 					}
 					break;
 				case 1:
@@ -536,6 +538,15 @@ int main(void)
 						task = 2;
 					}
 					break;
+				case 2:
+					if(landon(height,location_esm,&is_settarget))
+					{
+						BEEP_ON();
+						HAL_Delay(1000);
+						BEEP_OFF();
+						Set_PWM_Thr(3000);
+						task = 3;
+					}
 				default:
 					Back2Center();
 					break;

@@ -220,18 +220,18 @@ void PIDInit (PID *pp)
 	PID_Roll_Time.SumError = 0;
     
 	PID_Location_x.Max = 650;
-	PID_Location_x.Proportion = 2.6;
+	PID_Location_x.Proportion =  6.4;
 	PID_Location_x.Integral = 0;
-	PID_Location_x.Derivative = 2.2;//2.8;
+	PID_Location_x.Derivative = 5.7;//2.8;
 	PID_Location_x.SetPoint = 0;
 	PID_Location_x.LastError = 0;
 	PID_Location_x.PreviousError = 0;
 	PID_Location_x.SumError = 0;
 
 	PID_Location_y.Max = 650;			//
-	PID_Location_y.Proportion = -2.6;
+	PID_Location_y.Proportion = -6.4;
 	PID_Location_y.Integral = 0;
-	PID_Location_y.Derivative = -2.2;//-2.8;.
+	PID_Location_y.Derivative = -5.7;//-2.8;
 	PID_Location_y.SetPoint = 0;
 	PID_Location_y.LastError = 0;
 	PID_Location_y.PreviousError = 0;
@@ -280,7 +280,7 @@ void Lock(void)
  for(int i=PWM_yaw_mid;i>=PWM_yaw_min;i=i-128)
  {
 	 LED1_Flash();
-   Set_PWM_Yaw(i);   
+   Set_PWM_Yaw(i);
  }
  //***********偏航回中*************//
  delay1ms(5000);
@@ -315,10 +315,10 @@ void Take_off(float target_height, float current_height)//mm
 	{	
 		//printf("get in thr control!\r\n");
 		if(current_height < target_height) {
-			Set_PWM_Thr((int)(4500 + 750 * exp((-current_height / target_height)*0.71)));
+			Set_PWM_Thr((int)(4500 + 750 * exp((-current_height / target_height) * 0.75)));
 			//printf("cur_distance = %f\r\n", current_height);
 		}
-		else Set_PWM_Thr((int)(4500 - 750 * (exp(((current_height - target_height) / target_height)*0.71) - 1)));
+		else Set_PWM_Thr((int)(4500 - 750 * exp((current_height - 2 * target_height) / target_height)));
 	}	
 }
 
@@ -326,11 +326,11 @@ void Take_off(float target_height, float current_height)//mm
 /*==================================================================================================== 
    降落
 =====================================================================================================*/ 
-void land(float current_height)
+void land(int current_height)
 {
 	printf("*******************Land***************\r\n");
 	if(current_height > 500)
-		Set_PWM_Thr(4500 - 600);
+		Set_PWM_Thr(4500 - 300);
 	else if(current_height < 80)
 		Set_PWM_Thr(0);
 	else
@@ -555,11 +555,20 @@ void Set_PWM_Yaw(uint16_t pulse)
 }
 
 //***********模式**********************************************//
+/*
+AltHold->1000 x 3
+Loiter ->1500 x 3
+Loiter ->2000 x 3
+*/
 void Set_PWM_Mode(uint16_t pulse)
 {
   TIM4 ->CCR1 =pulse ;
 }
 /************Ctrl************************************************/
+/*
+直通 -> 1000 x 3
+桥接 -> 2000 x 3
+*/
 void Set_PWM_Ctrl(uint16_t pulse)
 {
 	TIM4->CCR2 = pulse;
@@ -603,6 +612,6 @@ void Back2Center(void)
 {
 	Set_PWM_Roll(4500);
 	Set_PWM_Pitch(4500);
-	Set_PWM_Thr(4500);
+	//Set_PWM_Thr(4500);
 }
 
