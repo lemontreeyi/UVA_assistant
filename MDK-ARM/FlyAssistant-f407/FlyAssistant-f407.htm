@@ -3,7 +3,7 @@
 <title>Static Call Graph - [FlyAssistant-f407\FlyAssistant-f407.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image FlyAssistant-f407\FlyAssistant-f407.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Sun Jul 24 20:49:28 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Jul 24 23:33:49 2022
 <BR><P>
 <H3>Maximum Stack Usage =        800 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -521,6 +521,7 @@ Global Symbols
 <P><STRONG><a name="[d5]"></a>__aeabi_f2d</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, f2d.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Take_off
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IMUupdate
+<LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rectangle
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Pack_cxof_buf
 <LI><a href="#[19c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;calculate_location
@@ -642,6 +643,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Device_Init
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getCurrentTarget
 </UL>
 
 <P><STRONG><a name="[79]"></a>BEEP_ON</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, beep.o(i.BEEP_ON))
@@ -649,6 +651,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Device_Init
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getCurrentTarget
 </UL>
 
 <P><STRONG><a name="[10d]"></a>BSP_USART_SendArray_LL</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, uart_api.o(i.BSP_USART_SendArray_LL))
@@ -757,6 +760,7 @@ Global Symbols
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED1_Slow_Flash
 <LI><a href="#[1ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vl53l1x_init
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getCurrentTarget
 <LI><a href="#[13c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L1_WaitValueMaskEx
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L1_WaitUs
 </UL>
@@ -1604,13 +1608,15 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[10a]"></a>Rectangle</STRONG> (Thumb, 228 bytes, Stack size 128 bytes, patrol.o(i.Rectangle))
-<BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = Rectangle &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
+<P><STRONG><a name="[10a]"></a>Rectangle</STRONG> (Thumb, 292 bytes, Stack size 120 bytes, patrol.o(i.Rectangle))
+<BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = Rectangle &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 <LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Loiter_location
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
+<LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
+<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 <LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getCurrentTarget
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -2263,13 +2269,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L1_read_p2p_data
 </UL>
 
-<P><STRONG><a name="[111]"></a>VL53L1_get_preset_mode_timing_cfg</STRONG> (Thumb, 128 bytes, Stack size 20 bytes, vl53l1_api_core.o(i.VL53L1_get_preset_mode_timing_cfg))
+<P><STRONG><a name="[111]"></a>VL53L1_get_preset_mode_timing_cfg</STRONG> (Thumb, 126 bytes, Stack size 20 bytes, vl53l1_api_core.o(i.VL53L1_get_preset_mode_timing_cfg))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = VL53L1_get_preset_mode_timing_cfg
 </UL>
 <BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetPresetMode
 </UL>
 
-<P><STRONG><a name="[12c]"></a>VL53L1_get_sequence_config_bit</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, vl53l1_api_core.o(i.VL53L1_get_sequence_config_bit))
+<P><STRONG><a name="[12c]"></a>VL53L1_get_sequence_config_bit</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, vl53l1_api_core.o(i.VL53L1_get_sequence_config_bit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = VL53L1_get_sequence_config_bit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L1_GetSequenceStepEnable
@@ -2808,6 +2814,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KeyScanning
 <LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Unlock
 <LI><a href="#[1b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;takeoff
+<LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rectangle
 <LI><a href="#[1ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vl53l1x_init
 <LI><a href="#[1ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vl53l1x_GetDistance
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -3016,8 +3023,12 @@ Global Symbols
 <LI><a href="#[19f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delete_matrix
 </UL>
 
-<P><STRONG><a name="[10b]"></a>getCurrentTarget</STRONG> (Thumb, 136 bytes, Stack size 20 bytes, patrol.o(i.getCurrentTarget))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = getCurrentTarget
+<P><STRONG><a name="[10b]"></a>getCurrentTarget</STRONG> (Thumb, 160 bytes, Stack size 24 bytes, patrol.o(i.getCurrentTarget))
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = getCurrentTarget &rArr; HAL_Delay
+</UL>
+<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BEEP_ON
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BEEP_OFF
 </UL>
 <BR>[Called By]<UL><LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Rectangle
 </UL>
@@ -3461,7 +3472,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L1_GetRangingMeasurementData
 </UL>
 
-<P><STRONG><a name="[198]"></a>_fp_digits</STRONG> (Thumb, 366 bytes, Stack size 64 bytes, printfa.o(i._fp_digits), UNUSED)
+<P><STRONG><a name="[198]"></a>_fp_digits</STRONG> (Thumb, 334 bytes, Stack size 56 bytes, printfa.o(i._fp_digits), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[194]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple

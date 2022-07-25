@@ -3,49 +3,76 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.23.0.0
-Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: 1 2041729, HP Inc., LIC=P6F56-DKL4I-JPTZQ-NPAAZ-GJ9CY-5X6VK
+IDE-Version: ¦ÌVision V5.17.0.0
+Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: X Kraft, XKraft, LIC=RC9X7-EPC47-AQ80M-XPAKG-NX0RT-V0U3E
  
 Tool Versions:
-Toolchain:       MDK-ARM Professional  Version: 5.23
-Toolchain Path:  F:\Tools\KEIL_v5\ARM\ARMCC\Bin
-C Compiler:      Armcc.exe V5.06 update 4 (build 422)
-Assembler:       Armasm.exe V5.06 update 4 (build 422)
-Linker/Locator:  ArmLink.exe V5.06 update 4 (build 422)
-Library Manager: ArmAr.exe V5.06 update 4 (build 422)
-Hex Converter:   FromElf.exe V5.06 update 4 (build 422)
-CPU DLL:         SARMCM3.DLL V5.23
-Dialog DLL:      DCM.DLL V1.15.0.0
+Toolchain:       MDK-ARM Standard  Version: 5.17
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 1 (build 61)
+Assembler:       Armasm.exe V5.06 update 1 (build 61)
+Linker/Locator:  ArmLink.exe V5.06 update 1 (build 61)
+Library Manager: ArmAr.exe V5.06 update 1 (build 61)
+Hex Converter:   FromElf.exe V5.06 update 1 (build 61)
+CPU DLL:         SARMCM3.DLL V5.17
+Dialog DLL:      DCM.DLL V1.13.4.0
 Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
-Dialog DLL:      TCM.DLL V1.27.0.0
+Dialog DLL:      TCM.DLL V1.14.6.0
  
 <h2>Project:</h2>
-f:\User\lemon\Desktop\UVA_assistant\MDK-ARM\FlyAssistant-f407.uvprojx
-Project File Date:  07/23/2022
+d:\study\ardupilot\UVA_assistant\MDK-ARM\FlyAssistant-f407.uvprojx
+Project File Date:  07/24/2022
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
+*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant-f407'
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 0 Warning(s).
+compiling patrol.c...
+../Inc/patrol.h(18): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Src\patrol.c(43): warning:  #39-D: division by zero
+          HAL_Delay(1/00);
+..\Src\patrol.c(107): warning:  #174-D: expression has no effect
+      path[0][0], path[0][1] = begin[0], begin[1];        //èµ?å§?ç‚?
+..\Src\patrol.c(123): warning:  #111-D: statement is unreachable
+          return 1; break;
+..\Src\patrol.c(125): warning:  #111-D: statement is unreachable
+          return 3; break;
+..\Src\patrol.c(126): warning:  #111-D: statement is unreachable
+      default: return 2; break;
+..\Src\patrol.c(136): warning:  #940-D: missing return statement at end of non-void function "Get_circle_2"
+  }
+..\Src\patrol.c(155): warning:  #223-D: function "abs" declared implicitly
+      if(abs(height - 1500) > 100 && is_takeoff==1)
+..\Src\patrol.c(160): warning:  #223-D: function "fabs" declared implicitly
+      else if(fabs(height - 1500) <= 100 && is_takeoff==1)
+..\Src\patrol.c(194): warning:  #223-D: function "fabs" declared implicitly
+      if(fabs(current_location[0] - target_x) < 0.01 && fabs(current_location[1] - target_y) < 0.01)
+..\Src\patrol.c(201): warning:  #1-D: last line of file ends without a newline
+  }
+..\Src\patrol.c: 11 warnings, 0 errors
+linking...
+Program Size: Code=42652 RO-data=1028 RW-data=1516 ZI-data=6300  
+FromELF: creating hex file...
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 11 Warning(s).
 
 <h2>Software Packages used:</h2>
 
 Package Vendor: ARM
-                http://www.keil.com/pack/ARM.CMSIS.5.0.1.pack
-                ARM::CMSIS:CORE:5.0.1
+                http://www.keil.com/pack/ARM.CMSIS.4.5.0.pack
+                ARM::CMSIS:CORE:4.3.0
                 CMSIS (Cortex Microcontroller Software Interface Standard)
-   * Component: CORE Version: 5.0.1
+   * Component: CORE Version: 4.3.0
 
 <h2>Collection of Component include folders:</h2>
-  .\RTE\_FlyAssistant-f407
-  F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
-  F:\Tools\KEIL_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+  d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE
+  C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
+  C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
 
-   * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:01
+   * Component: ARM::CMSIS:CORE:4.3.0
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

@@ -526,7 +526,7 @@ int main(void)
 					break;
 				case 1:
 					target_location[0] = 375;   target_location[1] = 325;
-					if(Rectangle(target_location,200,180,location_esm))
+					if(Rectangle(target_location,240,240,location_esm))
 					{
 						BEEP_ON();
 						HAL_Delay(1000);

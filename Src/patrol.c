@@ -39,6 +39,9 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
     if((path[have_arrive][0] - cur_x) * (path[have_arrive][0] - cur_x) + (path[have_arrive][1] - cur_y) * (path[have_arrive][1] - cur_y) < (Threshold*Threshold))
     {
         path_flag[have_arrive] = true;
+        BEEP_ON();
+        HAL_Delay(1/00);
+        BEEP_OFF();
         ++have_arrive;
     }
     //设置目标点->根据flag打开的个数去设置
@@ -65,7 +68,8 @@ param：width_x->x方向的边长，width_y->y方向的边长，start->起始点
 bool Rectangle(int *start, int width_x, int width_y, float *current_location)
 {
     int path[9][2];
-    path[0][1] = start[0]; path[0][1] = start[1];
+    printf("start_x:%d start_y:%d\r\n", start[0], start[1]);
+    path[0][0] = start[0]; path[0][1] = start[1];
     path[1][0] = start[0] - (int)(width_x / 2.0); path[1][1] = start[1];
     path[2][0] = start[0] - width_x; path[2][1] = start[1];
     path[3][0] = path[2][0]; path[3][1] = start[1] - (int)(width_y / 2.0);
@@ -74,11 +78,15 @@ bool Rectangle(int *start, int width_x, int width_y, float *current_location)
     path[6][0] = start[0];   path[6][1] = path[4][1];
     path[7][0] = start[0];   path[7][1] = path[3][1];
     path[8][0] = start[0];   path[8][1] = start[1];
-    bool path_flag[9] = {0};
+    static bool path_flag[9] = {0};
     int next_target[2], index = 0;
-    index = getCurrentTarget(current_location,next_target,9,path_flag,path,15);
+    printf("path0_x:%d path0_y:%d\r\n", path[0][0], path[0][1]);
+    index = getCurrentTarget(current_location,next_target,9,path_flag,path,20);
+    printf("cur_x:%f cur_y:%f\r\n", current_location[0], current_location[1]);
+    printf("index:%d\r\n", index);
+    printf("target_x:%d target_y:%d\r\n", next_target[0], next_target[1]);
     Loiter_location((int)(current_location[0]*100),(int)(current_location[1]*100),next_target[0],next_target[1]);
-    if(index == 8) return true;
+    if(index == 9) return true;
     else return false;
 }
 
