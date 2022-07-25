@@ -37,6 +37,7 @@ bool set_NextLocation(float* current_location, int* target_location, int *next_l
 
     if((tar_x - current_location[0]) * (tar_x - current_location[0]) + (tar_y - current_location[1]) * (tar_y - current_location[1]) < 0.20*0.20)
     {
+
         next_location[0] = target_location[0];
         next_location[1] = target_location[1];
         return true;
@@ -69,6 +70,9 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
     //转到cm为单位
     int cur_x = (int)(current_location[0]*100);
     int cur_y = (int)(current_location[1]*100);
+
+    static uint32_t time = 0;
+    static bool is_time = 0;
     //根据目标点顺序遍历flag
     for(have_arrive = 0; have_arrive < Length; ++have_arrive)
     {
@@ -78,11 +82,23 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
     //到达目标点阈值范围内，flag置1
     if((path[have_arrive][0] - cur_x) * (path[have_arrive][0] - cur_x) + (path[have_arrive][1] - cur_y) * (path[have_arrive][1] - cur_y) < (Threshold*Threshold))
     {
-        path_flag[have_arrive] = true;
-        BEEP_ON();
-        HAL_Delay(100);
-        BEEP_OFF();
-        ++have_arrive;
+        if(!is_time)
+        {
+            is_time = 1;
+            time = HAL_GetTick();
+        }
+        else
+        {
+            if((HAL_GetTick() - time) > 5000)
+            {
+                is_time = 0;
+                path_flag[have_arrive] = true;
+                BEEP_ON();
+                HAL_Delay(100);
+                BEEP_OFF();
+                ++have_arrive;
+            }
+        } 
     }
     //设置目标点->根据flag打开的个数去设置
     if(have_arrive < Length)

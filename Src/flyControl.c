@@ -220,18 +220,18 @@ void PIDInit (PID *pp)
 	PID_Roll_Time.SumError = 0;
     
 	PID_Location_x.Max = 650;
-	PID_Location_x.Proportion =  6.4;
+	PID_Location_x.Proportion =  5.4;
 	PID_Location_x.Integral = 0;
-	PID_Location_x.Derivative = 5.7;//2.8;
+	PID_Location_x.Derivative = 7.5;//2.8;
 	PID_Location_x.SetPoint = 0;
 	PID_Location_x.LastError = 0;
 	PID_Location_x.PreviousError = 0;
 	PID_Location_x.SumError = 0;
 
 	PID_Location_y.Max = 650;			//
-	PID_Location_y.Proportion = -6.4;
+	PID_Location_y.Proportion = -5.4;
 	PID_Location_y.Integral = 0;
-	PID_Location_y.Derivative = -5.7;//-2.8;
+	PID_Location_y.Derivative = -7.5;//-2.8;
 	PID_Location_y.SetPoint = 0;
 	PID_Location_y.LastError = 0;
 	PID_Location_y.PreviousError = 0;
@@ -433,7 +433,7 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 	deadZoneX = point_x - SetPoint_x;
 	deadZoneY = point_y - SetPoint_y;
 
-	if(abs(deadZoneX) >= 15)
+	if(abs(deadZoneX) >= 20)
 	{
 		pwm_roll_clc = PID_location(&PID_Location_x, point_x, SetPoint_x);
 		pwm_roll_out = PWM_Roll_mid + pwm_roll_clc;
@@ -443,7 +443,7 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 		pwm_roll_out = PWM_Roll_mid;
 		Set_PWM_Roll(pwm_roll_out);
 	}
-	if(abs(deadZoneY) >= 15)
+	if(abs(deadZoneY) >= 20)
 	{
 		pwm_pitch_clc = PID_location(&PID_Location_y, point_y, SetPoint_y);
 		pwm_pitch_out = PWM_Pitch_mid + pwm_pitch_clc;
