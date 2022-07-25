@@ -1,6 +1,8 @@
 #include "patrol.h"
 
 uint8_t cmd_buf[3];
+bool path_flag[9] = {0};
+int auto_next_target[2] = {0};
 // float path[FLYPATH_LEN][2];
 // bool path_flag[FLYPATH_LEN];
 // void init_flypath()
@@ -16,6 +18,41 @@ uint8_t cmd_buf[3];
 //     }
     
 // }
+
+void reset_path_flag()
+{
+    for(int i = 0; i < 9; ++i)
+        path_flag[i] = 0;
+}
+
+bool set_NextLocation(float* current_location, int* target_location, int *next_location)
+{
+    //转化到m为单位
+    float tar_x = (float)target_location[0] / 100.0;
+    float tar_y = (float)target_location[1] / 100.0;
+
+    float flag_y = (tar_y - current_location[1] > 0)?1.0:-1.0;
+    float flag_x = (tar_x - current_location[0] > 0)?1.0:-1.0;
+
+    if((tar_x - current_location[0]) * (tar_x - current_location[0]) + (tar_y - current_location[1]) * (tar_y - current_location[1]) < 0.15*0.15)
+    {
+        next_location[0] = target_location[0];
+        next_location[1] = target_location[1];
+        return true;
+    }
+    else
+    {
+        float tan = (tar_y - current_location[1]) / (tar_x - current_location[0]);
+        float sin = sqrt(tan * tan / (1 + tan * tan));
+        float cos = sqrt(1 / (1 + tan * tan));
+        //转化到cm为单位
+        //next_y
+        next_location[1] = (int)((current_location[1] + 0.4 * flag_y * sin) * 100);
+        //next_x
+        next_location[0] = (int)((current_location[0] + 0.4 * flag_x * cos) * 100);
+        return false;
+    }
+}
 
 /*
 param:
@@ -40,7 +77,7 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
     {
         path_flag[have_arrive] = true;
         BEEP_ON();
-        HAL_Delay(1/00);
+        HAL_Delay(100);
         BEEP_OFF();
         ++have_arrive;
     }
@@ -78,14 +115,14 @@ bool Rectangle(int *start, int width_x, int width_y, float *current_location)
     path[6][0] = start[0];   path[6][1] = path[4][1];
     path[7][0] = start[0];   path[7][1] = path[3][1];
     path[8][0] = start[0];   path[8][1] = start[1];
-    static bool path_flag[9] = {0};
     int next_target[2], index = 0;
-    printf("path0_x:%d path0_y:%d\r\n", path[0][0], path[0][1]);
+    // printf("path0_x:%d path0_y:%d\r\n", path[0][0], path[0][1]);
     index = getCurrentTarget(current_location,next_target,9,path_flag,path,20);
-    printf("cur_x:%f cur_y:%f\r\n", current_location[0], current_location[1]);
-    printf("index:%d\r\n", index);
-    printf("target_x:%d target_y:%d\r\n", next_target[0], next_target[1]);
-    Loiter_location((int)(current_location[0]*100),(int)(current_location[1]*100),next_target[0],next_target[1]);
+    // printf("cur_x:%f cur_y:%f\r\n", current_location[0], current_location[1]);
+    // printf("index:%d\r\n", index);
+    // printf("target_x:%d target_y:%d\r\n", next_target[0], next_target[1]);
+    // Loiter_location((int)(current_location[0]*100),(int)(current_location[1]*100),next_target[0],next_target[1]);
+    set_NextLocation(current_location, next_target, auto_next_target);
     if(index == 9) return true;
     else return false;
 }
@@ -136,31 +173,29 @@ int Get_circle_2(int current_height, int target_height)
 }
 
 //起飞
-bool takeoff(int height, float* current_location)
+bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_settarget)
 {
-    static bool is_takeoff = 1;
-    static bool is_settarget = 0;
     static uint32_t takeoff_Time = 0;
     static int target_location[2];
 
-    if(!is_settarget)
+    if(!(*is_settarget))
     {
         target_location[0] = (int)(current_location[0]*100);
         target_location[1] = (int)(current_location[1]*100);
-        is_settarget = 1;
+        *is_settarget = 1;
     }
 
     Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), target_location[0], target_location[1]);
     printf("height = %d\r\n", height);
-    if(abs(height - 1500) > 100 && is_takeoff==1)
+    if(abs(height - 1500) > 100 && *is_takeoff==1)
     {
         Take_off(1500, height);
         takeoff_Time = HAL_GetTick();
     }
-    else if(fabs(height - 1500) <= 100 && is_takeoff==1)
+    else if(fabs(height - 1500) <= 100 && *is_takeoff==1)
     {
-        is_takeoff = ((HAL_GetTick() - takeoff_Time) > 1000)?0:1;
-        if(is_takeoff == 0)
+        *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 1000)?0:1;
+        if(*is_takeoff == 0)
         {
             Set_PWM_Thr(4500);
             return true;

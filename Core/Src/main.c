@@ -182,6 +182,8 @@ bool  patrol_flag = 0;
 float height_esm = 0;
 
 int task = 0;
+bool is_takeoff = 1;
+bool is_settarget = 0;
 //校准坐标数据
 float kx = 1.0078536923765482;
 float dx = -0.091023393141628;
@@ -516,7 +518,7 @@ int main(void)
 				switch (task)
 				{
 				case 0:
-					if(takeoff(height, location_esm))
+					if(takeoff(height, location_esm, &is_takeoff, &is_settarget))
 					{
 						BEEP_ON();
 						HAL_Delay(1000);
@@ -533,6 +535,7 @@ int main(void)
 						BEEP_OFF();
 						task = 2;
 					}
+					break;
 				default:
 					Back2Center();
 					break;
@@ -560,6 +563,9 @@ int main(void)
 				//桥接模式
 				RC_bridge();
 				task = 0;
+				is_takeoff = 1;
+				is_settarget = 0;
+				reset_path_flag();
 			}
 		}
 
