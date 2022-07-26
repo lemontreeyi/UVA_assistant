@@ -4,28 +4,15 @@
 uint8_t cmd_buf[3];
 bool path_flag[9] = {0};
 int auto_next_target[2] = {0};
-// float path[FLYPATH_LEN][2];
-// bool path_flag[FLYPATH_LEN];
-// void init_flypath()
-// {
-//     path[0][0] = 3.50; path[0][1] = 2.00;
-//     path[1][0] = 2.80; path[1][1] = 2.00;
-//     path[2][0] = 2.20; path[2][1] = 2.00;
-//     path[3][0] = 1.50; path[3][1] = 2.00;
 
-//     for (int i = 0; i < FLYPATH_LEN; ++i)
-//     {
-//         path_flag[i] = false;
-//     }
-    
-// }
-
+//用于重置路径点标志位
 void reset_path_flag()
 {
     for(int i = 0; i < 9; ++i)
         path_flag[i] = 0;
 }
 
+//用于自动更新下一个目标点，更新半径为35cm
 bool set_NextLocation(float* current_location, int* target_location, int *next_location)
 {
     //转化到m为单位
@@ -146,6 +133,11 @@ bool Rectangle(int *start, int width_x, int width_y, float *current_location)
     printf("roll_out:%d, pitch_out:%d\r\n",pwm_roll_out, pwm_pitch_out);
     if(index == 9) return true;
     else return false;
+}
+
+bool Fly2Target(float *current_location,int *target_location)
+{
+
 }
 
 /*
