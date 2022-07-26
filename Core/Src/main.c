@@ -429,9 +429,8 @@ int main(void)
 			BEEP_ON();
 			Unlock();
 			break;
-		case KEY2_PRES: //控制LED0翻转
-			// LED_G_Flash();
-			// BEEP_OFF();
+		case KEY2_PRES: 		//给v831发送指令进行扫码
+			LED1_Slow_Flash();
 			Pack_cmd_buf(1, cmd_buf);
 			BSP_USART_SendArray_LL(USART2, cmd_buf, 3);
 			break;
@@ -521,13 +520,13 @@ int main(void)
 				switch (task)
 				{
 				case 0:
-					//if(height > 300) Set_PWM_Mode(4500);		//Loiter -> 1500 x 3
+					if(height > 300) Set_PWM_Mode(4500);		//Loiter -> 1500 x 3
 					if(takeoff(height, location_esm, &is_takeoff, &is_settarget))
 					{
 						BEEP_ON();
 						HAL_Delay(1000);
 						BEEP_OFF();
-						task = 1;
+						task = 3;
 						is_settarget = 0;
 					}
 					break;
@@ -548,10 +547,11 @@ int main(void)
 						HAL_Delay(1000);
 						BEEP_OFF();
 						Set_PWM_Thr(3000);
-						task = 3;
+						task = 4;
 					}
 				case 3:
-					
+					target_location[0] = 226; target_location[1] = 250;
+					Fly2Target(location_esm,target_location);
 					break;
 				default:
 					Back2Center();

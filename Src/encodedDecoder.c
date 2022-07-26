@@ -38,8 +38,8 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 				//printf("Attitude Position x = %d, Attitude Position y = %d, SetPoint x = %d, SetPoint y = %d \r\n", Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y);
 				return 1;
 			}
-			/* 以下指令可能会用于完成要求的飞行动作 */
-			else if(inBuf[1] == '2')		//修改基站位置数据
+			/*****修改基站位置信息*****/
+			else if(inBuf[1] == '2')
 			{
 				STATION1_X = (float)(inBuf[3]<<8 | inBuf[2]);
 				STATION1_Y = (float)(inBuf[5]<<8 | inBuf[4]);
@@ -53,8 +53,24 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 				STATION4_X = (float)(inBuf[21]<<8 | inBuf[20]);
 				STATION4_Y = (float)(inBuf[23]<<8 | inBuf[22]);
 				STATION4_Z = (float)(inBuf[25]<<8 | inBuf[24]);
+				BEEP_ON();
+				HAL_Delay(400);
+				BEEP_OFF();
+				HAL_Delay(200);
+
+				BEEP_ON();
+				HAL_Delay(400);
+				BEEP_OFF();
+				HAL_Delay(200);
+				
+				BEEP_ON();
+				HAL_Delay(1000);
+				BEEP_OFF();
+				printf("%f %f %f %f %f %f %f %f %f %f %f %f\r\n", STATION1_X, STATION1_Y, STATION1_Z, STATION2_X, STATION2_Y, STATION2_Z, STATION3_X, STATION3_Y, STATION3_Z, STATION4_X, STATION4_Y, STATION4_Z);
+
 				return 2;
 			}
+			/* 以下指令可能会用于完成要求的飞行动作 */
 			else if(inBuf[1] == '3')		//向左飞
 			{
 				return 3;

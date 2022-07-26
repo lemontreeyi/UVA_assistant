@@ -86,6 +86,8 @@ extern ATTITUDE    Attitude;
 extern uint8_t InitedFlag;
 extern int pwm_pitch_out;
 extern int pwm_roll_out;
+extern int pwm_pitch_SensorOut;
+extern int pwm_roll_SensorOut;
 extern int pwm_pitch_time;
 extern int pwm_roll_time;
 extern PID_TIME 	PID_Pitch_Time;

@@ -32,6 +32,8 @@ int PWM_Thr_min_LOCK =1101;
 
 int          pwm_pitch_out=0;
 int          pwm_roll_out=0;
+int 		 pwm_pitch_SensorOut = 0;
+int			 pwm_roll_SensorOut = 0;
 int 		 pwm_pitch_time = 0;
 int 		 pwm_roll_time = 0;
 
@@ -113,11 +115,11 @@ int PIDCalc( PID *pp, int CurrentPoint ,int SetPoint ,bool flag)
 { 
 		float out;  
 		float dError, Error;
-		static float basic_value = 0;
+		//static float basic_value = 0;
 		static float PID_Control_param = 1.2;
 
-		PID_Control_param = (abs(CurrentPoint - SetPoint) > 85)?  1.3  : 1.0;
-		basic_value = (abs(CurrentPoint - SetPoint) > 85)?  150 : 200;
+		PID_Control_param = (abs(CurrentPoint - SetPoint) > 95)?  1.2  : 1.0;
+		//basic_value = (abs(CurrentPoint - SetPoint) > 85)?  150 : 200;
 		pp->SetPoint =SetPoint; //112
 		Error = (float)CurrentPoint - (float)pp->SetPoint;  
 		pp->PreviousError = Error; 		   				
@@ -127,7 +129,6 @@ int PIDCalc( PID *pp, int CurrentPoint ,int SetPoint ,bool flag)
 		out  =  (pp->Proportion * Error    
 				+   pp->Integral * pp->SumError    
 				+   pp->Derivative * dError) * PID_Control_param;     
-		out += basic_value * ((Error > 0)?1:-1);
 		out = range(out, -pp->Pid_Clc_limit, pp->Pid_Clc_limit);
 		if(flag) out *= 0.5;
 		return (int)out;
@@ -182,7 +183,7 @@ void delay1ms(int time)
 void PIDInit (PID *pp) 
 { 
 	PID_Control_Pitch.Pid_Clc_limit = 500;		//4500+400 = 4900
-    PID_Control_Pitch.Proportion    = 2.1;//2.22;		
+    PID_Control_Pitch.Proportion    = 2.6;//2.22;
 	//  45 * 2.22 + 200 = 300; 85*2.22+200 = 389; 85*2.22*1.3+150=395; 112*2.22*1.3+50 = 473
 	PID_Control_Roll.Integral       = 0;    
     PID_Control_Pitch.Derivative    = 2.5; 
@@ -192,7 +193,7 @@ void PIDInit (PID *pp)
     PID_Control_Pitch.SumError      = 0;   
 	
 	PID_Control_Roll.Pid_Clc_limit = 500;		//4500+600 = 5100
-    PID_Control_Roll.Proportion    = 2.1;
+    PID_Control_Roll.Proportion    = 2.6;
 	//  45 * 2.22 + 200 = 300; 85*2.22+200 = 389; 85*2.22*1.3+150=395; 112*2.22*1.3+50 = 473
     PID_Control_Roll.Integral      = 0; 
     PID_Control_Roll.Derivative    = 2.5;
@@ -222,7 +223,7 @@ void PIDInit (PID *pp)
 	PID_Location_x.Max = 650;
 	PID_Location_x.Proportion =  5.9;
 	PID_Location_x.Integral = 0;
-	PID_Location_x.Derivative = 5.3;
+	PID_Location_x.Derivative = 5.2;
 	PID_Location_x.SetPoint = 0;
 	PID_Location_x.LastError = 0;
 	PID_Location_x.PreviousError = 0;
@@ -315,7 +316,7 @@ void Take_off(float target_height, float current_height)//mm
 	{	
 		//printf("get in thr control!\r\n");
 		if(current_height < target_height) {
-			Set_PWM_Thr((int)(4500 + 750 * exp((-current_height / target_height) * 0.75)));
+			Set_PWM_Thr((int)(4500 + 750 * exp((-current_height / target_height) * 0.95)));
 			//printf("cur_distance = %f\r\n", current_height);
 		}
 		else Set_PWM_Thr((int)(4500 - 750 * exp((current_height - 2 * target_height) / target_height)));
@@ -437,21 +438,21 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 	{
 		pwm_roll_clc = PID_location(&PID_Location_x, point_x, SetPoint_x);
 		pwm_roll_out = PWM_Roll_mid + pwm_roll_clc;
-		Set_PWM_Roll(pwm_roll_out);
+		// Set_PWM_Roll(pwm_roll_out);
 	}
 	else {
 		pwm_roll_out = PWM_Roll_mid;
-		Set_PWM_Roll(pwm_roll_out);
+		// Set_PWM_Roll(pwm_roll_out);
 	}
 	if(abs(deadZoneY) >= 20)
 	{
 		pwm_pitch_clc = PID_location(&PID_Location_y, point_y, SetPoint_y);
 		pwm_pitch_out = PWM_Pitch_mid + pwm_pitch_clc;
-		Set_PWM_Pitch(pwm_pitch_out);
+		// Set_PWM_Pitch(pwm_pitch_out);
 	}
 	else {
 		pwm_pitch_out = PWM_Pitch_mid;
-		Set_PWM_Pitch(pwm_pitch_out);
+		// Set_PWM_Pitch(pwm_pitch_out);
 	}
 }
 
@@ -467,47 +468,35 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 	int deadZoneY = 0;
 	int h = 50;
 
-	int x = 0;
-	int y = 0;
-	//int flag = 0;
-	x = round(point_x - h * tan(roll));
-	y = round(point_y - h * tan(pitch));
 	deadZoneX = point_x - SetPoint_x;
 	deadZoneY = point_y - SetPoint_y;
 
 	//roll方向
 	if(abs(deadZoneX)>=DeadThreShold)
 	{
-		if(abs(point_x - SetPoint_x) < 45)
+		if(abs(point_x - SetPoint_x) < 35)
 			pwm_roll_clc  = PIDCalc(&PID_Control_Roll  ,point_x,SetPoint_x, 1);
 		else 
 			pwm_roll_clc  = PIDCalc(&PID_Control_Roll  ,point_x,SetPoint_x, 0);
-		pwm_roll_out  = PWM_Roll_mid  + pwm_roll_clc;
-		// Set_PWM_Roll (pwm_roll_out);
-		// pwm_roll_time = PID_GetTime(&PID_Roll_Time, point_x, SetPoint_x);
-		// HAL_Delay(pwm_roll_time);
-		// Set_PWM_Roll(PWM_Roll_mid);
+		pwm_roll_SensorOut  = PWM_Roll_mid  + pwm_roll_clc;
 	}
 	if(abs(deadZoneX)<DeadThreShold)
 	{
-		Set_PWM_Roll(PWM_Roll_mid);
+		pwm_roll_SensorOut = PWM_Roll_mid;
 	}
+
 	//pitch方向
 	if(abs(deadZoneY)>=DeadThreShold)
 	{
-		if(abs(point_y - SetPoint_y) < 45)
+		if(abs(point_y - SetPoint_y) < 35)
 			pwm_pitch_clc = PIDCalc(&PID_Control_Pitch ,point_y,SetPoint_y, 1);
 		else 
 			pwm_pitch_clc = PIDCalc(&PID_Control_Pitch ,point_y,SetPoint_y, 0);
-		pwm_pitch_out = PWM_Pitch_mid + pwm_pitch_clc;
-		// Set_PWM_Pitch(pwm_pitch_out);
-		// pwm_pitch_time = PID_GetTime(&PID_Pitch_Time, point_y, SetPoint_y);
-		// HAL_Delay(pwm_pitch_time);
-		// Set_PWM_Pitch(PWM_Pitch_mid);
+		pwm_pitch_SensorOut = PWM_Pitch_mid + pwm_pitch_clc;
 	} 
 	if(abs(deadZoneY) < DeadThreShold)
 	{
-		Set_PWM_Pitch(PWM_Pitch_mid);
+		pwm_pitch_SensorOut = PWM_Pitch_mid;
 	}
 	printf("Roll_x = %d , %d, Pitch_y = %d, %d\r\n", point_x,pwm_roll_out, point_y, pwm_pitch_out);
 }

@@ -1,7 +1,7 @@
 flyassistant-f407\patrol.o: ..\Src\patrol.c
 flyassistant-f407\patrol.o: ../Inc/patrol.h
-flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
-flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+flyassistant-f407\patrol.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+flyassistant-f407\patrol.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stdint.h
 flyassistant-f407\patrol.o: ../Inc/flyControl.h
 flyassistant-f407\patrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 flyassistant-f407\patrol.o: ../Core/Inc/stm32f4xx_hal_conf.h
@@ -17,7 +17,7 @@ flyassistant-f407\patrol.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 flyassistant-f407\patrol.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 flyassistant-f407\patrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 flyassistant-f407\patrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+flyassistant-f407\patrol.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stddef.h
 flyassistant-f407\patrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 flyassistant-f407\patrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 flyassistant-f407\patrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -51,6 +51,6 @@ flyassistant-f407\patrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_dma
 flyassistant-f407\patrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h
 flyassistant-f407\patrol.o: ../Inc/led.h
 flyassistant-f407\patrol.o: ../Inc/uart_api.h
-flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+flyassistant-f407\patrol.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stdio.h
+flyassistant-f407\patrol.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\string.h
+flyassistant-f407\patrol.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\math.h
