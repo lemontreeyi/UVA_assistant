@@ -184,6 +184,7 @@ float height_esm = 0;
 int task = 0;
 bool is_takeoff = 1;
 bool is_settarget = 0;
+
 //校准坐标数据
 float kx = 1.0078536923765482;
 float dx = -0.091023393141628;
@@ -429,8 +430,10 @@ int main(void)
 			Unlock();
 			break;
 		case KEY2_PRES: //控制LED0翻转
-			LED_G_Flash();
-			BEEP_OFF();
+			// LED_G_Flash();
+			// BEEP_OFF();
+			Pack_cmd_buf(1, cmd_buf);
+			BSP_USART_SendArray_LL(USART2, cmd_buf, 3);
 			break;
 		}
 		
@@ -460,7 +463,7 @@ int main(void)
 				{
 					FreeBuffer_Encode[i2] = USART2_RX_BUF[i2];	//将串口2接收到的数据传输给自由缓冲区
 				}
-        		if(rxlen_usart_2 == 11) {
+        		if(rxlen_usart_2 == 27) {
 					cmd = encodeDecode_Analysis(FreeBuffer_Encode,encodeAnswer,rxlen_usart_2);
         		} //分析字符
 					rxlen_usart_2=0;
@@ -1001,7 +1004,7 @@ void USART_RxCallback(USART_TypeDef *huart)
 				}
 				USART2_RX_BUF[USART2_RX_STA++] = data;
 				Recv_Cnt_UART2 ++;			
-				if(Recv_Cnt_UART2>=11)
+				if(Recv_Cnt_UART2>=27)
 				{
 					Recv_Cnt_UART2 = 0;
 					UART2_Frame_Flag = 0;

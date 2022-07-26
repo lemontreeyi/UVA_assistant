@@ -3,6 +3,19 @@
 #include <stdio.h>
 #include <math.h>
 
+float STATION1_X = 0.0;
+float STATION1_Y = 0.0;
+float STATION1_Z = 1.50;
+float STATION2_X = 4.95;
+float STATION2_Y = 0.0;
+float STATION2_Z = 1.30;
+float STATION3_X = 0.0;
+float STATION3_Y = 4.95;
+float STATION3_Z = 1.60;
+float STATION4_X = 4.95;
+float STATION4_Y = 4.95;
+float STATION4_Z = 1.47;
+
 //创建一个矩阵对象
 Matrix creat_matrix(float* e, int line, int cols)
 {

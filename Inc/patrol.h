@@ -7,6 +7,8 @@
 #include "main.h"
 #define FLYPATH_LEN 4
 
+extern uint8_t cmd_buf[3];
+
 // void init_flypath();
 void reset_path_flag();
 bool set_NextLocation(float* current_location, int* target_location, int *next_location);

@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include "uart_api.h"
 #include "flyControl.h"
+#include "Matrix.h"
 
 #define BUFFSIZE 11  
 
@@ -15,7 +16,7 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 	{
 		//**********************#*****消息号**位置XH*****位置XL***位置YH****位置YL*****目标位置H***目标位置L***尾*******
     //********************* #头***消息号，数据位1L，数据位1H,数据位2L,数据位2H,数据位3L,数据位3H,数据位4L,数据位4H*****帧尾* *********
-		if((inBuf[0]==0x23) && (inBuf[10]==0x2A))
+		if((inBuf[0]==0x23) && (inBuf[26]==0x2A))
 		{
 			//开始
 			if(inBuf[1]=='1')		//悬停到目标点
@@ -38,8 +39,20 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 				return 1;
 			}
 			/* 以下指令可能会用于完成要求的飞行动作 */
-			else if(inBuf[1] == '2')		//向右飞
+			else if(inBuf[1] == '2')		//修改基站位置数据
 			{
+				STATION1_X = (float)(inBuf[3]<<8 | inBuf[2]);
+				STATION1_Y = (float)(inBuf[5]<<8 | inBuf[4]);
+				STATION1_Z = (float)(inBuf[7]<<8 | inBuf[6]);
+				STATION2_X = (float)(inBuf[9]<<8 | inBuf[8]);
+				STATION2_Y = (float)(inBuf[11]<<8 | inBuf[10]);
+				STATION2_Z = (float)(inBuf[13]<<8 | inBuf[12]);
+				STATION3_X = (float)(inBuf[15]<<8 | inBuf[14]);
+				STATION3_Y = (float)(inBuf[17]<<8 | inBuf[16]);
+				STATION3_Z = (float)(inBuf[19]<<8 | inBuf[18]);
+				STATION4_X = (float)(inBuf[21]<<8 | inBuf[20]);
+				STATION4_Y = (float)(inBuf[23]<<8 | inBuf[22]);
+				STATION4_Z = (float)(inBuf[25]<<8 | inBuf[24]);
 				return 2;
 			}
 			else if(inBuf[1] == '3')		//向左飞
@@ -54,7 +67,6 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 			{
 				return 5;
 			}
-			else return 0;
 		}
 		else return 0;
 	}

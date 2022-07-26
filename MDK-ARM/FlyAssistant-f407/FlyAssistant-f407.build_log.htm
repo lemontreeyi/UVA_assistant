@@ -3,96 +3,49 @@
 <pre>
 <h1>�Vision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ��Vision V5.23.0.0
-Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: 1 2041729, HP Inc., LIC=P6F56-DKL4I-JPTZQ-NPAAZ-GJ9CY-5X6VK
+IDE-Version: ��Vision V5.17.0.0
+Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: X Kraft, XKraft, LIC=RC9X7-EPC47-AQ80M-XPAKG-NX0RT-V0U3E
  
 Tool Versions:
-Toolchain:       MDK-ARM Professional  Version: 5.23
-Toolchain Path:  F:\Tools\KEIL_v5\ARM\ARMCC\Bin
-C Compiler:      Armcc.exe V5.06 update 4 (build 422)
-Assembler:       Armasm.exe V5.06 update 4 (build 422)
-Linker/Locator:  ArmLink.exe V5.06 update 4 (build 422)
-Library Manager: ArmAr.exe V5.06 update 4 (build 422)
-Hex Converter:   FromElf.exe V5.06 update 4 (build 422)
-CPU DLL:         SARMCM3.DLL V5.23
-Dialog DLL:      DCM.DLL V1.15.0.0
+Toolchain:       MDK-ARM Standard  Version: 5.17
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 1 (build 61)
+Assembler:       Armasm.exe V5.06 update 1 (build 61)
+Linker/Locator:  ArmLink.exe V5.06 update 1 (build 61)
+Library Manager: ArmAr.exe V5.06 update 1 (build 61)
+Hex Converter:   FromElf.exe V5.06 update 1 (build 61)
+CPU DLL:         SARMCM3.DLL V5.17
+Dialog DLL:      DCM.DLL V1.13.4.0
 Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
-Dialog DLL:      TCM.DLL V1.27.0.0
+Dialog DLL:      TCM.DLL V1.14.6.0
  
 <h2>Project:</h2>
-F:\User\lemon\Desktop\UVA_assistant\MDK-ARM\FlyAssistant-f407.uvprojx
+d:\study\ardupilot\UVA_assistant\MDK-ARM\FlyAssistant-f407.uvprojx
 Project File Date:  07/26/2022
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
+*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant-f407'
-compiling main.c...
-../Inc/patrol.h(11): warning:  #1295-D: Deprecated declaration reset_path_flag - give arg types
-  void reset_path_flag();
-../Inc/patrol.h(20): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/Src/main.c(412): warning:  #223-D: function "Set_PWM_Ctrl" declared implicitly
-  		Set_PWM_Ctrl(CHANNEL_3_PULSE_WIDE);		//便于在地面站观察直通或桥接模式
-../Core/Src/main.c(249): warning:  #177-D: variable "i3"  was declared but never referenced
-  	uint16_t i1 = 0, i2 = 0, i3 = 0, i5 = 0;
-../Core/Src/main.c(250): warning:  #177-D: variable "len"  was declared but never referenced
-  	uint16_t len = 0;
-../Core/Src/main.c(253): warning:  #177-D: variable "rxlen_usart_3"  was declared but never referenced
-  	uint16_t rxlen_usart_3;
-../Core/Src/main.c(256): warning:  #550-D: variable "cmd"  was set but never used
-  	uint8_t cmd = 0;
-../Core/Src/main.c(258): warning:  #550-D: variable "RunTime"  was set but never used
-  	uint32_t RunTime = 0;
-../Core/Src/main.c(259): warning:  #177-D: variable "ContrlTime_x"  was declared but never referenced
-  	uint32_t ContrlTime_x = 0;
-../Core/Src/main.c(260): warning:  #177-D: variable "ContrlTime_y"  was declared but never referenced
-  	uint32_t ContrlTime_y = 0;
-../Core/Src/main.c(265): warning:  #177-D: variable "Ctrl_flag_time"  was declared but never referenced
-  	uint32_t Ctrl_flag_time = 0;
-../Core/Src/main.c(267): warning:  #177-D: variable "decodetimer"  was declared but never referenced
-  	uint32_t decodetimer;
-../Core/Src/main.c(273): warning:  #177-D: variable "flag_rx2"  was declared but never referenced
-  	int flag_rx2 = 0;
-../Core/Src/main.c(280): warning:  #177-D: variable "str"  was declared but never referenced
-    uint8_t str[] = "hello world\r\n";
-../Core/Src/main.c(659): warning:  #870-D: invalid multibyte character sequence
-  	printf("  PA6       ------>   PWM1      与遥控器接收机油门相�?? \r\n");
-../Core/Src/main.c(807): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
-../Core/Src/main.c(807): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
-../Core/Src/main.c(1531): warning:  #550-D: variable "len"  was set but never used
-  	uint16_t len;
-../Core/Src/main.c(1555): warning:  #550-D: variable "len"  was set but never used
-  	uint16_t len;
-../Core/Src/main.c(1584): warning:  #550-D: variable "len"  was set but never used
-  	uint16_t len;
-../Core/Src/main.c(98): warning:  #177-D: variable "heartbeat"  was declared but never referenced
-  static int heartbeat = 0;
-../Core/Src/main.c: 21 warnings, 0 errors
-linking...
-Program Size: Code=43516 RO-data=1028 RW-data=1508 ZI-data=6300  
-FromELF: creating hex file...
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 21 Warning(s).
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
 Package Vendor: ARM
-                http://www.keil.com/pack/ARM.CMSIS.5.0.1.pack
-                ARM::CMSIS:CORE:5.0.1
+                http://www.keil.com/pack/ARM.CMSIS.4.5.0.pack
+                ARM::CMSIS:CORE:4.3.0
                 CMSIS (Cortex Microcontroller Software Interface Standard)
-   * Component: CORE Version: 5.0.1
+   * Component: CORE Version: 4.3.0
 
 <h2>Collection of Component include folders:</h2>
-  .\RTE\_FlyAssistant-f407
-  F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
-  F:\Tools\KEIL_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+  d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE
+  C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
+  C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
 
-   * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:04
+   * Component: ARM::CMSIS:CORE:4.3.0
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>
