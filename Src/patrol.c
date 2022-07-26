@@ -89,7 +89,7 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
         }
         else
         {
-            if((HAL_GetTick() - time) > 5000)
+            if((HAL_GetTick() - time) > 2000)
             {
                 is_time = 0;
                 path_flag[have_arrive] = true;

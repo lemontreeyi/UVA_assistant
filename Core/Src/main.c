@@ -512,7 +512,7 @@ int main(void)
 				BSP_USART_StartIT_LL(UART5); //启动下一次接收
 			}
 			if(HAL_GetTick() - Cxof_Wait >= 500)			//超过300ms未接收到uwb的数据，蜂鸣器响起报警
-				BEEP_ON();
+				BEEP_OFF();
 			if (3 == RC_Read()) //飞控助手控制
 			{	
 				switch (task)
@@ -547,6 +547,9 @@ int main(void)
 						Set_PWM_Thr(3000);
 						task = 3;
 					}
+				case 3:
+					
+					break;
 				default:
 					Back2Center();
 					break;
