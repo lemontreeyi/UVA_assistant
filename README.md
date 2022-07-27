@@ -1,6 +1,6 @@
 - 2022送货无人机：
 
-  ![af](F:\User\lemon\Desktop\UVA_assistant\image\示意图.jpg)
+  ![af](./image/示意图.jpg)
 
   - 任务1：
     - 从目标起降点起飞至巡航高度（150cm±10cm）(5分)
