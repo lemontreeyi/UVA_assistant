@@ -445,7 +445,7 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 	deadZoneX = point_x - SetPoint_x;
 	deadZoneY = point_y - SetPoint_y;
 
-	if(abs(deadZoneX) >= 20)
+	if(abs(deadZoneX) >= 25)
 	{
 		pwm_roll_clc = PID_location(&PID_Location_x, point_x, SetPoint_x);
 		pwm_roll_out = PWM_Roll_mid + pwm_roll_clc;
@@ -455,7 +455,7 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 		pwm_roll_out = PWM_Roll_mid;
 		// Set_PWM_Roll(pwm_roll_out);
 	}
-	if(abs(deadZoneY) >= 20)
+	if(abs(deadZoneY) >= 25)
 	{
 		pwm_pitch_clc = PID_location(&PID_Location_y, point_y, SetPoint_y);
 		pwm_pitch_out = PWM_Pitch_mid + pwm_pitch_clc;

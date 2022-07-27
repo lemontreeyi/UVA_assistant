@@ -59,7 +59,7 @@
 #define N 3
 #define voltage_ratio 204 // 2.04
 
-#define USART1_MAX_RECV_LEN 256 //最大接收缓存字节数
+#define USART1_MAX_RECV_LEN 256 //�?大接收缓存字节数
 #define USART2_MAX_RECV_LEN 256
 #define USART3_MAX_RECV_LEN 256
 #define UART5_MAX_RECV_LEN 256
@@ -75,7 +75,7 @@ int CHANNEL_8_RISE = 0, CHANNEL_8_FALL = 0, CHANNEL_8_PULSE_WIDE = 0; // Thr通�
 
 int ICFLAG_1 = 1, ICFLAG_2 = 1, ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6 = 1, ICFLAG_7 = 1, ICFLAG_8 = 1;
 
-//控制直通或桥接模式
+//控制直�?�或桥接模式
 int PWM_Ctrl_N1 = 2500;
 int PWM_Ctrl_N2 = 4500;
 int PWM_Ctrl_N3 = 5000;
@@ -173,7 +173,7 @@ float y_array[7] = {0, 0, 0, 0, 0, 0, 0};
 float location_esm[3] = {0, 0, 0};
 float location_esm_limit[3] = {0, 0, 0};
 float location_esm_kalma[3] = {0, 0, 0};
-int   target_location[2] = {0, 0};	//cm为单位
+int   target_location[2] = {0, 0};	//cm为单�?
 int   next_location[2] = {0, 0};
 short d_location[2] = {0 ,0};
 float speed[2] = {0.0, 0.0};
@@ -184,6 +184,7 @@ float height_esm = 0;
 int task = 0;
 bool is_takeoff = 1;
 bool is_settarget = 0;
+bool is_SetStartPoint = 0;
 
 //校准坐标数据
 float kx = 1.0078536923765482;
@@ -344,7 +345,7 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);
 
-	// 使能定时器输入捕获
+	// 使能定时器输入捕�?
 	printf("TIM 2 and 3 init\n");
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_2);
@@ -413,15 +414,15 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		Set_PWM_Ctrl(CHANNEL_3_PULSE_WIDE);		//便于在地面站观察直通或桥接模式
-		//读取激光雷达测距数据
+		Set_PWM_Ctrl(CHANNEL_3_PULSE_WIDE);		//便于在地面站观察直�?�或桥接模式
+		//读取�?光雷达测距数�?
 		vl53l1x_GetDistance(&Dev);
 		//读取MPU6050
 		float inner_loop_time = 0.001;
 		float outer_loop_time = 0.001;
 		MPU6050_Read();						   //读取mpu6轴传感器
 		MPU6050_Data_Prepare(inner_loop_time); // mpu6轴传感器数据处理
-		/*IMU更新姿态输入：半个执行周期，三轴陀螺仪数据（转换到度每秒），三轴加速度计数据（4096--1G）；输出：ROLPITYAW姿态角*/
+		/*IMU更新姿�?�输入：半个执行周期，三轴陀螺仪数据（转换到度每秒），三轴加速度计数据（4096--1G）；输出：ROLPITYAW姿�?�角*/
 		IMUupdate(0.5f * outer_loop_time, mpu6050.Gyro_deg.x, mpu6050.Gyro_deg.y, mpu6050.Gyro_deg.z, mpu6050.Acc.x, mpu6050.Acc.y, mpu6050.Acc.z, &Roll, &Pitch, &Yaw);
 
 		key = KeyScanning(0); //按键扫描
@@ -432,7 +433,7 @@ int main(void)
 			BEEP_ON();
 			Unlock();
 			break;
-		case KEY2_PRES: 		//给v831发送指令进行扫码
+		case KEY2_PRES: 		//给v831发�?�指令进行扫�?
 			LED1_Slow_Flash();
 			Pack_cmd_buf(1, cmd_buf);
 			BSP_USART_SendArray_LL(USART2, cmd_buf, 3);
@@ -441,44 +442,44 @@ int main(void)
 		
 		if (InitedFlag) //确保设备已初始化
 		{
-			/********************************UART1接收并处理数据**********************************/
+			/********************************UART1接收并处理数�?**********************************/
 			if (USART1_RX_STA & 0X8000) //接收到一次数据了
 			{
 				// printf("USART1 INT =%d \r\n",USART1_RX_STA);
 				rxlen_usart_1 = USART1_RX_STA & 0x7FFF; //得到数据长度
 				for (i1 = 0; i1 < rxlen_usart_1; i1++)
 				{
-					FreeBuffer_Encode[i1] = USART1_RX_BUF[i1]; //将串口1接收到的数据传输给自由缓冲区
+					FreeBuffer_Encode[i1] = USART1_RX_BUF[i1]; //将串�?1接收到的数据传输给自由缓冲区
 															   // BSP_USART_SendArray_LL( USART1,&FreeBuffer_Encode[i1],1);
 				}
-				cmd = encodeDecode_Analysis(FreeBuffer_Encode, encodeAnswer, rxlen_usart_1); //分析字符串
+				cmd = encodeDecode_Analysis(FreeBuffer_Encode, encodeAnswer, rxlen_usart_1); //分析字符�?
 				BSP_USART_StartIT_LL(USART1);
 				rxlen_usart_1 = 0;
-				USART1_RX_STA = 0; //启动下一次接收
+				USART1_RX_STA = 0; //启动下一次接�?
 			}
-			//********************************UART2接收并处理数据***********************************/
+			//********************************UART2接收并处理数�?***********************************/
 			if (USART2_RX_STA & 0X8000) //接收到一次数据，且超过了预设长度
 			{
         	//printf("USART2 revd ...\r\n");
 				rxlen_usart_2 = USART2_RX_STA & 0x7FFF;	//得到数据长度
 				for(i2=0;i2<rxlen_usart_2;i2++)
 				{
-					FreeBuffer_Encode[i2] = USART2_RX_BUF[i2];	//将串口2接收到的数据传输给自由缓冲区
+					FreeBuffer_Encode[i2] = USART2_RX_BUF[i2];	//将串�?2接收到的数据传输给自由缓冲区
 				}
         		if(rxlen_usart_2 == 27) {
 					cmd = encodeDecode_Analysis(FreeBuffer_Encode,encodeAnswer,rxlen_usart_2);
         		} //分析字符
 					rxlen_usart_2=0;
 					USART2_RX_STA=0;
-					BSP_USART_StartIT_LL( USART2 ); //启动下一次接收
+					BSP_USART_StartIT_LL( USART2 ); //启动下一次接�?
 			}
 			/*****************************USART3接收&处理数据***********************************/
-			if (USART3_RX_STA & 0x8000) //接收满一次数据
+			if (USART3_RX_STA & 0x8000) //接收满一次数�?
 			{
 				
 			}
 			/*****************************USART5接收&处理数据***********************************/
-			if (UART5_RX_STA & 0x0080) //接收满一次数据
+			if (UART5_RX_STA & 0x0080) //接收满一次数�?
 			{
 				if(UART5_RX_STA > 128)
         		rxlen_uart_5 = UART5_RX_STA & 0xFF7F;
@@ -487,7 +488,7 @@ int main(void)
 				for(i5=0;i5<rxlen_uart_5;i5++)
 				{
 					FreeBuffer_Encode_5[i5] = UART5_RX_BUF[i5];					
-					//将串口5接收到的数据传输给自由缓冲区
+					//将串�?5接收到的数据传输给自由缓冲区
 				}
 				if(encodeDecode_Analysis_UWB(FreeBuffer_Encode_5,distance_to_station,rxlen_uart_5))
         		{
@@ -514,33 +515,31 @@ int main(void)
         		}
 				rxlen_uart_5 = 0;
 				UART5_RX_STA = 0;
-				BSP_USART_StartIT_LL(UART5); //启动下一次接收
+				BSP_USART_StartIT_LL(UART5); //启动下一次接�?
 			}
-			if(HAL_GetTick() - Cxof_Wait >= 500)			//超过300ms未接收到uwb的数据，蜂鸣器响起报警
+			if(HAL_GetTick() - Cxof_Wait >= 500)			//超过300ms未接收到uwb的数据，蜂鸣器响起报�?
 				BEEP_OFF();
 			if (3 == RC_Read()) //飞控助手控制
 			{	
 				switch (task)
 				{
 				case 0:
+					//任务�?:�?键起�?
 					if(height > 300) Set_PWM_Mode(4500);		//Loiter -> 1500 x 3
 					if(takeoff(height, location_esm, &is_takeoff, &is_settarget))
 					{
 						BEEP_ON();
 						HAL_Delay(1000);
 						BEEP_OFF();
-						task = 3;
-						is_settarget = 0;
+						task = 1;
 					}
 					break;
 				case 1:
-					target_location[0] = 375;   target_location[1] = 375;
-					if(Rectangle(target_location,240,200,location_esm))
+					if(taskOne(location_esm, 300, 275, 150, 125, is_SetStartPoint))
 					{
 						BEEP_ON();
 						HAL_Delay(1000);
 						BEEP_OFF();
-						task = 2;
 					}
 					break;
 				case 2:
@@ -552,15 +551,11 @@ int main(void)
 						Set_PWM_Thr(3000);
 						task = 4;
 					}
-				case 3:
-					target_location[0] = 226; target_location[1] = 250 + 13;
-					Fly2Target(location_esm,target_location);
-					break;
 				default:
 					Back2Center();
 					break;
 				}
-				//将UWB无线定位后的坐标结果传入PID外环，进行控制
+				//将UWB无线定位后的坐标结果传入PID外环，进行控�?
 				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
 				if(ContriGetDataTime >= 300)
 				{
@@ -578,14 +573,15 @@ int main(void)
 				Set_PWM_Roll(4500);
 				Set_PWM_Yaw(4500);
 			}
-			else if (1 == RC_Read())//遥控器控制
+			else if (1 == RC_Read())//遥控器控�?
 			{
 				//桥接模式
 				RC_bridge();
 				task = 0;
 				is_takeoff = 1;
 				is_settarget = 0;
-				reset_path_flag();
+				is_SetStartPoint = 0;
+				reset_path_flag(t1_path_flag, 4);
 			}
 		}
 
@@ -650,10 +646,10 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 /*
 *********************************************************************************************************
-*	函 数 名: PrintfHardInfo
+*	�? �? �?: PrintfHardInfo
 *	功能说明: 打印硬件接线信息
-*	形    参：无
-*	返 回 值: 无
+*	�?    参：�?
+*	�? �? �?: �?
 *********************************************************************************************************
 */
 static void PrintfHardInfo(void)
@@ -665,7 +661,7 @@ static void PrintfHardInfo(void)
 	printf("  GND       -------   GND       地\r\n");
 	printf("  PB0       ------>   PWM3      与遥控器的pitch通道相连\r\n");
 	printf("  PB1       ------>   PWM4      与遥控器的接收机的第五�?�道相连 \r\n");
-	printf("  PA6       ------>   PWM1      与遥控器接收机油门相�? \r\n");
+	printf("  PA6       ------>   PWM1      与遥控器接收机油门相�?? \r\n");
 	printf("  PB7       ------>   PWM2      与遥控器的偏航�?�道(YAW)相连\r\n");
 	printf("  PA0       ------>   ADC_CH1   模拟超声波高度测量\r\n");
 	printf("  打印采集数据: \r\n");
@@ -720,7 +716,7 @@ void OutPut_Data(void)
 	for (i = 0; i < 10; i++)
 	{
 		BSP_USART_SendArray_LL(USART1, databuf, sizeof(databuf));
-		// HAL_UART_Transmit(&huart1,(uint8_t *)&databuf[i],1,10);       //串口发送
+		// HAL_UART_Transmit(&huart1,(uint8_t *)&databuf[i],1,10);       //串口发�??
 	}
 }
 
@@ -737,10 +733,10 @@ void Data_to_VisualScope(void)
 
 /*
 *********************************************************************************************************
-*	函 数 名: AD转化函数
+*	�? �? �?: AD转化函数
 *	功能说明: 处理采样后的数据
-*	形    参：无
-*	返 回 值: 无
+*	�?    参：�?
+*	�? �? �?: �?
 *********************************************************************************************************
 */
 
@@ -767,10 +763,10 @@ float ADC_CvtVolt(void)
 
 /*
 *********************************************************************************************************
-*	函 数 名: AD7606_Mak
+*	�? �? �?: AD7606_Mak
 *	功能说明: 处理采样后的数据
-*	形    参：无
-*	返 回 值: 无
+*	�?    参：�?
+*	�? �? �?: �?
 *********************************************************************************************************
 */
 
@@ -797,7 +793,7 @@ float get_adc(char adc_id)
 	return volt;
 }
 
-//********算数平均滤波法**************//
+//********算数平均滤波�?**************//
 float filter_av(char filter_id)
 {
 	char count = 0;
@@ -834,7 +830,7 @@ float filter(float new_value)
 	return new_value;
 }
 
-//初始化测距模坿
+//初始化测距模�?
 VL53L1_Error vl53l1x_init(VL53L1_DEV pDev)
 {
   VL53L1_Error Status = VL53L1_ERROR_NONE;
@@ -935,13 +931,13 @@ VL53L1_Error vl53l1x_Cali(VL53L1_DEV pDev, VL53L1_CalibrationData_t* save)
 
   return Status;
 }
-//获取测量的距离
+//获取测量的距�?
 VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev)
 {
   VL53L1_Error Status = VL53L1_ERROR_NONE;
   uint8_t isDataReady=0;
   //status = VL53L1_WaitMeasurementDataReady(pDev);//阻塞
-  Status = VL53L1_GetMeasurementDataReady(pDev,&isDataReady);//非阻塞测量
+  Status = VL53L1_GetMeasurementDataReady(pDev,&isDataReady);//非阻塞测�?
   if(Status!=VL53L1_ERROR_NONE) 
 	{
 		printf("Wait too long!\r\n");
@@ -973,12 +969,12 @@ void USART_RxCallback(USART_TypeDef *huart)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
 			// printf("USART1_RX_STA =%d data = %d \r\n",USART1_RX_STA , data);
-			if ((USART1_RX_STA & (1 << 15)) == 0) //还可以接收数�? ,�?高位不为1.
+			if ((USART1_RX_STA & (1 << 15)) == 0) //还可以接收数�?? ,�??高位不为1.
 			{
-				TIM11->CNT = 0;			//计数�?11清零
-				if (USART1_RX_STA == 0) //新一轮接收数�?
+				TIM11->CNT = 0;			//计数�??11清零
+				if (USART1_RX_STA == 0) //新一轮接收数�??
 				{
-					TIM11_Set(1); //中断方式�?启定时器11
+					TIM11_Set(1); //中断方式�??启定时器11
 				}
 				// BSP_USART_SendArray_LL( USART1,&USART1_RX_BUF[USART1_RX_STA],1);
 				// printf("USART1 INT =%d \r\n",USART1_RX_STA);
@@ -997,12 +993,12 @@ void USART_RxCallback(USART_TypeDef *huart)
 			{
 				UART2_Frame_Flag = 1;
 			}
-      if(((USART2_RX_STA  & (1<<15))==0) && (UART2_Frame_Flag == 1))		//还可以接收数据，最高位不为1.
+      if(((USART2_RX_STA  & (1<<15))==0) && (UART2_Frame_Flag == 1))		//还可以接收数据，�?高位不为1.
 			{
-				TIM13->CNT=0;											//计数器13清空
+				TIM13->CNT=0;											//计数�?13清空
         if(USART2_RX_STA == 0)
 				{
-					TIM13_Set(1);	 	                //使能定时器13的中断
+					TIM13_Set(1);	 	                //使能定时�?13的中�?
 					Recv_Cnt_UART2 = 0;
 				}
 				USART2_RX_BUF[USART2_RX_STA++] = data;
@@ -1022,12 +1018,12 @@ void USART_RxCallback(USART_TypeDef *huart)
 			uint8_t data = LL_USART_ReceiveData8(huart); 
 			if ((USART3_RX_STA & (1 << 15)) == 0)
 			{
-				TIM14->CNT = 0;			//定时器14清空
-				if (USART3_RX_STA == 0) //新一轮接收开始
+				TIM14->CNT = 0;			//定时�?14清空
+				if (USART3_RX_STA == 0) //新一轮接收开�?
 				{
 					TIM14_Set(1);
 				}
-				USART3_RX_BUF[USART3_RX_STA++] = data; //存入接收缓冲区
+				USART3_RX_BUF[USART3_RX_STA++] = data; //存入接收缓冲�?
 				// printf("USART3 INT =%d \r\n",USART3_RX_STA);
 			}
 			else
@@ -1041,9 +1037,9 @@ void USART_RxCallback(USART_TypeDef *huart)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart); //串口接收
 			//printf("%c",data);
-			if ((UART5_RX_STA & (1 << 7)) == 0)  //缓冲区还没满，继续接收数据
+			if ((UART5_RX_STA & (1 << 7)) == 0)  //缓冲区还没满，继续接收数�?
 			{
-				UART5_RX_BUF[UART5_RX_STA++] = data; //存入接收缓冲区
+				UART5_RX_BUF[UART5_RX_STA++] = data; //存入接收缓冲�?
 				// printf("USART5 INT =%d \r\n",USART5_RX_STA);
 			}
 			else
@@ -1055,7 +1051,7 @@ void USART_RxCallback(USART_TypeDef *huart)
 	}
 }
 
-//*******定时器中断服务程序	*************************************//
+//*******定时器中断服务程�?	*************************************//
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	static uint16_t tim11_1ms = 0; //中断次数计数
@@ -1063,7 +1059,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	static uint16_t tim14_1ms = 0; //中断次数计数
 	static uint16_t tim10_1ms = 0; //中断次数计数
 
-	//*****定时器10中断服务函数->用于延时*********
+	//*****定时�?10中断服务函数->用于延时*********
 	if (htim->Instance == htim10.Instance) //更新中断
 	{
 		tim10_1ms++;
@@ -1072,7 +1068,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			// printf("TIME 10 INT \r\n");
 		}
 	}
-	//*****定时器11中断服务函数->在串口1中使用到更新中断*********
+	//*****定时�?11中断服务函数->在串�?1中使用到更新中断*********
 	if (htim->Instance == htim11.Instance) //更新中断
 	{
 		tim11_1ms++;
@@ -1085,7 +1081,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			// printf("TIME 11 INT \r\n");
 		}
 	}
-	//*****定时�?13中断服务函数->用于串口2*********************
+	//*****定时�??13中断服务函数->用于串口2*********************
 	if (htim->Instance == htim13.Instance) 
 	{
 		tim13_1ms++;
@@ -1098,7 +1094,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			// printf("TIME 13 INT \r\n");
 		}
 	}
-	//*****定时�?14中断服务函数->用于串口3*********************
+	//*****定时�??14中断服务函数->用于串口3*********************
 	if (htim->Instance == htim14.Instance) //更新中断
 	{
 		tim14_1ms++;
@@ -1124,33 +1120,33 @@ void TIM10_Set(uint8_t sta)
 		HAL_TIM_Base_Stop_IT(&htim10);
 }
 
-//定时器11
+//定时�?11
 void TIM11_Set(uint8_t sta)
 {
 	if (sta)
 	{
-		TIM11->CNT = 0;					//计数器清空计数
-		HAL_TIM_Base_Start_IT(&htim11); //使能定时器11
+		TIM11->CNT = 0;					//计数器清空计�?
+		HAL_TIM_Base_Start_IT(&htim11); //使能定时�?11
 	}
 	else
-		HAL_TIM_Base_Stop_IT(&htim11); //关闭定时器11
+		HAL_TIM_Base_Stop_IT(&htim11); //关闭定时�?11
 }
 
-//定时器13
+//定时�?13
 void TIM13_Set(uint8_t sta)
 {
 	if (sta)
 	{
-		TIM13->CNT = 0;					//计数器清�?
-		HAL_TIM_Base_Start_IT(&htim13); //使能定时�?13
+		TIM13->CNT = 0;					//计数器清�??
+		HAL_TIM_Base_Start_IT(&htim13); //使能定时�??13
 	}
 	else
-		HAL_TIM_Base_Stop_IT(&htim13); //关闭定时�?13
+		HAL_TIM_Base_Stop_IT(&htim13); //关闭定时�??13
 }
 
-//定时�?14
+//定时�??14
 //********************************
-//采用定时器轮询的方式实现延时�?
+//采用定时器轮询的方式实现延时�??
 //		for(int q=0;q<1000;q++)
 //		{
 //				Delay_us(1000);
@@ -1162,11 +1158,11 @@ void TIM14_Set(uint8_t sta)
 {
 	if (sta)
 	{
-		TIM14->CNT = 0;					//计数器清�?
-		HAL_TIM_Base_Start_IT(&htim14); //使能定时�?14
+		TIM14->CNT = 0;					//计数器清�??
+		HAL_TIM_Base_Start_IT(&htim14); //使能定时�??14
 	}
 	else
-		HAL_TIM_Base_Stop_IT(&htim14); //关闭定时�?14
+		HAL_TIM_Base_Stop_IT(&htim14); //关闭定时�??14
 }
 
 //定时器输入捕获PWM
@@ -1174,7 +1170,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
 	// printf("TIM_IC \r\n");
 	TIM_IC_InitTypeDef sConfigIC;
-	//定时�?2输入捕获
+	//定时�??2输入捕获
 	if (htim->Instance == htim2.Instance)
 	{
 		switch (htim->Channel)
@@ -1185,7 +1181,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_1_RISE = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_1);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1204,7 +1200,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_1_FALL = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_1);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1229,7 +1225,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_2_RISE = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_2);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1248,7 +1244,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_2_FALL = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_2);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1273,7 +1269,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_3_RISE = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_3);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1292,7 +1288,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_3_FALL = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_3);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1317,7 +1313,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_4_RISE = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_4);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1336,7 +1332,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_4_FALL = HAL_TIM_ReadCapturedValue(&htim2, TIM_CHANNEL_4);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1361,7 +1357,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 		}
 	}
 
-	//****************************定时�?3输入捕获****************************************
+	//****************************定时�??3输入捕获****************************************
 	if (htim->Instance == htim3.Instance)
 	{
 		switch (htim->Channel)
@@ -1372,7 +1368,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_5_RISE = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_1);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1388,7 +1384,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_5_FALL = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_1);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1410,7 +1406,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_6_RISE = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_2);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1426,7 +1422,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_6_FALL = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_2);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1448,7 +1444,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_7_RISE = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_3);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1464,7 +1460,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_7_FALL = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_3);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1486,7 +1482,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_8_RISE = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_4);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING; //下降�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1502,7 +1498,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 			{
 				CHANNEL_8_FALL = HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_4);
 
-				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�?
+				sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING; //上升�??
 				sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
 				sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
 				sConfigIC.ICFilter = 0;
@@ -1527,8 +1523,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 //手动发�?�mavlink信号
 void MANUAL_CONTROL_Send(int16_t xpoint, int16_t ypoint)
 {
-	uint8_t system_id = 255;  // 发�?�本条消息帧的设备的系统编号（sys�?
-	uint8_t component_id = 0; // 发�?�本条消息帧的设备的单元编号（comp�?
+	uint8_t system_id = 255;  // 发�?�本条消息帧的设备的系统编号（sys�??
+	uint8_t component_id = 0; // 发�?�本条消息帧的设备的单元编号（comp�??
 	uint8_t target = 0x01;	  //目标系统
 	int16_t x = 0;
 	int16_t y = ypoint;
@@ -1606,7 +1602,7 @@ int RC_Read(void)
 	 {
 		 return 1;
 	 }
-	 // 4500~5000 回中(�?)
+	 // 4500~5000 回中(�??)
 	 else if (CHANNEL_3_PULSE_WIDE >= PWM_Ctrl_N2 && CHANNEL_3_PULSE_WIDE <= PWM_Ctrl_N3)
 	 {
 		 return 2;

@@ -1,4 +1,4 @@
---cpu=Cortex-M4.fp
+--cpu Cortex-M4.fp
 "flyassistant-f407\beep.o"
 "flyassistant-f407\key.o"
 "flyassistant-f407\mav_altitude_decode.o"
@@ -13,6 +13,8 @@
 "flyassistant-f407\kalman.o"
 "flyassistant-f407\matrix.o"
 "flyassistant-f407\uart_api.o"
+"flyassistant-f407\vl53l1_platform.o"
+"flyassistant-f407\patrol.o"
 "flyassistant-f407\main.o"
 "flyassistant-f407\gpio.o"
 "flyassistant-f407\adc.o"
@@ -21,8 +23,6 @@
 "flyassistant-f407\usart.o"
 "flyassistant-f407\stm32f4xx_it.o"
 "flyassistant-f407\stm32f4xx_hal_msp.o"
-"flyassistant-f407\vl53l1_platform.o"
-"flyassistant-f407\patrol.o"
 "flyassistant-f407\stm32f4xx_hal_adc.o"
 "flyassistant-f407\stm32f4xx_hal_adc_ex.o"
 "flyassistant-f407\stm32f4xx_ll_adc.o"

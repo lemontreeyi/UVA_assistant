@@ -2,13 +2,16 @@
 #include <math.h>
 
 uint8_t cmd_buf[3];
-bool path_flag[9] = {0};
+bool rec_path_flag[9] = {0};
+bool t1_path_flag[4] = {0};
 int auto_next_target[2] = {0};
 
+int takeoff_location[2] = {0};
+
 //用于重置路径点标志位
-void reset_path_flag()
+void reset_path_flag(bool path_flag[], int len)
 {
-    for(int i = 0; i < 9; ++i)
+    for(int i = 0; i < len; ++i)
         path_flag[i] = 0;
 }
 
@@ -22,37 +25,22 @@ bool set_NextLocation(float* current_location, int* target_location, int *next_l
     float flag_y = (tar_y - current_location[1] > 0)?1.0:-1.0;
     float flag_x = (tar_x - current_location[0] > 0)?1.0:-1.0;
 
-    bool get2y = false;
-    if(fabs(tar_y - current_location[1]) <= 0.2) get2y = true;
-    else get2y = false;
-    printf("cur_x:%f, cur_y:%f, tar_x:%f, tar_y:%f, flag:%d\r\n", current_location[0],current_location[1],tar_x,tar_y,get2y);
-    if(!get2y)
+    if((current_location[0] - tar_x) * (current_location[0] - tar_x) + (current_location[1] - tar_y) * (current_location[1] - tar_y) < 0.25 * 0.25)
     {
-        printf("get to y\r\n");
-        if(fabs(current_location[1] - tar_y) > 0.2)
-        {
-            next_location[0] = (int)(current_location[0] * 100);
-            next_location[1] = (int)((current_location[1] + flag_y * 0.3) * 100);
-            printf("get nexty:%d\r\n",next_location[1]);
-        }
-        else
-        {
-            next_location[0] = (int)(current_location[0] * 100);
-            next_location[1] = (int)(current_location[1] * 100);
-        }
+        //在阈值内
+        next_location[0] = current_location[0];
+        next_location[1] = current_location[1];
+        return true;
     }
     else
     {
-        if(fabs(current_location[0] - tar_x) > 0.2)
-        {
-            next_location[1] = (int)(current_location[1] * 100);
-            next_location[0] = (int)((current_location[0] + flag_x * 0.3) * 100);
-        }
-        else
-        {
-            next_location[0] = (int)(current_location[0] * 100);
-            next_location[1] = (int)(current_location[1] * 100);
-        }
+        float tan = (tar_y - current_location[1]) / (tar_x - current_location[0]);
+        float sin = sqrt(tan * tan / (1 + tan * tan));
+        float cos = sqrt(1 / (1 + tan * tan));
+
+        next_location[1] = (int)((current_location[1] + 0.35 * flag_y * sin) * 100);
+        next_location[0] = (int)((current_location[0] + 0.35 * flag_x * cos) * 100);
+        return false;
     }
 }
 
@@ -78,7 +66,7 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
         if(!path_flag[have_arrive])
             break;
     }
-    //到达目标点阈值范围内，flag置1
+    //到达目标点阈值范围内，并且长达5秒,flag置1
     if((path[have_arrive][0] - cur_x) * (path[have_arrive][0] - cur_x) + (path[have_arrive][1] - cur_y) * (path[have_arrive][1] - cur_y) < (Threshold*Threshold))
     {
         if(!is_time)
@@ -88,7 +76,7 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
         }
         else
         {
-            if((HAL_GetTick() - time) > 2000)
+            if((HAL_GetTick() - time) > 5000)
             {
                 is_time = 0;
                 path_flag[have_arrive] = true;
@@ -98,6 +86,13 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
                 ++have_arrive;
             }
         } 
+    }
+    else
+    {
+        if(is_time)
+        {
+            is_time = 0;
+        }
     }
     //设置目标点->根据flag打开的个数去设置
     if(have_arrive < Length)
@@ -116,6 +111,43 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
 int Get_WeightedValue(int param1, int param2, float weight)
 {
     return (int)(param1 * weight + param2 * (1 - weight));
+}
+
+/*
+func:完成任务一
+参数：当前坐标，两个目标点坐标，任务开始初始点设置标志位
+返回：1：已完成任务
+*/
+bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool is_SetStartPoint)
+{
+    static int start_location[2] = {0};
+    int path[4][2];
+    int index = 0, next_target[2];
+
+    //设置任务的起始点
+    if(!is_SetStartPoint)
+    {
+        start_location[0] = cur_location[0];
+        start_location[1] = cur_location[1];
+        is_SetStartPoint = 1;
+    }
+    //设置任务的路径点
+    path[0][0] = tar1_x; path[0][1] = start_location[1];
+    path[1][0] = tar1_x; path[1][1] = tar1_y;
+    path[2][0] = tar2_x; path[2][1] = tar1_y;
+    path[3][0] = tar2_x; path[3][1] = tar2_y;
+
+    //得到当前路径中的目标点
+    index = getCurrentTarget(cur_location, next_target, 4, t1_path_flag, path, 25);
+    //得到以当前路径中目标点计算出的小目标点
+    set_NextLocation(cur_location, next_target, auto_next_target);
+    //计算UWB的PID数据
+    Loiter_location((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), auto_next_target[0], auto_next_target[1]);
+    //混合UWB的PID和视觉定位PID,并输出
+    Mix_PwmOut((int)(cur_location[0] * 100), (int)(cur_location[1] * 100),next_target);
+
+    if(index == 4) return true;
+    else return false;
 }
 
 /*
@@ -140,7 +172,7 @@ bool Rectangle(int *start, int width_x, int width_y, float *current_location)
     path[8][0] = start[0];   path[8][1] = start[1];
     int next_target[2], index = 0;
     // printf("path0_x:%d path0_y:%d\r\n", path[0][0], path[0][1]);
-    index = getCurrentTarget(current_location,next_target,9,path_flag,path,20);
+    index = getCurrentTarget(current_location,next_target,9,rec_path_flag,path,20);
     // printf("cur_x:%f cur_y:%f\r\n", current_location[0], current_location[1]);
     // printf("index:%d\r\n", index);
     // printf("target_x:%d target_y:%d\r\n", next_target[0], next_target[1]);
@@ -229,16 +261,17 @@ int Get_circle_2(int current_height, int target_height)
 bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_settarget)
 {
     static uint32_t takeoff_Time = 0;
-    static int target_location[2];
 
     if(!(*is_settarget))
     {
-        target_location[0] = (int)(current_location[0]*100);
-        target_location[1] = (int)(current_location[1]*100);
+        takeoff_location[0] = (int)(current_location[0]*100);
+        takeoff_location[1] = (int)(current_location[1]*100);
         *is_settarget = 1;
     }
 
-    Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), target_location[0], target_location[1]);
+    Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1]);
+    Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location);
+
     //printf("height = %d\r\n", height);
     if(abs(height - 1500) > 100 && *is_takeoff==1)
     {
@@ -247,7 +280,7 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
     }
     else if(fabs(height - 1500) <= 100 && *is_takeoff==1)
     {
-        *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 1000)?0:1;
+        *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 3000)?0:1;
         if(*is_takeoff == 0)
         {
             Set_PWM_Thr(4500);
@@ -270,7 +303,6 @@ bool landon(int height, float* current_location, bool *is_settarget)
     }
 
     Loiter_location(current_location[0], current_location[1], target_location[0], target_location[1]);
-
     land(height);
 	if(height < 80) return true;
 	else return false;
