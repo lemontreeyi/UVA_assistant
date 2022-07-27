@@ -78,8 +78,8 @@ typedef struct ATTITUDE {
         float  Heigh;          
         uint16_t  Position_x;          //  Error[-2] 
         uint16_t  Position_y;           //  Sums of Errors 
-				uint16_t  SetPoint_x;
-	      uint16_t  SetPoint_y;
+	uint16_t  SetPoint_x;
+	uint16_t  SetPoint_y;
 } ATTITUDE; 
 
 extern ATTITUDE    Attitude; 
@@ -107,6 +107,7 @@ extern int CHANNEL_8_RISE,CHANNEL_8_FALL,CHANNEL_8_PULSE_WIDE;
 
 void PIDInit (PID *pp);
 void Device_Init(void);
+void Attitude_init(ATTITUDE *p);
 void Unlock(void);
 void Lock(void);
 void Take_off_Preper(void);

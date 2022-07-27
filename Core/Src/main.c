@@ -388,6 +388,9 @@ int main(void)
 		printf("%d\r\n", Status);
 	}
 
+	//Attitude init
+	Attitude_init(&Attitude);
+
 	//patrol init
 	//init_flypath();
 

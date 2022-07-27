@@ -83,6 +83,17 @@ void Device_Init(void)
 	Set_PWM_Mode(PWM_Mode_mid);
 }
 
+void Attitude_init(ATTITUDE *p)
+{
+	p->Pitch = 0;
+	p->Roll = 0;
+	p->Yaw = 0;
+	p->Heigh = 0;
+	p->Position_x = 112;
+	p->Position_y = 112;
+	p->SetPoint_x = 112;
+	p->SetPoint_y = 112;
+}
 
 ///*==================================================================================================== 
 //   PID计算部分 
@@ -500,6 +511,7 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 	}
 	printf("Roll_x = %d , %d, Pitch_y = %d, %d\r\n", point_x,pwm_roll_out, point_y, pwm_pitch_out);
 }
+
 
 /*==================================================================================================== 
    高度调整

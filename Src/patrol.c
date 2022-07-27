@@ -22,30 +22,42 @@ bool set_NextLocation(float* current_location, int* target_location, int *next_l
     float flag_y = (tar_y - current_location[1] > 0)?1.0:-1.0;
     float flag_x = (tar_x - current_location[0] > 0)?1.0:-1.0;
 
-    if((tar_x - current_location[0]) * (tar_x - current_location[0]) + (tar_y - current_location[1]) * (tar_y - current_location[1]) < 0.20*0.20)
+    bool get2y = false;
+    if(fabs(tar_y - current_location[1]) <= 0.2) get2y = true;
+    else get2y = false;
+    printf("cur_x:%f, cur_y:%f, tar_x:%f, tar_y:%f, flag:%d\r\n", current_location[0],current_location[1],tar_x,tar_y,get2y);
+    if(!get2y)
     {
-
-        next_location[0] = target_location[0];
-        next_location[1] = target_location[1];
-        return true;
+        printf("get to y\r\n");
+        if(fabs(current_location[1] - tar_y) > 0.2)
+        {
+            next_location[0] = (int)(current_location[0] * 100);
+            next_location[1] = (int)((current_location[1] + flag_y * 0.3) * 100);
+            printf("get nexty:%d\r\n",next_location[1]);
+        }
+        else
+        {
+            next_location[0] = (int)(current_location[0] * 100);
+            next_location[1] = (int)(current_location[1] * 100);
+        }
     }
     else
     {
-        float tan = (tar_y - current_location[1]) / (tar_x - current_location[0]);
-        float sin = sqrt(tan * tan / (1 + tan * tan));
-        float cos = sqrt(1 / (1 + tan * tan));
-				//printf("tan:%f sin:%f cos:%f flag_x:%f flag_y:%f\r\n", tan, sin, cos, flag_x, flag_y);
-        //转化到cm为单位
-        //next_y
-        next_location[1] = (int)((current_location[1] + 0.35 * flag_y * sin) * 100);
-        //next_x
-        next_location[0] = (int)((current_location[0] + 0.35 * flag_x * cos) * 100);
-				//printf("%f %d\r\n", (current_location[1] + 0.35 * flag_y * sin) * 100, (int)((current_location[1] + 0.35 * flag_y * sin) * 100));
-        return false;
+        if(fabs(current_location[0] - tar_x) > 0.2)
+        {
+            next_location[1] = (int)(current_location[1] * 100);
+            next_location[0] = (int)((current_location[0] + flag_x * 0.3) * 100);
+        }
+        else
+        {
+            next_location[0] = (int)(current_location[0] * 100);
+            next_location[1] = (int)(current_location[1] * 100);
+        }
     }
 }
 
 /*
+func:用于更新规划好路径的目标点
 param:
 Length:路径点的个数
 Threshold:到目标点的更新阈值（cm为单位）
@@ -144,6 +156,7 @@ bool Fly2Target(float *current_location,int *target_location)
     static int next_target[2] = {0, 0};
     int cur_x = (int)(current_location[0]*100), cur_y = (int)(current_location[1]*100);
     set_NextLocation(current_location, target_location, next_target);
+    printf("next_x:%d, next_y:%d\r\n", next_target[0], next_target[1]);
     Loiter_location((int)(current_location[0]*100),(int)(current_location[1]*100),next_target[0],next_target[1]);
     Mix_PwmOut(cur_x, cur_y, target_location);
     return true;
@@ -155,9 +168,10 @@ void Mix_PwmOut(int cur_x, int cur_y, int *target_location)
     if(((cur_x-target_location[0])*(cur_x-target_location[0]) + (cur_y-target_location[1])*(cur_y-target_location[1])) <= 85*85)
     {
         Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y,0,0);
-        //此处让坐标环PID占0.4的权重
-        Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 0.4));
-        Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 0.4));
+        //此处让坐标环PID占0.2的权重
+        printf("roll_out:%d, pitch_out:%d", pwm_roll_SensorOut, pwm_pitch_SensorOut);
+        Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 1.0));
+        Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 1.0));
     }
     else
     {
