@@ -232,18 +232,18 @@ void PIDInit (PID *pp)
 	PID_Roll_Time.SumError = 0;
     
 	PID_Location_x.Max = 650;
-	PID_Location_x.Proportion =  5.9;
+	PID_Location_x.Proportion =  3.4;
 	PID_Location_x.Integral = 0;
-	PID_Location_x.Derivative = 5.2;
+	PID_Location_x.Derivative = 1.0;
 	PID_Location_x.SetPoint = 0;
 	PID_Location_x.LastError = 0;
 	PID_Location_x.PreviousError = 0;
 	PID_Location_x.SumError = 0;
 
 	PID_Location_y.Max = 650;			//
-	PID_Location_y.Proportion = -5.7;
+	PID_Location_y.Proportion = -3.4;
 	PID_Location_y.Integral = 0;
-	PID_Location_y.Derivative = -5.5;
+	PID_Location_y.Derivative = -1.0;
 	PID_Location_y.SetPoint = 0;
 	PID_Location_y.LastError = 0;
 	PID_Location_y.PreviousError = 0;
@@ -441,7 +441,12 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 	int pwm_roll_clc=0;
 	int deadZoneX = 0;
 	int deadZoneY = 0;
-
+	static int last_point_x = 0, last_pint_y = 0;
+	if(point_x == last_point_x && point_y == last_pint_y)
+	{
+		return;
+	}
+	last_point_x = point_x; last_pint_y = point_y;
 	deadZoneX = point_x - SetPoint_x;
 	deadZoneY = point_y - SetPoint_y;
 
@@ -509,7 +514,7 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 	{
 		pwm_pitch_SensorOut = PWM_Pitch_mid;
 	}
-	printf("Roll_x = %d , %d, Pitch_y = %d, %d\r\n", point_x,pwm_roll_out, point_y, pwm_pitch_out);
+	// printf("Roll_x = %d , %d, Pitch_y = %d, %d\r\n", point_x,pwm_roll_out, point_y, pwm_pitch_out);
 }
 
 

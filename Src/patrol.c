@@ -5,7 +5,7 @@ uint8_t cmd_buf[3];
 bool rec_path_flag[9] = {0};
 bool t1_path_flag[4] = {0};
 int auto_next_target[2] = {0};
-
+float init_yaw = 0;
 int takeoff_location[2] = {0};
 
 //用于重置路径点标志位
@@ -201,14 +201,15 @@ void Mix_PwmOut(int cur_x, int cur_y, int *target_location)
     {
         Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y,0,0);
         //此处让坐标环PID占0.2的权重
-        printf("roll_out:%d, pitch_out:%d", pwm_roll_SensorOut, pwm_pitch_SensorOut);
+        // printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
         Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 1.0));
         Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 1.0));
     }
     else
     {
+        printf("2pwm_roll_out:%d pwm_pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
         Set_PWM_Roll(pwm_roll_out);
-        Set_PWM_Pitch(pwm_pitch_out);
+        Set_PWM_Pitch(pwm_pitch_out);   
     }
 }
 
@@ -261,6 +262,7 @@ int Get_circle_2(int current_height, int target_height)
 bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_settarget)
 {
     static uint32_t takeoff_Time = 0;
+    static int next_target[2] = {0};
 
     if(!(*is_settarget))
     {
@@ -269,10 +271,13 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
         *is_settarget = 1;
     }
 
+    set_NextLocation(current_location, takeoff_location, next_target);
     Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1]);
     Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location);
 
-    //printf("height = %d\r\n", height);
+    // printf("height = %d\r\n", height);
+    // printf("x:%f y:%f\r\n", current_location[0], current_location[1]);
+    // printf("takeoff_x:%d takeoff_y:%d\r\n", takeoff_location[0], takeoff_location[1]);
     if(abs(height - 1500) > 100 && *is_takeoff==1)
     {
         Take_off(1500, height);
@@ -319,4 +324,30 @@ bool shootphoto(float target_x, float target_y, float* current_location, USART_T
         return true;
     }
     return false;
+}
+
+//纠正姿态
+void fixyaw(float yaw)
+{
+    static bool is_inityaw = 0;
+    if(!is_inityaw)
+    {
+        init_yaw = yaw;
+        is_inityaw = 1;
+    }
+    if(yaw < 0 && yaw > -150.0 / 180.0 * 3.14159)
+    {
+        if(yaw - init_yaw < 0)
+        {
+            // printf("pwm_yaw:%f\r\n", 4500 + 160* (exp(init_yaw - yaw) - 1));
+            Set_PWM_Yaw(4500 + 80* exp(init_yaw - yaw));//右转
+        }         
+        else if(yaw - init_yaw > 0)
+        {
+            // printf("pwm_yaw:%f\r\n", 4500 - 160* (exp(yaw - init_yaw) - 1));
+            Set_PWM_Yaw(4500 - 80* exp(yaw - init_yaw));//左转
+        }
+            
+    }
+
 }

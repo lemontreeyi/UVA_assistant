@@ -24,4 +24,5 @@ bool landon(int height, float* current_location, bool *is_settarget);
 bool shootphoto(float target_x, float target_y, float* current_location, USART_TypeDef* huart);
 int Get_WeightedValue(int param1, int param2, float weight);
 void Mix_PwmOut(int cur_x, int cur_y, int *target_location);
+void fixyaw(float yaw);
 #endif
