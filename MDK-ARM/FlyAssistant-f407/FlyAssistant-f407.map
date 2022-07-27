@@ -3963,7 +3963,7 @@ Image Symbol Table
     kalman_init                              0x0800a149   Thumb Code    30  kalman.o(i.kalman_init)
     land                                     0x0800a179   Thumb Code    96  flycontrol.o(i.land)
     landon                                   0x0800a211   Thumb Code   102  patrol.o(i.landon)
-    main                                     0x0800a27d   Thumb Code  1750  main.o(i.main)
+    main                                     0x0800a27d   Thumb Code  1752  main.o(i.main)
     malloc                                   0x0800a995   Thumb Code    92  malloc.o(i.malloc)
     matrix_T                                 0x0800aa01   Thumb Code   100  matrix.o(i.matrix_T)
     matrix_inv2_2                            0x0800aa65   Thumb Code   100  matrix.o(i.matrix_inv2_2)
@@ -4643,7 +4643,7 @@ Image component sizes
        220         28          0          0        280       2290   kalman.o
        396        100          0          1          0       1905   key.o
        132         34          0          0          0       4075   led.o
-      4806        942        375        239       2648      99530   main.o
+      4806        940        375        239       2648      99530   main.o
       1596         46          0         56         12       7808   matrix.o
          0          0          0          0          0       3292   mav_altitude_decode.o
       1050         44          0          8        364      15910   mpu6050.o
@@ -4677,7 +4677,7 @@ Image component sizes
        106          0          0          0          0       2576   vl53l1_wait.o
 
     ----------------------------------------------------------------------
-     37800       3048        824       1552       6304    1272105   Object Totals
+     37800       3046        824       1552       6304    1272105   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         42          0          1          4         14          0   (incl. Padding)
 
@@ -4754,9 +4754,9 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     44816       3440        992       1568       6304    1243373   Grand Totals
-     44816       3440        992       1148       6304    1243373   ELF Image Totals (compressed)
-     44816       3440        992       1148          0          0   ROM Totals
+     44816       3438        992       1568       6304    1243373   Grand Totals
+     44816       3438        992       1148       6304    1243373   ELF Image Totals (compressed)
+     44816       3438        992       1148          0          0   ROM Totals
 
 ==============================================================================
 

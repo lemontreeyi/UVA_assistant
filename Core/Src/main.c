@@ -550,7 +550,7 @@ int main(void)
 						task = 4;
 					}
 				case 3:
-					target_location[0] = 226; target_location[1] = 250;
+					target_location[0] = 226; target_location[1] = 250 + 13;
 					Fly2Target(location_esm,target_location);
 					break;
 				default:

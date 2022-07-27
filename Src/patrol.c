@@ -152,7 +152,7 @@ bool Fly2Target(float *current_location,int *target_location)
 //根据坐标位置融合PWM输出
 void Mix_PwmOut(int cur_x, int cur_y, int *target_location)
 {
-    if(((cur_x-target_location[0])*(cur_x-target_location[0]) + (cur_y-target_location[1])*(cur_y-target_location[1])) <= 110*110)
+    if(((cur_x-target_location[0])*(cur_x-target_location[0]) + (cur_y-target_location[1])*(cur_y-target_location[1])) <= 85*85)
     {
         Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y,0,0);
         //此处让坐标环PID占0.4的权重
