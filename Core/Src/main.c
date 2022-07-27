@@ -101,11 +101,11 @@ static int heartbeat = 0;
 
 uint8_t USART1_RX_BUF[USART1_MAX_RECV_LEN];
 uint8_t USART2_RX_BUF[USART2_MAX_RECV_LEN];
-uint8_t USART3_RX_BUF[USART3_MAX_RECV_LEN];
+uint8_t USART3_RX_BUF[MAVLINK_MAX_PACKET_LEN * 3];
 uint8_t UART5_RX_BUF[UART5_MAX_RECV_LEN];
 
 uint8_t FreeBuffer_Encode[USART2_MAX_RECV_LEN];
-uint8_t FreeBuffer_Encode_3[USART3_MAX_RECV_LEN];
+uint8_t FreeBuffer_Encode_3[MAVLINK_MAX_PACKET_LEN * 3];
 uint8_t FreeBuffer_Encode_5[UART5_MAX_RECV_LEN];
 uint8_t MAVLink_RECV_BUF[USART2_MAX_RECV_LEN];
 uint8_t MAVLink_TX_BUF[MAVLINK_MAX_PACKET_LEN];
@@ -195,8 +195,6 @@ float dy = 0.07220428891557518;
 
 //姿�??
 float yaw = 0;
-float pitch = 0;
-float roll = 0;
 
 //bool Get_UWB_distance(float distance[]);
 
@@ -480,9 +478,27 @@ int main(void)
 					BSP_USART_StartIT_LL( USART2 ); //启动下一次接�??
 			}
 			/*****************************USART3接收&处理数据***********************************/
-			if (USART3_RX_STA & 0x8000) //接收满一次数�??
+			if (USART3_RX_STA == MAVLINK_MAX_PACKET_LEN * 3) //接收满一次数�??
 			{
-				
+				for(i3 = 0; i3 < MAVLINK_MAX_PACKET_LEN * 3; ++i3)
+					FreeBuffer_Encode_3[i3] = USART3_RX_BUF[i3];
+				USART3_RX_STA = 0;
+				BSP_USART_StartIT_LL( USART2 );
+				mavlink_message_t msg;
+				mavlink_status_t status;
+				// printf("ok\r\n");
+				for(i3 = 0; i3 < MAVLINK_MAX_PACKET_LEN * 3; ++i3)
+				{
+					if(mavlink_parse_char(MAVLINK_COMM_0, FreeBuffer_Encode_3[i3], &msg, &status))
+					{
+						if(msg.msgid == MAVLINK_MSG_ID_ATTITUDE)
+						{
+							yaw = mavlink_msg_attitude_get_yaw(&msg);
+							// printf("_yaw:%f\r\n", yaw);
+						}
+							
+					}
+				}
 			}
 			/*****************************USART5接收&处理数据***********************************/
 			if (UART5_RX_STA & 0x0080) //接收满一次数�??
@@ -509,7 +525,7 @@ int main(void)
 					// location[1] = ky * location[1] + dy;
 					location_esm[0] = kalman_calc(&kalman_x, location[0]);
 					location_esm[1] = kalman_calc(&kalman_y, location[1]);
-          			//printf("kal_x:%f kal_y:%f\r\n", kalman_calc(&kalman_x, location[0]), kalman_calc(&kalman_y, location[1]));
+          			printf("kal_x:%f kal_y:%f\r\n", location_esm[0], location_esm[1]);
 					Dtime = HAL_GetTick() - Cxof_Time;
           			calculate_cxof(location_esm, d_location, speed, Dtime);
 					//printf("vx:%f, vy:%f\r\n",speed[0], speed[1]);
@@ -531,10 +547,9 @@ int main(void)
 				{
 				case 0:
 					mav_request_data(USART3);
-					HAL_Delay(1000);
-					printf("init_yaw:%f\r\n", yaw);
-					fixyaw(yaw);
+					HAL_Delay(500);
 					task = 1;
+					break;
 				case 1:
 					//任务�??:�??键起�??
 					if(height > 300) Set_PWM_Mode(4500);		//Loiter -> 1500 x 3
@@ -567,7 +582,7 @@ int main(void)
 					Back2Center();
 					break;
 				}
-				// fixyaw(yaw);
+				fixyaw(yaw);
 				//将UWB无线定位后的坐标结果传入PID外环，进行控�??
 				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
 				if(ContriGetDataTime >= 300)
@@ -1039,41 +1054,41 @@ void USART_RxCallback(USART_TypeDef *huart)
 		else if (huart == USART3)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart); 
-			// if ((USART3_RX_STA & (1 << 15)) == 0)
-			// {
-			// 	TIM14->CNT = 0;			//定时�??14清空
-			// 	if (USART3_RX_STA == 0) //新一轮接收开�??
-			// 	{
-			// 		TIM14_Set(1);
-			// 	}
-			// 	USART3_RX_BUF[USART3_RX_STA++] = data; //存入接收缓冲�??
-			// 	// printf("USART3 INT =%d \r\n",USART3_RX_STA);
-			// }
-			// else
-			// {
-			// 	USART3_RX_STA |= 1 << 15; //强制标记接收完成
-			// 	LL_USART_DisableIT_RXNE(UART5);
-			// }
-			mavlink_message_t msg;
-			mavlink_status_t status;
-			// printf("%c", data);
-			if(mavlink_parse_char(MAVLINK_COMM_0, data, &msg, &status))
-    		{
-    		  switch (msg.msgid)
-    		  {
-				// case MAVLINK_MSG_ID_HEARTBEAT:
-				// 	printf("ok\r\n");
-    		    case MAVLINK_MSG_ID_ATTITUDE:
-    		      	pitch = mavlink_msg_attitude_get_pitch(&msg);
-    		      	yaw = mavlink_msg_attitude_get_yaw(&msg);
-    		      	roll = mavlink_msg_attitude_get_roll(&msg);					//   printf("pitch:%f, roll:%f\r\n", pitch, roll);
-    		      	break;
-    		    default:
-    		      	break;
-    		  }
-    		  LL_USART_DisableIT_RXNE(USART3);
-    		  BSP_USART_StartIT_LL(USART3);
-    		}
+			if ((USART3_RX_STA < MAVLINK_MAX_PACKET_LEN * 3))
+			{
+				TIM14->CNT = 0;			//定时�??14清空
+				if (USART3_RX_STA == 0) //新一轮接收开�??
+				{
+					TIM14_Set(1);
+				}
+				USART3_RX_BUF[USART3_RX_STA++] = data; //存入接收缓冲�??
+				// printf("USART3 INT =%d \r\n",USART3_RX_STA);
+			}
+			else
+			{
+				USART3_RX_STA = MAVLINK_MAX_PACKET_LEN * 3; //强制标记接收完成
+				LL_USART_DisableIT_RXNE(UART5);
+			}
+			// mavlink_message_t msg;
+			// mavlink_status_t status;
+			// // printf("%c", data);
+			// if(mavlink_parse_char(MAVLINK_COMM_0, data, &msg, &status))
+    		// {
+    		//   switch (msg.msgid)
+    		//   {
+			// 	// case MAVLINK_MSG_ID_HEARTBEAT:
+			// 	// 	printf("ok\r\n");
+    		//     case MAVLINK_MSG_ID_ATTITUDE:
+    		//       	pitch = mavlink_msg_attitude_get_pitch(&msg);
+    		//       	yaw = mavlink_msg_attitude_get_yaw(&msg);
+    		//       	roll = mavlink_msg_attitude_get_roll(&msg);					//   printf("pitch:%f, roll:%f\r\n", pitch, roll);
+    		//       	break;
+    		//     default:
+    		//       	break;
+    		//   }
+    		//   LL_USART_DisableIT_RXNE(USART3);
+    		//   BSP_USART_StartIT_LL(USART3);
+    		// }
 		}
 		// ******************串口5中断****************
 		else if (huart == UART5)
@@ -1143,7 +1158,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		tim14_1ms++;
 		if (tim14_1ms == 50) 
 		{
-			USART3_RX_STA |= (1 << 15); //标记接收完成
+			USART3_RX_STA = MAVLINK_MAX_PACKET_LEN * 3; //标记接收完成
 			TIM14->SR &= ~(1 << 0);		//清除中断标志
 			TIM14_Set(0);				//关闭TIM14
 			tim14_1ms = 0;

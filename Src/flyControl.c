@@ -234,7 +234,7 @@ void PIDInit (PID *pp)
 	PID_Location_x.Max = 650;
 	PID_Location_x.Proportion =  3.4;
 	PID_Location_x.Integral = 0;
-	PID_Location_x.Derivative = 1.0;
+	PID_Location_x.Derivative = 1.45;
 	PID_Location_x.SetPoint = 0;
 	PID_Location_x.LastError = 0;
 	PID_Location_x.PreviousError = 0;
@@ -243,7 +243,7 @@ void PIDInit (PID *pp)
 	PID_Location_y.Max = 650;			//
 	PID_Location_y.Proportion = -3.4;
 	PID_Location_y.Integral = 0;
-	PID_Location_y.Derivative = -1.0;
+	PID_Location_y.Derivative = -1.45;
 	PID_Location_y.SetPoint = 0;
 	PID_Location_y.LastError = 0;
 	PID_Location_y.PreviousError = 0;

@@ -207,7 +207,7 @@ void Mix_PwmOut(int cur_x, int cur_y, int *target_location)
     }
     else
     {
-        printf("2pwm_roll_out:%d pwm_pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
+        // printf("2pwm_roll_out:%d pwm_pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
         Set_PWM_Roll(pwm_roll_out);
         Set_PWM_Pitch(pwm_pitch_out);   
     }
@@ -333,19 +333,23 @@ void fixyaw(float yaw)
     if(!is_inityaw)
     {
         init_yaw = yaw;
-        is_inityaw = 1;
+        if(yaw != 0)
+        {
+            printf("init_yaw:%f\r\n", init_yaw);
+            is_inityaw = 1;
+        }        
     }
-    if(yaw < 0 && yaw > -150.0 / 180.0 * 3.14159)
+    if(yaw < 0 && yaw > -150.0 / 180.0 * 3.14159 && is_inityaw)
     {
-        if(yaw - init_yaw < 0)
+        if(yaw - init_yaw < -0.30)
         {
-            // printf("pwm_yaw:%f\r\n", 4500 + 160* (exp(init_yaw - yaw) - 1));
-            Set_PWM_Yaw(4500 + 80* exp(init_yaw - yaw));//右转
+            // printf("pwm_yaw:%f\r\n", 4500 + 80 * (exp(init_yaw - yaw) - 1));
+            Set_PWM_Yaw(4500 + 80 * exp(init_yaw - yaw));//右转
         }         
-        else if(yaw - init_yaw > 0)
+        else if(yaw - init_yaw > 0.30)
         {
-            // printf("pwm_yaw:%f\r\n", 4500 - 160* (exp(yaw - init_yaw) - 1));
-            Set_PWM_Yaw(4500 - 80* exp(yaw - init_yaw));//左转
+            // printf("pwm_yaw:%f\r\n", 4500 - 80 * (exp(yaw - init_yaw) - 1));
+            Set_PWM_Yaw(4500 - 80 * exp(yaw - init_yaw));//左转
         }
             
     }
