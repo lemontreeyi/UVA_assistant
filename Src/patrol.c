@@ -119,12 +119,12 @@ func:完成任务一
 参数：当前坐标，两个目标点坐标，任务开始初始点设置标志位
 返回：1：已完成任务
 */
-bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint)
+bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint, uint16_t Task1_Type1,  uint16_t Task1_Type2)
 {
     static int start_location[2] = {0};
     int path[4][2];
-    int index = 0, next_target[2];
-    static int old_index = 0;
+    int next_target[2];
+    static int index = 0, old_index = 0;
     //设置任务的起始点
     if(!(*is_SetStartPoint))
     {
@@ -132,7 +132,7 @@ bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y
         start_location[1] = cur_location[1] * 100;
         *is_SetStartPoint = 1;
         //请求识别type4,即红色三角形
-        Pack_cmd_buf(4,1,cmd_buf);
+        Pack_cmd_buf(Task1_Type1,1,cmd_buf);
         BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
     }
     //设置任务的路径点
@@ -147,7 +147,7 @@ bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y
     if(index ==2 && old_index != index)
     {
         //请求识别type3,即蓝色三角形
-        Pack_cmd_buf(3,1,cmd_buf);
+        Pack_cmd_buf(Task1_Type2,1,cmd_buf);
         BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
     }
     printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);

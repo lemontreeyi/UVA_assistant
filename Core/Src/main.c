@@ -200,12 +200,12 @@ float yaw = 0;
 
 //任务目标点信息
 //Task1
-uint16_t Task1_Point1_x;
-uint16_t Task1_Point1_y;
-uint16_t Task1_Point2_x;
-uint16_t Task1_Point2_y;
-uint16_t Task1_Type1;
-uint16_t Task1_Type2;
+uint16_t Task1_Point1_x = 222;
+uint16_t Task1_Point1_y = 240;
+uint16_t Task1_Point2_x = 150;
+uint16_t Task1_Point2_y = 163;
+uint16_t Task1_Type1 = 4;
+uint16_t Task1_Type2 = 3;
 /*
 type说明：
 0:cross, 1：蓝色方形，2：蓝色圆，3：蓝色三角形，4：红色三角形，5：红色方形，6：红色圆
@@ -558,7 +558,7 @@ int main(void)
 				USART3_RX_STA = 0;
 				BSP_USART_StartIT_LL( USART3 );//启动下一次接收
 			}
-			if(HAL_GetTick() - Cxof_Wait >= 500)			//超过300ms未接收到uwb的数据，蜂鸣器响起报警
+			if(HAL_GetTick() - Cxof_Wait >= 500)			//超过500ms未接收到uwb的数据，蜂鸣器响起报警
 				BEEP_OFF();
 			if (3 == RC_Read()) //飞控助手控制
 			{	
@@ -585,7 +585,7 @@ int main(void)
 						break;
 					case 2:
 						//步骤2:前往两个目标点
-						if(taskOne(location_esm, 222, 240, 150, 163, &is_SetStartPoint))
+						if(taskOne(location_esm, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint))
 						{
 							Pack_cmd_buf(3,0,cmd_buf);
 							BSP_USART_SendArray_LL(USART2, cmd_buf, 4);

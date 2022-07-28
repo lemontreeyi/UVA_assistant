@@ -68,25 +68,12 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 			//解析目标点位置信息
 			else if(inBuf[1] == '3')		
 			{
-				Task1_Point1_x = inBuf[2]<<8 | inBuf[3];
-				Task1_Point1_y = inBuf[4]<<8 | inBuf[5];
-				Task1_Point2_x = inBuf[6]<<8 | inBuf[7];
-				Task1_Point2_y = inBuf[8]<<8 | inBuf[9];
-				Task1_Type1 = inBuf[10]<<8 | inBuf[11];
-				Task1_Type2 = inBuf[12]<<8 | inBuf[13];
-				BEEP_ON();
-				HAL_Delay(400);
-				BEEP_OFF();
-				HAL_Delay(200);
-
-				BEEP_ON();
-				HAL_Delay(400);
-				BEEP_OFF();
-				HAL_Delay(200);
-				
-				BEEP_ON();
-				HAL_Delay(1000);
-				BEEP_OFF();
+				Task1_Point1_x = inBuf[3]<<8 | inBuf[2];
+				Task1_Point1_y = inBuf[5]<<8 | inBuf[4];
+				Task1_Point2_x = inBuf[7]<<8 | inBuf[6];
+				Task1_Point2_y = inBuf[9]<<8 | inBuf[8];
+				Task1_Type1 = inBuf[11]<<8 | inBuf[10];
+				Task1_Type2 = inBuf[13]<<8 | inBuf[12];
 				return 3;
 			}
 			else if(inBuf[1] == '4')		//向右飞
