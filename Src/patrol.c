@@ -29,8 +29,8 @@ bool set_NextLocation(float* current_location, int* target_location, int *next_l
     if((current_location[0] - tar_x) * (current_location[0] - tar_x) + (current_location[1] - tar_y) * (current_location[1] - tar_y) < 0.25 * 0.25)
     {
         //在阈值内
-        next_location[0] = current_location[0];
-        next_location[1] = current_location[1];
+        next_location[0] = target_location[0];
+        next_location[1] = target_location[1];
         return true;
     }
     else
