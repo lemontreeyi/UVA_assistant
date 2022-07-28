@@ -626,7 +626,7 @@ int main(void)
 			{
 				//桥接模式
 				RC_bridge();
-				task = 0;
+				task = 1;
 				is_takeoff = 1;
 				is_settarget = 0;
 				is_SetStartPoint = 0;
