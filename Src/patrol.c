@@ -205,7 +205,7 @@ void Mix_PwmOut(int cur_x, int cur_y, int *target_location)
     {
         Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y,0,0);
         //此处让坐标环PID占0.2的权重
-        printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
+        // printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
         Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 1.0));
         Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 1.0));
     }
@@ -302,22 +302,23 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
 //降落
 bool landon(int height, float* current_location, bool *is_SetStartPoint)
 {
-    // static int start_location[2] = {0};
-    // int path[2][2];
-    // int next_target[2];
-    // //设置任务的起始点
-    // if(!(*is_SetStartPoint))
-    // {
-    //     start_location[0] = current_location[0];
-    //     start_location[1] = current_location[1];
-    //     *is_SetStartPoint = 1;
-    // }
-    // getCurrentTarget(current_location, next_target, 2, ld_path_flag, path, 25);
-    // set_NextLocation(current_location, next_target, auto_next_target);
-    // Loiter_location((int)(current_location[0] * 100), (int)(current_location[1]), auto_next_target[0], auto_next_target[1]);
-    // land(height);
-	// if(height < 80) return true;
-	// else return false;
+    static int start_location[2] = {0};
+    int path[2][2], index = 0;
+    int next_target[2];
+    //设置任务的起始点
+    if(!(*is_SetStartPoint))
+    {
+        start_location[0] = current_location[0];
+        start_location[1] = current_location[1];
+        *is_SetStartPoint = 1;
+    }
+    index = getCurrentTarget(current_location, next_target, 2, ld_path_flag, path, 25);
+    if(set_NextLocation(current_location, next_target, auto_next_target) && index == 2)
+        land(height);
+    Loiter_location((int)(current_location[0] * 100), (int)(current_location[1]), auto_next_target[0], auto_next_target[1]);
+    
+	if(height < 80) return true;
+	else return false;
 }
 
 //拍照片

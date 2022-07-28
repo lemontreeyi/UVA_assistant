@@ -70,8 +70,7 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 
 				return 2;
 			}
-			/* 以下指令可能会用于完成要求的飞行动作 */
-			else if(inBuf[1] == '3')		//向左飞
+			else if(inBuf[1] == '3')		//解析目标点位置信息
 			{
 				return 3;
 			}
