@@ -1,3 +1,59 @@
-Load "FlyAssistant-f407\\FlyAssistant-f407.axf" 
-Erase Done.Programming Done.Verify OK.Application running ...
-Flash Load finished at 08:35:38
+*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'FlyAssistant-f407'
+compiling patrol.c...
+../Inc/patrol.h(28): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Src\patrol.c(23): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float tar_x = (float)target_location[0] / 100.0;
+..\Src\patrol.c(24): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float tar_y = (float)target_location[1] / 100.0;
+..\Src\patrol.c(42): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          next_location[1] = (int)((current_location[1] + 0.35 * flag_y * sin) * 100);
+..\Src\patrol.c(43): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          next_location[0] = (int)((current_location[0] + 0.35 * flag_x * cos) * 100);
+..\Src\patrol.c(231): warning:  #174-D: expression has no effect
+      path[0][0], path[0][1] = begin[0], begin[1];        //èµ?å§?ç‚?
+..\Src\patrol.c(247): warning:  #111-D: statement is unreachable
+          return 1; break;
+..\Src\patrol.c(249): warning:  #111-D: statement is unreachable
+          return 3; break;
+..\Src\patrol.c(250): warning:  #111-D: statement is unreachable
+      default: return 2; break;
+..\Src\patrol.c(260): warning:  #940-D: missing return statement at end of non-void function "Get_circle_2"
+  }
+..\Src\patrol.c(282): warning:  #223-D: function "abs" declared implicitly
+      if(abs(height - 1500) > 100 && *is_takeoff==1)
+..\Src\patrol.c(318): warning:  #940-D: missing return statement at end of non-void function "landon"
+  }
+..\Src\patrol.c(366): warning:  #1-D: last line of file ends without a newline
+  }
+..\Src\patrol.c: 13 warnings, 0 errors
+compiling flyControl.c...
+..\Src\flyControl.c(132): warning:  #223-D: function "abs" declared implicitly
+  		PID_Control_param = (abs(CurrentPoint - SetPoint) > 95)?  1.2  : 1.0;
+..\Src\flyControl.c(144): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  		if(flag) out *= 0.5;
+..\Src\flyControl.c(163): warning:  #223-D: function "abs" declared implicitly
+  	out = abs((int)out);
+..\Src\flyControl.c(330): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  			Set_PWM_Thr((int)(4500 + 780 * exp((-current_height / target_height) * 0.95)));
+..\Src\flyControl.c(453): warning:  #223-D: function "abs" declared implicitly
+  	if(abs(deadZoneX) >= 25)
+..\Src\flyControl.c(463): warning:  #223-D: function "abs" declared implicitly
+  	if(abs(deadZoneY) >= 25)
+..\Src\flyControl.c(491): warning:  #223-D: function "abs" declared implicitly
+  	if(abs(deadZoneX)>=DeadThreShold)
+..\Src\flyControl.c(499): warning:  #223-D: function "abs" declared implicitly
+  	if(abs(deadZoneX)<DeadThreShold)
+..\Src\flyControl.c(505): warning:  #223-D: function "abs" declared implicitly
+  	if(abs(deadZoneY)>=DeadThreShold)
+..\Src\flyControl.c(513): warning:  #223-D: function "abs" declared implicitly
+  	if(abs(deadZoneY) < DeadThreShold)
+..\Src\flyControl.c(485): warning:  #177-D: variable "h" was declared but never referenced
+  	int h = 50;
+..\Src\flyControl.c: 11 warnings, 0 errors
+linking...
+Program Size: Code=44764 RO-data=1256 RW-data=1600 ZI-data=7648  
+FromELF: creating hex file...
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 24 Warning(s).
+Build Time Elapsed:  00:00:04

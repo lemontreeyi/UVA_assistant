@@ -300,15 +300,18 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
 bool landon(int height, float* current_location, bool *is_SetStartPoint)
 {
     // static int start_location[2] = {0};
+    // int path[2][2];
+    // int next_target[2];
     // //设置任务的起始点
     // if(!(*is_SetStartPoint))
     // {
-    //     start_location[0] = cur_location[0];
-    //     start_location[1] = cur_location[1];
+    //     start_location[0] = current_location[0];
+    //     start_location[1] = current_location[1];
     //     *is_SetStartPoint = 1;
     // }
-    // // set_NextLocation()
-    // Loiter_location(current_location[0], current_location[1], target_location[0], target_location[1]);
+    // getCurrentTarget(current_location, next_target, 2, ld_path_flag, path, 25);
+    // set_NextLocation(current_location, next_target, auto_next_target);
+    // Loiter_location((int)(current_location[0] * 100), (int)(current_location[1]), auto_next_target[0], auto_next_target[1]);
     // land(height);
 	// if(height < 80) return true;
 	// else return false;
