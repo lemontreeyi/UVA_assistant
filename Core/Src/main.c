@@ -198,6 +198,19 @@ float dy = 0.07220428891557518;
 //姿态数据
 float yaw = 0;
 
+//任务目标点信息
+//Task1
+uint16_t Task1_Point1_x;
+uint16_t Task1_Point1_y;
+uint16_t Task1_Point2_x;
+uint16_t Task1_Point2_y;
+uint16_t Task1_Type1;
+uint16_t Task1_Type2;
+/*
+type说明：
+0:cross, 1：蓝色方形，2：蓝色圆，3：蓝色三角形，4：红色三角形，5：红色方形，6：红色圆
+*/
+
 //bool Get_UWB_distance(float distance[]);
 
 /* 仅允许本文件内调用的函数声明 */
@@ -446,8 +459,8 @@ int main(void)
 			break;
 		case KEY2_PRES: 		//给v831发指令进行扫码
 			LED1_Slow_Flash();
-			Pack_cmd_buf(1, cmd_buf);
-			BSP_USART_SendArray_LL(USART2, cmd_buf, 3);
+			Pack_cmd_buf(7, 0, cmd_buf);		//前7个ID代表7类图形的ID,7表示二维码
+			BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
 			break;
 		}
 		
@@ -513,7 +526,7 @@ int main(void)
           			printf("kal_x:%f kal_y:%f\r\n", location_esm[0], location_esm[1]);
 					Dtime = HAL_GetTick() - Cxof_Time;
           			calculate_cxof(location_esm, d_location, speed, Dtime);//计算光流
-					//printf("vx:%f, vy:%f\r\n",speed[0], speed[1]);
+					printf("vx:%f, vy:%f, dtime:%d\r\n",speed[0], speed[1],Dtime);
           			Pack_cxof_buf(speed, 100, cxof_buf);//打包光流数据
 					Cxof_Time = HAL_GetTick();
 					Cxof_Wait = HAL_GetTick();
@@ -574,6 +587,8 @@ int main(void)
 						//步骤2:前往两个目标点
 						if(taskOne(location_esm, 222, 240, 150, 163, &is_SetStartPoint))
 						{
+							Pack_cmd_buf(3,0,cmd_buf);
+							BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
 							BEEP_ON();
 							HAL_Delay(1000);
 							BEEP_OFF();

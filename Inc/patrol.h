@@ -4,10 +4,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "flyControl.h"
+#include "uart_api.h"
 #include "main.h"
 #define FLYPATH_LEN 4
 
-extern uint8_t cmd_buf[3];
+extern uint8_t cmd_buf[4];
 extern bool t1_path_flag[4];
 
 // void init_flypath();

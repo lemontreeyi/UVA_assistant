@@ -1,7 +1,7 @@
 #include "patrol.h"
 #include <math.h>
 
-uint8_t cmd_buf[3];
+uint8_t cmd_buf[4];
 bool rec_path_flag[9] = {0};
 bool t1_path_flag[4] = {0};
 bool ld_path_flag[2] = {0};
@@ -124,22 +124,32 @@ bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y
     static int start_location[2] = {0};
     int path[4][2];
     int index = 0, next_target[2];
-
+    static int old_index = 0;
     //设置任务的起始点
     if(!(*is_SetStartPoint))
     {
         start_location[0] = cur_location[0] * 100;
         start_location[1] = cur_location[1] * 100;
         *is_SetStartPoint = 1;
+        //请求识别type4,即红色三角形
+        Pack_cmd_buf(4,1,cmd_buf);
+        BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
     }
     //设置任务的路径点
     path[0][0] = tar1_x; path[0][1] = start_location[1];
-    path[1][0] = tar1_x; path[1][1] = tar1_y;
+    path[1][0] = tar1_x; path[1][1] = tar1_y;       //目标点1
     path[2][0] = tar2_x; path[2][1] = tar1_y;
-    path[3][0] = tar2_x; path[3][1] = tar2_y;
+    path[3][0] = tar2_x; path[3][1] = tar2_y;       //目标点2
     printf("t1_x:%d t1_y:%d\r\n", path[0][0], path[0][1]);
+    old_index = index;
     //得到当前路径中的目标点
     index = getCurrentTarget(cur_location, next_target, 4, t1_path_flag, path, 25);
+    if(index ==2 && old_index != index)
+    {
+        //请求识别type3,即蓝色三角形
+        Pack_cmd_buf(3,1,cmd_buf);
+        BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+    }
     printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
     //得到以当前路径中目标点计算出的小目标点
     set_NextLocation(cur_location, next_target, auto_next_target);
@@ -327,7 +337,7 @@ bool shootphoto(float target_x, float target_y, float* current_location, USART_T
     Loiter_location(current_location[0], current_location[1], target_x, target_y);
     if(fabs(current_location[0] - target_x) < 0.01 && fabs(current_location[1] - target_y) < 0.01)
     {
-        Pack_cmd_buf(1, cmd_buf);
+        //Pack_cmd_buf(1, cmd_buf);
         BSP_USART_SendArray_LL(huart, cmd_buf, 3);
         return true;
     }

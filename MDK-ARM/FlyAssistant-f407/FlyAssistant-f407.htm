@@ -3,7 +3,7 @@
 <title>Static Call Graph - [FlyAssistant-f407\FlyAssistant-f407.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image FlyAssistant-f407\FlyAssistant-f407.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Thu Jul 28 11:34:29 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Thu Jul 28 15:17:41 2022
 <BR><P>
 <H3>Maximum Stack Usage =       1072 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -677,7 +677,8 @@ Global Symbols
 <P><STRONG><a name="[110]"></a>BSP_USART_SendArray_LL</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, uart_api.o(i.BSP_USART_SendArray_LL))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = BSP_USART_SendArray_LL
 </UL>
-<BR>[Called By]<UL><LI><a href="#[10f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send_cxof_buf
+<BR>[Called By]<UL><LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;taskOne
+<LI><a href="#[10f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send_cxof_buf
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -1601,8 +1602,9 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Loiter_location
 </UL>
 
-<P><STRONG><a name="[1b6]"></a>Pack_cmd_buf</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, uart_api.o(i.Pack_cmd_buf))
-<BR><BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<P><STRONG><a name="[1b6]"></a>Pack_cmd_buf</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, uart_api.o(i.Pack_cmd_buf))
+<BR><BR>[Called By]<UL><LI><a href="#[1bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;taskOne
+<LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[10c]"></a>Pack_cxof_buf</STRONG> (Thumb, 134 bytes, Stack size 40 bytes, uart_api.o(i.Pack_cxof_buf))
@@ -2292,13 +2294,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[14e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L1_read_p2p_data
 </UL>
 
-<P><STRONG><a name="[114]"></a>VL53L1_get_preset_mode_timing_cfg</STRONG> (Thumb, 126 bytes, Stack size 20 bytes, vl53l1_api_core.o(i.VL53L1_get_preset_mode_timing_cfg))
+<P><STRONG><a name="[114]"></a>VL53L1_get_preset_mode_timing_cfg</STRONG> (Thumb, 128 bytes, Stack size 20 bytes, vl53l1_api_core.o(i.VL53L1_get_preset_mode_timing_cfg))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = VL53L1_get_preset_mode_timing_cfg
 </UL>
 <BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetPresetMode
 </UL>
 
-<P><STRONG><a name="[12e]"></a>VL53L1_get_sequence_config_bit</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, vl53l1_api_core.o(i.VL53L1_get_sequence_config_bit))
+<P><STRONG><a name="[12e]"></a>VL53L1_get_sequence_config_bit</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, vl53l1_api_core.o(i.VL53L1_get_sequence_config_bit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = VL53L1_get_sequence_config_bit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L1_GetSequenceStepEnable
@@ -3013,7 +3015,7 @@ Global Symbols
 <LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;calculate_location
 </UL>
 
-<P><STRONG><a name="[1a4]"></a>encodeDecode_Analysis</STRONG> (Thumb, 604 bytes, Stack size 128 bytes, encodeddecoder.o(i.encodeDecode_Analysis))
+<P><STRONG><a name="[1a4]"></a>encodeDecode_Analysis</STRONG> (Thumb, 660 bytes, Stack size 128 bytes, encodeddecoder.o(i.encodeDecode_Analysis))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = encodeDecode_Analysis &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
@@ -3124,7 +3126,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[5c]"></a>main</STRONG> (Thumb, 1874 bytes, Stack size 312 bytes, main.o(i.main))
+<P><STRONG><a name="[5c]"></a>main</STRONG> (Thumb, 1966 bytes, Stack size 312 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1072<LI>Call Chain = main &rArr; vl53l1x_init &rArr; VL53L1_WaitDeviceBooted &rArr; VL53L1_poll_for_boot_completion &rArr; VL53L1_WaitValueMaskEx &rArr; VL53L1_RdByte &rArr; _I2CRead &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnMasterAddressFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
@@ -3290,13 +3292,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[1bd]"></a>taskOne</STRONG> (Thumb, 244 bytes, Stack size 80 bytes, patrol.o(i.taskOne))
-<BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = taskOne &rArr; set_NextLocation &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
+<P><STRONG><a name="[1bd]"></a>taskOne</STRONG> (Thumb, 332 bytes, Stack size 88 bytes, patrol.o(i.taskOne))
+<BR><BR>[Stack]<UL><LI>Max Depth = 256<LI>Call Chain = taskOne &rArr; set_NextLocation &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Loiter_location
 <LI><a href="#[1ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_NextLocation
 <LI><a href="#[1a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getCurrentTarget
 <LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Mix_PwmOut
+<LI><a href="#[1b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Pack_cmd_buf
+<LI><a href="#[110]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_USART_SendArray_LL
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -3595,7 +3599,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VL53L1_GetRangingMeasurementData
 </UL>
 
-<P><STRONG><a name="[19a]"></a>_fp_digits</STRONG> (Thumb, 334 bytes, Stack size 56 bytes, printfa.o(i._fp_digits), UNUSED)
+<P><STRONG><a name="[19a]"></a>_fp_digits</STRONG> (Thumb, 366 bytes, Stack size 64 bytes, printfa.o(i._fp_digits), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[196]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple

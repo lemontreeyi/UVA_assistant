@@ -18,7 +18,7 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
     //********************* #头***消息号，数据位1L，数据位1H,数据位2L,数据位2H,数据位3L,数据位3H,数据位4L,数据位4H*****帧尾* *********
 		if((inBuf[0]==0x23) && (inBuf[26]==0x2A))
 		{
-			//开始
+			//1号消息：用于接收视觉相对位置信息
 			if(inBuf[1]=='1')		//悬停到目标点
 			{
 				//printf("*****第一号消息************ \r\n"); 
@@ -57,6 +57,27 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 				HAL_Delay(400);
 				BEEP_OFF();
 				HAL_Delay(200);
+				
+				BEEP_ON();
+				HAL_Delay(1000);
+				BEEP_OFF();
+				printf("%f %f %f %f %f %f %f %f %f %f %f %f\r\n", STATION1_X, STATION1_Y, STATION1_Z, STATION2_X, STATION2_Y, STATION2_Z, STATION3_X, STATION3_Y, STATION3_Z, STATION4_X, STATION4_Y, STATION4_Z);
+
+				return 2;
+			}
+			//解析目标点位置信息
+			else if(inBuf[1] == '3')		
+			{
+				Task1_Point1_x = inBuf[2]<<8 | inBuf[3];
+				Task1_Point1_y = inBuf[4]<<8 | inBuf[5];
+				Task1_Point2_x = inBuf[6]<<8 | inBuf[7];
+				Task1_Point2_y = inBuf[8]<<8 | inBuf[9];
+				Task1_Type1 = inBuf[10]<<8 | inBuf[11];
+				Task1_Type2 = inBuf[12]<<8 | inBuf[13];
+				BEEP_ON();
+				HAL_Delay(400);
+				BEEP_OFF();
+				HAL_Delay(200);
 
 				BEEP_ON();
 				HAL_Delay(400);
@@ -66,12 +87,6 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 				BEEP_ON();
 				HAL_Delay(1000);
 				BEEP_OFF();
-				printf("%f %f %f %f %f %f %f %f %f %f %f %f\r\n", STATION1_X, STATION1_Y, STATION1_Z, STATION2_X, STATION2_Y, STATION2_Z, STATION3_X, STATION3_Y, STATION3_Z, STATION4_X, STATION4_Y, STATION4_Z);
-
-				return 2;
-			}
-			else if(inBuf[1] == '3')		//解析目标点位置信息
-			{
 				return 3;
 			}
 			else if(inBuf[1] == '4')		//向右飞
