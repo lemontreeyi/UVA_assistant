@@ -569,11 +569,11 @@ int main(void)
 							BEEP_ON();
 							HAL_Delay(500);
 							BEEP_OFF();
-							// task = 1;
+							task = 2;
 						}
 						break;
 					case 2:
-						if(taskOne(location_esm, 300, 275, 150, 125, &is_SetStartPoint))
+						if(taskOne(location_esm, 222, 240, 150, 163, &is_SetStartPoint))
 						{
 							BEEP_ON();
 							HAL_Delay(1000);
@@ -631,6 +631,7 @@ int main(void)
 				is_settarget = 0;
 				is_SetStartPoint = 0;
 				reset_path_flag(t1_path_flag, 4);
+				is_SetStartPoint = 0;
 			}
 		}
 

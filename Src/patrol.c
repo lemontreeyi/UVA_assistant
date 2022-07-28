@@ -137,11 +137,14 @@ bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y
     path[1][0] = tar1_x; path[1][1] = tar1_y;
     path[2][0] = tar2_x; path[2][1] = tar1_y;
     path[3][0] = tar2_x; path[3][1] = tar2_y;
-
+    printf("t1_x:%d t1_y:%d\r\n", path[0][0], path[0][1]);
     //得到当前路径中的目标点
     index = getCurrentTarget(cur_location, next_target, 4, t1_path_flag, path, 25);
+    printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
     //得到以当前路径中目标点计算出的小目标点
     set_NextLocation(cur_location, next_target, auto_next_target);
+    printf("mini_target_x:%d. mini_target_y:%d\r\n", auto_next_target[0], auto_next_target[1]);
+
     //计算UWB的PID数据
     Loiter_location((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), auto_next_target[0], auto_next_target[1]);
     //混合UWB的PID和视觉定位PID,并输出
@@ -202,7 +205,7 @@ void Mix_PwmOut(int cur_x, int cur_y, int *target_location)
     {
         Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y,0,0);
         //此处让坐标环PID占0.2的权重
-        // printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
+        printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
         Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 1.0));
         Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 1.0));
     }
