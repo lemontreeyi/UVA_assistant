@@ -64,6 +64,7 @@ void TIM13_Set(uint8_t sta);
 void TIM14_Set(uint8_t sta);
 extern char UWB_data[4][8];
 extern int data_flag[4];
+extern float yaw;
 extern uint16_t Task1_Point1_x;
 extern uint16_t Task1_Point1_y;
 extern uint16_t Task1_Point2_x;

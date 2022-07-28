@@ -34,7 +34,7 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 				outBuf[7]=inBuf[7]; //接收到的有效数据6
 				outBuf[8]=inBuf[8]; //接收到的有效数据7
 				outBuf[9]=inBuf[9]; //接收到的有效数据8
-				//printf("x: %d, y: %d\r\n", Attitude.Position_x, Attitude.Position_y);
+				printf("x: %d, y: %d\r\n", Attitude.Position_x, Attitude.Position_y);
 				//printf("Attitude Position x = %d, Attitude Position y = %d, SetPoint x = %d, SetPoint y = %d \r\n", Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y);
 				return 1;
 			}
@@ -140,6 +140,22 @@ bool encodeDecode_Analysis_UWB(uint8_t *inBuf,float *outBuf,uint16_t Buflen)
 	return true;
 }
 
+bool encodeDecode_Analysis_SecondBoard(uint8_t *inBuf, uint16_t Buflen)
+{
+	uint8_t Data_buf[4];
+	if(Buflen >= 2)
+	{
+		//通信包：0xFE ID yaw*4 0xFD
+		if(inBuf[0] == 0xFE && inBuf[1] == '1')
+		{
+			for(int i=0;i<4;i++)
+				Data_buf[i] = inBuf[2+i];
+			yaw = *((float *)Data_buf);
+		}
+		return true;
+	}
+	else return false;
+}
 
 /*
 解析uwb串口发过来的通信包，仅适用于distance不超过10m的情况！
