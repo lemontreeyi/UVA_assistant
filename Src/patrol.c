@@ -4,6 +4,7 @@
 uint8_t cmd_buf[3];
 bool rec_path_flag[9] = {0};
 bool t1_path_flag[4] = {0};
+bool ld_path_flag[2] = {0};
 int auto_next_target[2] = {0};
 float init_yaw = 0;
 int takeoff_location[2] = {0};
@@ -118,18 +119,18 @@ func:完成任务一
 参数：当前坐标，两个目标点坐标，任务开始初始点设置标志位
 返回：1：已完成任务
 */
-bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool is_SetStartPoint)
+bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint)
 {
     static int start_location[2] = {0};
     int path[4][2];
     int index = 0, next_target[2];
 
     //设置任务的起始点
-    if(!is_SetStartPoint)
+    if(!(*is_SetStartPoint))
     {
-        start_location[0] = cur_location[0];
-        start_location[1] = cur_location[1];
-        is_SetStartPoint = 1;
+        start_location[0] = cur_location[0] * 100;
+        start_location[1] = cur_location[1] * 100;
+        *is_SetStartPoint = 1;
     }
     //设置任务的路径点
     path[0][0] = tar1_x; path[0][1] = start_location[1];
@@ -296,21 +297,21 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
 }
 
 //降落
-bool landon(int height, float* current_location, bool *is_settarget)
+bool landon(int height, float* current_location, bool *is_SetStartPoint)
 {
-    static float target_location[2];
-
-    if(!(*is_settarget))
-    {
-        target_location[0] = current_location[0];
-        target_location[1] = current_location[1];
-        *is_settarget = 1;
-    }
-
-    Loiter_location(current_location[0], current_location[1], target_location[0], target_location[1]);
-    land(height);
-	if(height < 80) return true;
-	else return false;
+    // static int start_location[2] = {0};
+    // //设置任务的起始点
+    // if(!(*is_SetStartPoint))
+    // {
+    //     start_location[0] = cur_location[0];
+    //     start_location[1] = cur_location[1];
+    //     *is_SetStartPoint = 1;
+    // }
+    // // set_NextLocation()
+    // Loiter_location(current_location[0], current_location[1], target_location[0], target_location[1]);
+    // land(height);
+	// if(height < 80) return true;
+	// else return false;
 }
 
 //拍照片
@@ -327,7 +328,7 @@ bool shootphoto(float target_x, float target_y, float* current_location, USART_T
 }
 
 //纠正姿态
-void fixyaw(float yaw)
+bool fixyaw(float yaw)
 {
     static bool is_inityaw = 0;
     if(!is_inityaw)
@@ -341,17 +342,22 @@ void fixyaw(float yaw)
     }
     if(yaw < 0 && yaw > -150.0 / 180.0 * 3.14159 && is_inityaw)
     {
-        if(yaw - init_yaw < -0.30)
+        if(yaw - init_yaw < -0.175f)
         {
-            // printf("pwm_yaw:%f\r\n", 4500 + 80 * (exp(init_yaw - yaw) - 1));
-            Set_PWM_Yaw(4500 + 80 * exp(init_yaw - yaw));//右转
+            printf("pwm_yaw:%f\r\n", 4431 + 100 * (exp(init_yaw - yaw) - 1));
+            Set_PWM_Yaw(min(4431 + 80 * exp(init_yaw - yaw), 4631));//右转
         }         
-        else if(yaw - init_yaw > 0.30)
+        else if(yaw - init_yaw > 0.175f)
         {
-            // printf("pwm_yaw:%f\r\n", 4500 - 80 * (exp(yaw - init_yaw) - 1));
-            Set_PWM_Yaw(4500 - 80 * exp(yaw - init_yaw));//左转
+            printf("pwm_yaw:%f\r\n", 4431 - 100 * (exp(yaw - init_yaw) - 1));
+            Set_PWM_Yaw(max(4431 - 80 * exp(yaw - init_yaw), 4231));//左转
         }
-            
+        else
+        {
+            Set_PWM_Yaw(4431);//回中
+        }    
     }
-
+    else
+        Set_PWM_Yaw(4431);//回中
+    return is_inityaw;
 }
