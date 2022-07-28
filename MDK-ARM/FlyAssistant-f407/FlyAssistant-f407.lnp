@@ -1,4 +1,4 @@
---cpu=Cortex-M4.fp
+--cpu Cortex-M4.fp
 "flyassistant-f407\beep.o"
 "flyassistant-f407\key.o"
 "flyassistant-f407\mav_altitude_decode.o"

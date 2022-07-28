@@ -527,6 +527,7 @@ int main(void)
 					Dtime = HAL_GetTick() - Cxof_Time;
           			calculate_cxof(location_esm, d_location, speed, Dtime);//计算光流
 					printf("vx:%f, vy:%f, dtime:%d\r\n",speed[0], speed[1],Dtime);
+
           			Pack_cxof_buf(speed, 100, cxof_buf);//打包光流数据
 					Cxof_Time = HAL_GetTick();
 					Cxof_Wait = HAL_GetTick();
@@ -580,12 +581,12 @@ int main(void)
 							BEEP_ON();
 							HAL_Delay(500);
 							BEEP_OFF();
-							task = 2;
+							// task = 2;
 						}
 						break;
 					case 2:
 						//步骤2:前往两个目标点
-						if(taskOne(location_esm, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint))
+						if(taskOne(location_esm, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint, Task1_Type1, Task1_Type2))
 						{
 							Pack_cmd_buf(3,0,cmd_buf);
 							BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
@@ -647,6 +648,7 @@ int main(void)
 				is_SetStartPoint = 0;
 				reset_path_flag(t1_path_flag, 4);
 				is_SetStartPoint = 0;
+				t1_opt_flag = 0;
 			}
 		}
 

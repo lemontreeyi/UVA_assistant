@@ -4,11 +4,11 @@
 uint8_t cmd_buf[4];
 bool rec_path_flag[9] = {0};
 bool t1_path_flag[4] = {0};
+bool t1_opt_flag = 0;
 bool ld_path_flag[2] = {0};
 int auto_next_target[2] = {0};
 float init_yaw = 0;
 int takeoff_location[2] = {0};
-
 //用于重置路径点标志位
 void reset_path_flag(bool path_flag[], int len)
 {
@@ -52,7 +52,7 @@ Length:路径点的个数
 Threshold:到目标点的更新阈值（cm为单位）
 return:遍历过点的个数
 */
-int getCurrentTarget(float* current_location, int* target_location, int Length, bool* path_flag, int path[][2], float Threshold)
+int getCurrentTarget(float* current_location, int* target_location, int Length, bool* path_flag, int path[][2], float Threshold, uint16_t Task1_Type1,  uint16_t Task1_Type2)
 {
     int have_arrive = 0;
     //转到cm为单位
@@ -79,6 +79,19 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
         {
             if((HAL_GetTick() - time) > 5000)
             {
+                if(have_arrive == 1 && t1_opt_flag == 1)
+                {
+                    Pack_cmd_buf(Task1_Type1, 0, cmd_buf);
+                    BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+                    t1_opt_flag = 0;
+                }
+                if(have_arrive == 3 && t1_opt_flag == 1)
+                {
+                    Pack_cmd_buf(Task1_Type2, 0, cmd_buf);
+                    BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+                    t1_opt_flag = 0;
+                }
+            
                 is_time = 0;
                 path_flag[have_arrive] = true;
                 BEEP_ON();
@@ -132,8 +145,8 @@ bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y
         start_location[1] = cur_location[1] * 100;
         *is_SetStartPoint = 1;
         //请求识别type4,即红色三角形
-        Pack_cmd_buf(Task1_Type1,1,cmd_buf);
-        BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+        // Pack_cmd_buf(Task1_Type1,1,cmd_buf);
+        // BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
     }
     //设置任务的路径点
     path[0][0] = tar1_x; path[0][1] = start_location[1];
@@ -143,13 +156,13 @@ bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y
     printf("t1_x:%d t1_y:%d\r\n", path[0][0], path[0][1]);
     old_index = index;
     //得到当前路径中的目标点
-    index = getCurrentTarget(cur_location, next_target, 4, t1_path_flag, path, 25);
-    if(index ==2 && old_index != index)
-    {
-        //请求识别type3,即蓝色三角形
-        Pack_cmd_buf(Task1_Type2,1,cmd_buf);
-        BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
-    }
+    index = getCurrentTarget(cur_location, next_target, 4, t1_path_flag, path, 25, Task1_Type1, Task1_Type2);
+    // if(index ==2 && old_index != index)
+    // {
+    //     //请求识别type3,即蓝色三角形
+    //     Pack_cmd_buf(Task1_Type2,1,cmd_buf);
+    //     BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+    // }
     printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
     //得到以当前路径中目标点计算出的小目标点
     set_NextLocation(cur_location, next_target, auto_next_target);
@@ -158,8 +171,12 @@ bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y
     //计算UWB的PID数据
     Loiter_location((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), auto_next_target[0], auto_next_target[1]);
     //混合UWB的PID和视觉定位PID,并输出
-    Mix_PwmOut((int)(cur_location[0] * 100), (int)(cur_location[1] * 100),next_target);
-
+    if(index == 1)
+        Mix_PwmOut((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), next_target, Task1_Type1);
+    else if(index == 3)
+        Mix_PwmOut((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), next_target, Task1_Type2);
+    else
+        Mix_PwmOut((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), next_target, 8);//无效视觉
     if(index == 4) return true;
     else return false;
 }
@@ -186,7 +203,7 @@ bool Rectangle(int *start, int width_x, int width_y, float *current_location)
     path[8][0] = start[0];   path[8][1] = start[1];
     int next_target[2], index = 0;
     // printf("path0_x:%d path0_y:%d\r\n", path[0][0], path[0][1]);
-    index = getCurrentTarget(current_location,next_target,9,rec_path_flag,path,20);
+    // index = getCurrentTarget(current_location,next_target,9,rec_path_flag,path,20);
     // printf("cur_x:%f cur_y:%f\r\n", current_location[0], current_location[1]);
     // printf("index:%d\r\n", index);
     // printf("target_x:%d target_y:%d\r\n", next_target[0], next_target[1]);
@@ -204,15 +221,28 @@ bool Fly2Target(float *current_location,int *target_location)
     set_NextLocation(current_location, target_location, next_target);
     printf("next_x:%d, next_y:%d\r\n", next_target[0], next_target[1]);
     Loiter_location((int)(current_location[0]*100),(int)(current_location[1]*100),next_target[0],next_target[1]);
-    Mix_PwmOut(cur_x, cur_y, target_location);
+    // Mix_PwmOut(cur_x, cur_y, target_location);
     return true;
 }
 
 //根据坐标位置融合PWM输出
-void Mix_PwmOut(int cur_x, int cur_y, int *target_location)
+void Mix_PwmOut(int cur_x, int cur_y, int *target_location, uint16_t task1_type)
 {
     if(((cur_x-target_location[0])*(cur_x-target_location[0]) + (cur_y-target_location[1])*(cur_y-target_location[1])) <= 85*85)
     {
+        if(task1_type != 8)
+        {
+            if(!t1_opt_flag)
+            {
+                Pack_cmd_buf(task1_type, 1, cmd_buf);
+                BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+                Attitude.Position_x = 0;
+                Attitude.Position_y = 0;
+                Attitude.SetPoint_x = 0;
+                Attitude.SetPoint_y = 0;
+                t1_opt_flag = 1;
+            }
+        }
         Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y,0,0);
         //此处让坐标环PID占0.2的权重
         // printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
@@ -253,7 +283,7 @@ int Get_circle_1(float *current_location, int *target_location, int *begin, int 
     path[3][0] = end[0];
     path[3][1] = end[1];
     //传入处理函数，得出当前目标值
-    index = getCurrentTarget(current_location,target_location,4,circle_flag,path,5);
+    // index = getCurrentTarget(current_location,target_location,4,circle_flag,path,5);
     switch (index)
     {
     case 0:
@@ -287,7 +317,7 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
 
     set_NextLocation(current_location, takeoff_location, next_target);
     Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1]);
-    Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location);
+    Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location, 0);
 
     // printf("height = %d\r\n", height);
     // printf("x:%f y:%f\r\n", current_location[0], current_location[1]);
@@ -302,6 +332,10 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
         *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 3000)?0:1;
         if(*is_takeoff == 0)
         {
+            Pack_cmd_buf(0, 0, cmd_buf);
+            BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+            t1_opt_flag = 0;
+
             Set_PWM_Thr(4500);
             return true;
         }
@@ -322,11 +356,14 @@ bool landon(int height, float* current_location, bool *is_SetStartPoint)
         start_location[1] = current_location[1];
         *is_SetStartPoint = 1;
     }
-    index = getCurrentTarget(current_location, next_target, 2, ld_path_flag, path, 25);
+    index = getCurrentTarget(current_location, next_target, 2, ld_path_flag, path, 25, 0, 8);
     if(set_NextLocation(current_location, next_target, auto_next_target) && index == 2)
         land(height);
     Loiter_location((int)(current_location[0] * 100), (int)(current_location[1]), auto_next_target[0], auto_next_target[1]);
-    
+    if(index == 1)
+        Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100), next_target, 0);
+    else
+        Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100), next_target, 8);
 	if(height < 80) return true;
 	else return false;
 }

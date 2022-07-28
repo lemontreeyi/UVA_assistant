@@ -1,3 +1,47 @@
-Load "FlyAssistant-f407\\FlyAssistant-f407.axf" 
-Erase Done.Programming Done.Verify OK.Application running ...
-Flash Load finished at 15:18:22
+*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'FlyAssistant-f407'
+compiling main.c...
+../Inc/patrol.h(30): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Src/main.c(436): warning:  #223-D: function "Set_PWM_Ctrl" declared implicitly
+  		Set_PWM_Ctrl(CHANNEL_3_PULSE_WIDE);		//ä¾?äº?åœ?åœ?é?ç«?è§?å¯?ç›?é€?æˆ?æ¡?æ?æ¨?å¼?
+../Core/Src/main.c(271): warning:  #177-D: variable "len" was declared but never referenced
+  	uint16_t len = 0;
+../Core/Src/main.c(274): warning:  #177-D: variable "rxlen_usart_3" was declared but never referenced
+  	uint16_t rxlen_usart_3;
+../Core/Src/main.c(277): warning:  #550-D: variable "cmd" was set but never used
+  	uint8_t cmd = 0;
+../Core/Src/main.c(279): warning:  #550-D: variable "RunTime" was set but never used
+  	uint32_t RunTime = 0;
+../Core/Src/main.c(280): warning:  #177-D: variable "ContrlTime_x" was declared but never referenced
+  	uint32_t ContrlTime_x = 0;
+../Core/Src/main.c(281): warning:  #177-D: variable "ContrlTime_y" was declared but never referenced
+  	uint32_t ContrlTime_y = 0;
+../Core/Src/main.c(286): warning:  #177-D: variable "Ctrl_flag_time" was declared but never referenced
+  	uint32_t Ctrl_flag_time = 0;
+../Core/Src/main.c(288): warning:  #177-D: variable "decodetimer" was declared but never referenced
+  	uint32_t decodetimer;
+../Core/Src/main.c(294): warning:  #177-D: variable "flag_rx2" was declared but never referenced
+  	int flag_rx2 = 0;
+../Core/Src/main.c(301): warning:  #177-D: variable "str" was declared but never referenced
+    uint8_t str[] = "hello world\r\n";
+../Core/Src/main.c(731): warning:  #870-D: invalid multibyte character sequence
+  	printf("  PA6       ------>   PWM1      ä¸?é?æ?å™?æ?æ”?æœ?æ²?é—?ç›?ï¿??????? \r\n");
+../Core/Src/main.c(879): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
+../Core/Src/main.c(879): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
+../Core/Src/main.c(1633): warning:  #550-D: variable "len" was set but never used
+  	uint16_t len;
+../Core/Src/main.c(1657): warning:  #550-D: variable "len" was set but never used
+  	uint16_t len;
+../Core/Src/main.c(1686): warning:  #550-D: variable "len" was set but never used
+  	uint16_t len;
+../Core/Src/main.c(98): warning:  #177-D: variable "heartbeat" was declared but never referenced
+  static int heartbeat = 0;
+../Core/Src/main.c: 19 warnings, 0 errors
+linking...
+Program Size: Code=45644 RO-data=1256 RW-data=1632 ZI-data=7648  
+FromELF: creating hex file...
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 19 Warning(s).
+Build Time Elapsed:  00:00:05
