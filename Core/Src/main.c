@@ -420,8 +420,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		Set_PWM_Ctrl(CHANNEL_3_PULSE_WIDE);		//便于在地面站观察直�?�或桥接模式
-		//读取�?????光雷达测距数�?????
+		Set_PWM_Ctrl(CHANNEL_3_PULSE_WIDE);		//便于在地面站观察直通或桥接模式
+		//读取激光雷达示数
 		vl53l1x_GetDistance(&Dev);
 		//读取MPU6050
 		float inner_loop_time = 0.001;
@@ -453,7 +453,7 @@ int main(void)
 		
 		if (InitedFlag) //确保设备已初始化
 		{
-			/********************************UART1接收并处理数�?????**********************************/
+			/********************************UART1接收并处理**********************************/
 			if (USART1_RX_STA & 0X8000) //接收到一次数据了
 			{
 				// printf("USART1 INT =%d \r\n",USART1_RX_STA);
@@ -468,7 +468,7 @@ int main(void)
 				rxlen_usart_1 = 0;
 				USART1_RX_STA = 0; //启动下一次接收
 			}
-			//********************************UART2接收并处理数�?????***********************************/
+			//********************************UART2接收并处理***********************************/
 			if (USART2_RX_STA & 0X8000) //接收到一次数据，且超过了预设长度
 			{
         	//printf("USART2 revd ...\r\n");
