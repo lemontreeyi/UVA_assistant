@@ -50,7 +50,7 @@ PID_LOCATION PID_Location_y;
 /*==================================================================================================== 
     PID Function 
      
-    The PID (±ÈÀý¡¢»ý·Ö¡¢Î¢·Ö) function is used in mainly 
+    The PID (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¡ï¿½Î¢ï¿½ï¿½) function is used in mainly 
     control applications. PIDCalc performs one iteration of the PID 
     algorithm. 
 
@@ -59,7 +59,7 @@ PID_LOCATION PID_Location_y;
 =====================================================================================================*/ 
 
 
-//*********Éè±¸³õÊ¼»¯********//
+//*********ï¿½è±¸ï¿½ï¿½Ê¼ï¿½ï¿½********//
 void Device_Init(void)
 {
 	for(int i = 0 ;i<2;i++)
@@ -96,7 +96,7 @@ void Attitude_init(ATTITUDE *p)
 }
 
 ///*==================================================================================================== 
-//   PID¼ÆËã²¿·Ö 
+//   PIDï¿½ï¿½ï¿½ã²¿ï¿½ï¿½ 
 //=====================================================================================================*/ 
 
 //int PIDCalc( PID *pp, int CurrentPoint ,int SetPoint ) 
@@ -105,22 +105,22 @@ void Attitude_init(ATTITUDE *p)
 //		float dError, Error; 
 //		pp->SetPoint =SetPoint;
 
-//		Error = (float)pp->SetPoint -  (float)CurrentPoint; //¼ÆËãÆ«²î
-//		pp->SumError += Error;                              // »ý·Ö 
-//		pp->LastError = Error; 		                          //¸üÐÂ×´Ì¬
-//		dError = pp->PreviousError - pp->LastError; // µ±Ç°Î¢·Ö 
-//		out =   pp->Proportion * Error              // ±ÈÀýÏî 
-//				+   pp->Integral * pp->SumError         // »ý·ÖÏî 
-//				+   (pp->Derivative * dError)* (-0.5*exp(-0.6*(Error*Error))+1);  // Î¢·ÖÏî 
-//		//¼ÆËãÊä³ö,ÏÞ·ù 
+//		Error = (float)pp->SetPoint -  (float)CurrentPoint; //ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½
+//		pp->SumError += Error;                              // ï¿½ï¿½ï¿½ï¿½ 
+//		pp->LastError = Error; 		                          //ï¿½ï¿½ï¿½ï¿½×´Ì¬
+//		dError = pp->PreviousError - pp->LastError; // ï¿½ï¿½Ç°Î¢ï¿½ï¿½ 
+//		out =   pp->Proportion * Error              // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+//				+   pp->Integral * pp->SumError         // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+//				+   (pp->Derivative * dError)* (-0.5*exp(-0.6*(Error*Error))+1);  // Î¢ï¿½ï¿½ï¿½ï¿½ 
+//		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½Þ·ï¿½ 
 //		out = range(out, -pp->Pid_Clc_limit, pp->Pid_Clc_limit);
 
-//		pp->PreviousError = pp->LastError; 		     //¸üÐÂ×´Ì¬
+//		pp->PreviousError = pp->LastError; 		     //ï¿½ï¿½ï¿½ï¿½×´Ì¬
 //		return (int)out;
 //} 
 
 /*==================================================================================================== 
-   PID¼ÆËã²¿·Ö 
+   PIDï¿½ï¿½ï¿½ã²¿ï¿½ï¿½ 
 =====================================================================================================*/ 
 int PIDCalc( PID *pp, int CurrentPoint ,int SetPoint ,bool flag) 
 { 
@@ -146,7 +146,7 @@ int PIDCalc( PID *pp, int CurrentPoint ,int SetPoint ,bool flag)
 }
 
 /*
-¼ÆËãÊ±¼äPID
+ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½PID
 */
 int PID_GetTime(PID_TIME *pp, int CurrentPoint, int SetPoint)
 {
@@ -194,20 +194,20 @@ void delay1ms(int time)
 void PIDInit (PID *pp) 
 { 
 	PID_Control_Pitch.Pid_Clc_limit = 500;		//4500+400 = 4900
-    PID_Control_Pitch.Proportion    = 2.6;//2.22;
+    PID_Control_Pitch.Proportion    = 2.3;//2;
 	//  45 * 2.22 + 200 = 300; 85*2.22+200 = 389; 85*2.22*1.3+150=395; 112*2.22*1.3+50 = 473
 	PID_Control_Roll.Integral       = 0;    
-    PID_Control_Pitch.Derivative    = 2.5; 
+    PID_Control_Pitch.Derivative    = 0.7;//0.7 
     PID_Control_Pitch.SetPoint      = 112;
 	PID_Control_Pitch.LastError     = 0;  
     PID_Control_Pitch.PreviousError = 0;    
     PID_Control_Pitch.SumError      = 0;   
 	
 	PID_Control_Roll.Pid_Clc_limit = 500;		//4500+600 = 5100
-    PID_Control_Roll.Proportion    = 2.6;
+    PID_Control_Roll.Proportion    = 2.3;//2
 	//  45 * 2.22 + 200 = 300; 85*2.22+200 = 389; 85*2.22*1.3+150=395; 112*2.22*1.3+50 = 473
     PID_Control_Roll.Integral      = 0; 
-    PID_Control_Roll.Derivative    = 2.5;
+    PID_Control_Roll.Derivative    = 0.7;//0.7
     PID_Control_Roll.SetPoint      = 112;
 	PID_Control_Roll.LastError     = 0;  
     PID_Control_Roll.PreviousError = 0;    
@@ -231,7 +231,7 @@ void PIDInit (PID *pp)
 	PID_Roll_Time.PreviousError = 0;
 	PID_Roll_Time.SumError = 0;
     
-	PID_Location_x.Max = 650;
+	PID_Location_x.Max = 235;
 	PID_Location_x.Proportion =  4.37;
 	PID_Location_x.Integral = 0;
 	PID_Location_x.Derivative = 1.55;
@@ -240,7 +240,7 @@ void PIDInit (PID *pp)
 	PID_Location_x.PreviousError = 0;
 	PID_Location_x.SumError = 0;
 
-	PID_Location_y.Max = 650;			//
+	PID_Location_y.Max = 235;			//
 	PID_Location_y.Proportion = -4.37;
 	PID_Location_y.Integral = 0;
 	PID_Location_y.Derivative = -1.55;
@@ -252,23 +252,23 @@ void PIDInit (PID *pp)
 } 
 
 /*==================================================================================================== 
-   ½âËø 
+   ï¿½ï¿½ï¿½ï¿½ 
 =====================================================================================================*/ 
 void Unlock(void)
 {
-	 //**********ÓÍÃÅ×îµÍÖµ***********//
+	 //**********ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ***********//
 	 Set_PWM_Thr(PWM_Thr_min_LOCK); //1071------>1101
 	 HAL_Delay(2000);
 	 for(int i=PWM_yaw_mid;i<=PWM_yaw_Max;i=i+86)
 	 {
 		LED1_Flash();
-		Set_PWM_Yaw(i);   //½âËø
+		Set_PWM_Yaw(i);   //ï¿½ï¿½ï¿½ï¿½
 	 }
 	 delay1ms(3000);
 	 for(int i =PWM_yaw_Max;i>=PWM_yaw_mid;i=i-86)
 	 {
 		LED1_Flash();
-		Set_PWM_Yaw(i);   //»ØÖÐ
+		Set_PWM_Yaw(i);   //ï¿½ï¿½ï¿½ï¿½
 	 }
 	 delay1ms(1000);
 	 printf("*******************Unlock***************\r\n");
@@ -277,7 +277,7 @@ void Unlock(void)
 
 
 /*==================================================================================================== 
-   ¼ÓËø
+   ï¿½ï¿½ï¿½ï¿½
 =====================================================================================================*/ 
 void Lock(void)
 {
@@ -285,28 +285,28 @@ void Lock(void)
  HAL_Delay(3000);
  BEEP_OFF();
  HAL_Delay(1000);
- //**********ÓÍÃÅ×îµÍÖµ***********//
+ //**********ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ***********//
  Set_PWM_Thr(PWM_Thr_min_LOCK); 
  HAL_Delay(1000);
- //***********Æ«º½Ïò×ó*************//
+ //***********Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*************//
  for(int i=PWM_yaw_mid;i>=PWM_yaw_min;i=i-128)
  {
 	 LED1_Flash();
    Set_PWM_Yaw(i);
  }
- //***********Æ«º½»ØÖÐ*************//
+ //***********Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*************//
  delay1ms(5000);
  for(int i=PWM_yaw_min;i<=PWM_yaw_mid;i=i+128)
  {
 	 LED1_Flash();
-   Set_PWM_Yaw(i);   //»ØÖÐ
+   Set_PWM_Yaw(i);   //ï¿½ï¿½ï¿½ï¿½
  }
  delay1ms(5000);
  printf("*******************lock***************\r\n");
 }
 
 /*==================================================================================================== 
-   Æð·É×¼±¸
+   ï¿½ï¿½ï¿½×¼ï¿½ï¿½
 =====================================================================================================*/ 
 void Take_off_Preper(void)
 {	
@@ -315,7 +315,7 @@ void Take_off_Preper(void)
 
 
 /*==================================================================================================== 
-   Æð·É Fly_Moder_AltHold
+   ï¿½ï¿½ï¿½ Fly_Moder_AltHold
 =====================================================================================================*/ 
 void Take_off(float target_height, float current_height)//mm
 {	
@@ -336,7 +336,7 @@ void Take_off(float target_height, float current_height)//mm
 
 
 /*==================================================================================================== 
-   ½µÂä
+   ï¿½ï¿½ï¿½ï¿½
 =====================================================================================================*/ 
 void land(int current_height)
 {
@@ -350,7 +350,7 @@ void land(int current_height)
 }
 
 /*==================================================================================================== 
-   Ç°½ø
+   Ç°ï¿½ï¿½
 =====================================================================================================*/ 
 void Go_ahead(uint16_t pulse)
 {
@@ -358,7 +358,7 @@ void Go_ahead(uint16_t pulse)
 }
 
 /*==================================================================================================== 
-   ºóÍË
+   ï¿½ï¿½ï¿½ï¿½
 =====================================================================================================*/ 
 void Go_back(uint16_t pulse)
 {
@@ -366,7 +366,7 @@ void Go_back(uint16_t pulse)
 }
 
 /*==================================================================================================== 
-   Ïò×ó·É
+   ï¿½ï¿½ï¿½ï¿½ï¿½
 =====================================================================================================*/ 
 void Go_left(uint16_t pulse)
 {
@@ -374,7 +374,7 @@ void Go_left(uint16_t pulse)
 }
 
 /*==================================================================================================== 
-   ÏòÓÒ·É
+   ï¿½ï¿½ï¿½Ò·ï¿½
 =====================================================================================================*/ 
 void Go_right(uint16_t pulse)
 {
@@ -382,7 +382,7 @@ void Go_right(uint16_t pulse)
 }
 
 /*==================================================================================================== 
-   ×ó×ª
+   ï¿½ï¿½×ª
 =====================================================================================================*/ 
 void Turn_left(uint16_t pulse)
 {
@@ -390,7 +390,7 @@ void Turn_left(uint16_t pulse)
 }
 
 /*==================================================================================================== 
-   ÓÒ×ª
+   ï¿½ï¿½×ª
 =====================================================================================================*/ 
 void Turn_right(uint16_t pulse)
 {
@@ -399,7 +399,7 @@ void Turn_right(uint16_t pulse)
 
 
 /*==================================================================================================== 
-   ·ÉÐÐÄ£Ê½
+   ï¿½ï¿½ï¿½ï¿½Ä£Ê½
 =====================================================================================================*/ 
 void Fly_Moder(int16_t FlyMode)
 {
@@ -473,7 +473,7 @@ void Loiter_location(int point_x, int point_y, int SetPoint_x, int SetPoint_y)
 }
 
 /*==================================================================================================== 
-   ÐüÍ£
+   ï¿½ï¿½Í£
 =====================================================================================================*/ 
 void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, float roll)
 {  
@@ -483,11 +483,13 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 	int deadZoneX = 0;
 	int deadZoneY = 0;
 	int h = 50;
-
+	static int last_x = 112, last_y = 112;
+	if(point_x == last_x && point_y == last_y) return;
+	last_x = point_x; last_y = point_y;
 	deadZoneX = point_x - SetPoint_x;
 	deadZoneY = point_y - SetPoint_y;
 
-	//roll·½Ïò
+	//rollï¿½ï¿½ï¿½ï¿½
 	if(abs(deadZoneX)>=DeadThreShold)
 	{
 		if(abs(point_x - SetPoint_x) < 35)
@@ -501,7 +503,7 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 		pwm_roll_SensorOut = PWM_Roll_mid;
 	}
 
-	//pitch·½Ïò
+	//pitchï¿½ï¿½ï¿½ï¿½
 	if(abs(deadZoneY)>=DeadThreShold)
 	{
 		if(abs(point_y - SetPoint_y) < 35)
@@ -519,42 +521,42 @@ void Loiter(int point_x,int point_y,int SetPoint_x,int SetPoint_y,float pitch, f
 
 
 /*==================================================================================================== 
-   ¸ß¶Èµ÷Õû
+   ï¿½ß¶Èµï¿½ï¿½ï¿½
 =====================================================================================================*/ 
 void AltAdj(float high)
 {	 
 	 Set_PWM_Thr(PWM_Thr_mid);
-	 printf("******************¸ß¶Èµ÷Õû**************\r\n");
+	 printf("******************ï¿½ß¶Èµï¿½ï¿½ï¿½**************\r\n");
 }
 
 
 
 /*==================================================================================================== 
-   PWMµ×²ã¿ØÖÆ
+   PWMï¿½×²ï¿½ï¿½ï¿½ï¿½
 =====================================================================================================*/ 
-//¶¨Ê±Æ÷Êä³öPWMÍ¨µÀ¶ÔÓ¦¹ØÏµ£º
+//ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½PWMÍ¨ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Ïµï¿½ï¿½
 //TIM5-> CH1 = Yaw; CH2 = Roll; CH3 = Pitch; CH4 = Thr
 //TIm4-> CH1 = Mode; CH2 = Ctrl; CH3 = AUX1; CH4 = AUX2
-//***********ÓÍÃÅ*********************************************//
+//***********ï¿½ï¿½ï¿½ï¿½*********************************************//
 void Set_PWM_Thr(uint16_t pulse)
 {
   TIM5 ->CCR4 =pulse ;
 }
 
-//***********¸©Ñö**********************************************//
+//***********ï¿½ï¿½ï¿½ï¿½**********************************************//
 void Set_PWM_Pitch(uint16_t pulse)
 {
   TIM5 ->CCR3 =pulse ;
 }
 
 
-//***********ºá¹ö*********************************************//
+//***********ï¿½ï¿½ï¿½*********************************************//
 void Set_PWM_Roll(uint16_t pulse)
 {
   TIM5 ->CCR2 =pulse ;
 }
 
-//***********Æ«º½**********************************************//
+//***********Æ«ï¿½ï¿½**********************************************//
 void Set_PWM_Yaw(uint16_t pulse)
 {
   TIM5 ->CCR1 =pulse ;
@@ -573,7 +575,7 @@ void Set_PWM_Mode(uint16_t pulse)
 /************Ctrl************************************************/
 /*
 Ö±Í¨ -> 1000 x 3
-ÇÅ½Ó -> 2000 x 3
+ï¿½Å½ï¿½ -> 2000 x 3
 */
 void Set_PWM_Ctrl(uint16_t pulse)
 {
@@ -613,7 +615,7 @@ void RC_bridge_Test(void)
 	Set_PWM_Ctrl(CHANNEL_3_PULSE_WIDE);
 }
 
-//¸÷Í¨µÀ»ØÖÐ
+//ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void Back2Center(void)
 {
 	Set_PWM_Roll(4500);

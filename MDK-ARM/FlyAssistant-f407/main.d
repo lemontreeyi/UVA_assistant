@@ -23,9 +23,6 @@ flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti
 flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h
 flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h
 flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
-flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
-flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
-flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
 flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
@@ -45,7 +42,6 @@ flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_pwr.h
 flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h
 flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_dma.h
 flyassistant-f407\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h
-flyassistant-f407\main.o: ../Core/Inc/adc.h
 flyassistant-f407\main.o: ../Core/Inc/i2c.h
 flyassistant-f407\main.o: ../Core/Inc/tim.h
 flyassistant-f407\main.o: ../Core/Inc/usart.h

@@ -143,10 +143,10 @@ bool encodeDecode_Analysis_UWB(uint8_t *inBuf,float *outBuf,uint16_t Buflen)
 bool encodeDecode_Analysis_SecondBoard(uint8_t *inBuf, uint16_t Buflen)
 {
 	uint8_t Data_buf[4];
-	if(Buflen >= 2)
+	if(Buflen >= 7)
 	{
 		//Í¨ÐÅ°ü£º0xFE ID yaw*4 0xFD
-		if(inBuf[0] == 0xFE && inBuf[1] == '1')
+		if(inBuf[0] == 0xFE && inBuf[1] == 0x01)
 		{
 			for(int i=0;i<4;i++)
 				Data_buf[i] = inBuf[2+i];

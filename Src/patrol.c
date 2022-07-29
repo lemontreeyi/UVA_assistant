@@ -165,8 +165,8 @@ bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y
     // }
     printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
     //得到以当前路径中目标点计算出的小目标点
-    set_NextLocation(cur_location, next_target, auto_next_target);
-    printf("mini_target_x:%d. mini_target_y:%d\r\n", auto_next_target[0], auto_next_target[1]);
+    // set_NextLocation(cur_location, next_target, auto_next_target);
+    // printf("mini_target_x:%d. mini_target_y:%d\r\n", auto_next_target[0], auto_next_target[1]);
 
     //计算UWB的PID数据
     Loiter_location((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), auto_next_target[0], auto_next_target[1]);
@@ -180,6 +180,53 @@ bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y
     if(index == 4) return true;
     else return false;
 }
+
+/*
+func:完成任务一
+参数：当前坐标，两个目标点坐标，任务开始初始点设置标志位
+返回：1：已完成任务
+*/
+bool taskOne_B(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint, uint16_t Task1_Type1,  uint16_t Task1_Type2)
+{
+    static int start_location[2] = {0};
+    int path[4][2];
+    int next_target[2];
+    static int index = 0, old_index = 0;
+    //设置任务的起始点
+    if(!(*is_SetStartPoint))
+    {
+        start_location[0] = cur_location[0] * 100;
+        start_location[1] = cur_location[1] * 100;
+        *is_SetStartPoint = 1;
+        //请求识别type4,即红色三角形
+        // Pack_cmd_buf(Task1_Type1,1,cmd_buf);
+        // BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+    }
+    //设置任务的路径点
+    path[0][0] = tar1_x; path[0][1] = start_location[1];
+    path[1][0] = tar1_x; path[1][1] = tar1_y;       //目标点1
+    path[2][0] = tar2_x; path[2][1] = tar1_y;
+    path[3][0] = tar2_x; path[3][1] = tar2_y;       //目标点2
+    printf("t1_x:%d t1_y:%d\r\n", path[0][0], path[0][1]);
+    old_index = index;
+    //得到当前路径中的目标点
+    index = getCurrentTarget(cur_location, next_target, 4, t1_path_flag, path, 25, Task1_Type1, Task1_Type2);
+    printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
+
+    //计算UWB的PID数据
+    Loiter_location((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), auto_next_target[0], auto_next_target[1]);
+    //混合UWB的PID和视觉定位PID,并输出
+    if(index == 1)
+        Mix_PwmOut((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), next_target, Task1_Type1);
+    else if(index == 3)
+        Mix_PwmOut((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), next_target, Task1_Type2);
+    else
+        Mix_PwmOut((int)(cur_location[0] * 100), (int)(cur_location[1] * 100), next_target, 8);//无效视觉
+    if(index == 4) return true;
+    else return false;
+}
+
+
 
 /*
 func:让无人机飞一个矩形路径,默认将起始点设在左下角，可按需求调整
@@ -213,22 +260,21 @@ bool Rectangle(int *start, int width_x, int width_y, float *current_location)
     else return false;
 }
 
-//朝目标点飞去
-bool Fly2Target(float *current_location,int *target_location)
-{
-    static int next_target[2] = {0, 0};
-    int cur_x = (int)(current_location[0]*100), cur_y = (int)(current_location[1]*100);
-    set_NextLocation(current_location, target_location, next_target);
-    printf("next_x:%d, next_y:%d\r\n", next_target[0], next_target[1]);
-    Loiter_location((int)(current_location[0]*100),(int)(current_location[1]*100),next_target[0],next_target[1]);
-    // Mix_PwmOut(cur_x, cur_y, target_location);
-    return true;
-}
+// //朝目标点飞去
+// bool Fly2Target(float *current_location,int *target_location)
+// {
+//     static int next_target[2];
+//     next_target[0] = target_location[0]
+//     int cur_x = (int)(current_location[0]*100), cur_y = (int)(current_location[1]*100);
+
+//     // Mix_PwmOut(cur_x, cur_y, target_location);
+//     return true;
+// }
 
 //根据坐标位置融合PWM输出
 void Mix_PwmOut(int cur_x, int cur_y, int *target_location, uint16_t task1_type)
 {
-    if(((cur_x-target_location[0])*(cur_x-target_location[0]) + (cur_y-target_location[1])*(cur_y-target_location[1])) <= 85*85)
+    if(((cur_x-target_location[0])*(cur_x-target_location[0]) + (cur_y-target_location[1])*(cur_y-target_location[1])) <= 65*65)
     {
         if(task1_type != 8)
         {
@@ -243,11 +289,13 @@ void Mix_PwmOut(int cur_x, int cur_y, int *target_location, uint16_t task1_type)
                 t1_opt_flag = 1;
             }
         }
+        
         Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y,0,0);
         //此处让坐标环PID占0.2的权重
         // printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
-        Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 1.0));
-        Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 1.0));
+        Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 0.05));
+        Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 0.05));
+        //printf("roll_out:%d, pitch_out:%d\r\n",Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 0.2),Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 0.2));
     }
     else
     {
@@ -316,8 +364,8 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
     }
 
     set_NextLocation(current_location, takeoff_location, next_target);
-    Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1]);
-    Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location, 0);
+    Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1] + 10);
+    Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location, 4);
 
     // printf("height = %d\r\n", height);
     // printf("x:%f y:%f\r\n", current_location[0], current_location[1]);
@@ -332,8 +380,8 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
         *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 3000)?0:1;
         if(*is_takeoff == 0)
         {
-            Pack_cmd_buf(0, 0, cmd_buf);
-            BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+            // Pack_cmd_buf(0, 0, cmd_buf);
+            // BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
             t1_opt_flag = 0;
 
             Set_PWM_Thr(4500);

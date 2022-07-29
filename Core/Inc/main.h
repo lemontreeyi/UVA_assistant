@@ -87,6 +87,12 @@ void Error_Handler(void);
 #define LED_G_GPIO_Port GPIOE
 #define LED_R_Pin GPIO_PIN_4
 #define LED_R_GPIO_Port GPIOE
+#define Moto_down_Pin GPIO_PIN_0
+#define Moto_down_GPIO_Port GPIOC
+#define Moto_up_Pin GPIO_PIN_1
+#define Moto_up_GPIO_Port GPIOC
+#define Moto_Pin_Pin GPIO_PIN_2
+#define Moto_Pin_GPIO_Port GPIOC
 #define Yaw_Out_Pin GPIO_PIN_0
 #define Yaw_Out_GPIO_Port GPIOA
 #define Roll_Out_Pin GPIO_PIN_1

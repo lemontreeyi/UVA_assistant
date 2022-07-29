@@ -8,6 +8,20 @@
 #define LED3_ON   HAL_GPIO_WritePin(GPIOE, LED_R_Pin, GPIO_PIN_RESET);
 #define LED3_OFF  HAL_GPIO_WritePin(GPIOE, LED_R_Pin, GPIO_PIN_SET);
 
+// void Moto_Down()
+// {
+//   HAL_GPIO_WritePin(GPIOC, Moto_down_GPIO_Port, GPIO_PIN_SET);  //?????????
+//   HAL_GPIO_WritePin(GPIOC, Moto_up_GPIO_Port, GPIO_PIN_RESET);  //?????????
+// }
+
+// void Moto_Up()
+// {
+//   HAL_GPIO_WritePin(GPIOC, Moto_down_GPIO_Port, GPIO_PIN_RESET);  //?????????
+//   HAL_GPIO_WritePin(GPIOC, Moto_up_GPIO_Port, GPIO_PIN_SET);  //?????????
+// }
+
+
+
 void LED1_Flash(void)
 {
   HAL_GPIO_TogglePin(LED_B_GPIO_Port, LED_B_Pin);
