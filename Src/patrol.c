@@ -553,3 +553,51 @@ bool taskOne_C(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2
     if(index == 4) return true;
     else return false;
 }
+
+void Moto_Down()
+{
+  HAL_GPIO_WritePin(GPIOC, Moto_down_Pin, GPIO_PIN_SET);  
+  HAL_GPIO_WritePin(GPIOC, Moto_up_Pin, GPIO_PIN_RESET);  
+}
+
+void Moto_Up()
+{
+  HAL_GPIO_WritePin(GPIOC, Moto_down_Pin, GPIO_PIN_RESET);  
+  HAL_GPIO_WritePin(GPIOC, Moto_up_Pin, GPIO_PIN_SET);  
+}
+
+void Moto_stable()
+{
+  HAL_GPIO_WritePin(GPIOC, Moto_down_Pin, GPIO_PIN_RESET);  
+  HAL_GPIO_WritePin(GPIOC, Moto_up_Pin, GPIO_PIN_RESET);  
+}
+
+/*
+func:调用时，进行投递货物任务
+param1->is_begin：开始投递货物，放下砝码，滴答定时器计时到一定时间后停止下降
+param2->is_over：结束投递货物，开始上升砝码，读到开关电平时保持静止
+*/
+bool Throw_Moto(bool *is_begin, bool *is_over)
+{
+    static uint32_t down_time;
+    if(*is_begin)
+    {
+        uint32_t down_time = HAL_GetTick();
+        Moto_Down();
+        *is_begin  = false;
+    }
+    if (HAL_GetTick() - down_time >= 10000)
+    {
+        Moto_stable();
+    }
+    if(*is_over)
+    {
+        Moto_Up();
+        if(HAL_GPIO_ReadPin(GPIOC,Moto_Pin_Pin) == GPIO_PIN_SET)
+        {
+            Moto_stable();
+            return true;
+        }
+    }
+    return false;
+}

@@ -28,5 +28,8 @@ bool shootphoto(float target_x, float target_y, float* current_location, USART_T
 int Get_WeightedValue(int param1, int param2, float weight);
 void Mix_PwmOut(int cur_x, int cur_y, int *target_location, uint16_t task1_type);
 bool fixyaw(float yaw);
+void Moto_Down();
+void Moto_Up();
+void Moto_stable();
 
 #endif

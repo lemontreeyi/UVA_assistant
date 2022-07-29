@@ -270,24 +270,24 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	uint16_t i1 = 0, i2 = 0, i3 = 0, i5 = 0;
-	// uint16_t len = 0;
+	uint16_t len = 0;
 	uint16_t rxlen_usart_1;
 	uint16_t rxlen_usart_2;
 	uint16_t rxlen_usart_3;
 	uint16_t rxlen_uart_5;
 	
-	// uint8_t cmd = 0;
+	uint8_t cmd = 0;
 	uint8_t key;
-	// uint32_t RunTime = 0;
-	// uint32_t ContrlTime_x = 0;
-	// uint32_t ContrlTime_y = 0;
+	uint32_t RunTime = 0;
+	uint32_t ContrlTime_x = 0;
+	uint32_t ContrlTime_y = 0;
 	uint32_t ContriGetDataTime = 0;
 	uint32_t ctrlstart_x = HAL_GetTick();
 	uint32_t ctrlstart_y = HAL_GetTick();
 	uint32_t ContriGetDataStart = HAL_GetTick();
-	// uint32_t Ctrl_flag_time = 0;
+	uint32_t Ctrl_flag_time = 0;
 	uint32_t Ctrl_flag_start = HAL_GetTick();
-	// uint32_t decodetimer;
+	uint32_t decodetimer;
 	uint32_t tickstart = HAL_GetTick();
 	uint32_t ticklast = HAL_GetTick();
 	uint32_t Cxof_Time = HAL_GetTick();
@@ -569,10 +569,11 @@ int main(void)
 					switch (task)
 					{
 					case 0:
+						printf("send_message\r\n");
 						Pack_cmd_buf(1, 0, cmd_buf);		//打包数据发给F103副板
                 		BSP_USART_SendArray_LL(USART3, cmd_buf, 4);
 						HAL_Delay(500);
-						// task = 1;
+						task = 1;
 						break;
 					case 1:
 						//步骤1:定点�?键起�?
@@ -582,7 +583,7 @@ int main(void)
 							BEEP_ON();
 							HAL_Delay(400);
 							BEEP_OFF();
-							// task = 2;
+							task = 2;
 						}
 						break;
 					case 2:
@@ -1607,8 +1608,11 @@ void MANUAL_CONTROL_Send(int16_t xpoint, int16_t ypoint)
 	int16_t z = 0;
 	int16_t r = 0;
 	uint16_t buttons = 0;
-	mavlink_message_t msg; // msg The MAVLink message to compress the data into
+	mavlink_message_t msg; // msg The MAVLink message to compress the data into+
+	
+
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+	uint16_t len;
 
 	mavlink_msg_manual_control_pack(system_id, component_id, &msg, target, x, y, z, r, buttons);
 	len = mavlink_msg_to_send_buffer(buf, &msg);
@@ -1632,7 +1636,7 @@ void RC_CHANNELS_OVERRIDE_Send(int16_t xpoint, int16_t ypoint)
 	uint16_t chan7_raw = 65535;
 	uint16_t chan8_raw = 65535;
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
-	// uint16_t len;
+	uint16_t len;
 
 	mavlink_msg_rc_channels_override_pack(system_id, component_id, &msg, target_system, target_component,
 										  chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw);
@@ -1661,7 +1665,7 @@ void heartbeat_Mavlink(void)
 	uint8_t system_status = 0x04;
 
 	uint8_t buf_head[MAVLINK_MAX_PACKET_LEN];
-	// uint16_t len;
+	uint16_t len;
 
 	mavlink_msg_heartbeat_pack(system_id, component_id, &heart_msg, type, autopilot, base_mode, custom_mode, system_status);
 	len = mavlink_msg_to_send_buffer(buf_head, &heart_msg);
