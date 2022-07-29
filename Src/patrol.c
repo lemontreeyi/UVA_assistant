@@ -1,5 +1,6 @@
 #include "patrol.h"
 #include <math.h>
+#include <stdlib.h>
 
 uint8_t cmd_buf[4];
 bool rec_path_flag[9] = {0};
@@ -11,11 +12,24 @@ float init_yaw = 0;
 int takeoff_location[2] = {0};
 
 bool is_near_target[4] = {0};
+bool is_near_target_land[2] = {0};
+
+bool drop_goods_flag[5] = {0};//分别代表下降，舵机下降货物，稳住5s，舵机上升，上升五个步骤
+uint32_t drop_time = 0;
+uint32_t stable_time = 0;
+bool is_count_time = 0;
+bool is_begin = 0, is_over = 0;
 //用于重置路径点标志位
 void reset_path_flag(bool path_flag[], int len)
 {
     for(int i = 0; i < len; ++i)
         path_flag[i] = 0;
+}
+//清除投放货物过程的标志位
+void clear_drop_goods_flag()
+{
+    for(int i = 0; i < 5; ++i)
+        drop_goods_flag[i] = 0;
 }
 
 //用于自动更新下一个目标点，更新半径为35cm
@@ -72,44 +86,45 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
     //到达目标点阈值范围内，并且长达5秒,flag置1
     if((path[have_arrive][0] - cur_x) * (path[have_arrive][0] - cur_x) + (path[have_arrive][1] - cur_y) * (path[have_arrive][1] - cur_y) < (Threshold*Threshold))
     {
-        if(!is_time)
+        if(have_arrive == 1 || have_arrive == 3)
         {
-            is_time = 1;
-            time = HAL_GetTick();
-        }
-        else
-        {
-            if((HAL_GetTick() - time) > 5000)
+            if(drop_goods_flag[0] == 0)
             {
-                if(have_arrive == 1 && t1_opt_flag == 1)
+                clear_drop_goods_flag();
+                drop_goods_flag[0] = 1;//开启下降
+            }
+            if(drop_goods_flag[4] == 1)
+            {
+                if(have_arrive == 1 && t1_opt_flag)
                 {
                     Pack_cmd_buf(Task1_Type1, 0, cmd_buf);
                     BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
                     t1_opt_flag = 0;
                 }
-                if(have_arrive == 3 && t1_opt_flag == 1)
+                if(have_arrive == 3 && t1_opt_flag)
                 {
                     Pack_cmd_buf(Task1_Type2, 0, cmd_buf);
                     BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
                     t1_opt_flag = 0;
                 }
-            
-                is_time = 0;
+                clear_drop_goods_flag();//
                 path_flag[have_arrive] = true;
                 BEEP_ON();
                 HAL_Delay(100);
                 BEEP_OFF();
                 ++have_arrive;
             }
-        } 
-    }
-    else
-    {
-        if(is_time)
+        }
+        else
         {
-            is_time = 0;
+            path_flag[have_arrive] = true;
+            BEEP_ON();
+            HAL_Delay(100);
+            BEEP_OFF();
+            ++have_arrive;
         }
     }
+
     //设置目标点->根据flag打开的个数去设置
     if(have_arrive < Length)
     {
@@ -382,8 +397,8 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
         *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 3000)?0:1;
         if(*is_takeoff == 0)
         {
-            // Pack_cmd_buf(0, 0, cmd_buf);
-            // BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+            Pack_cmd_buf(0, 0, cmd_buf);
+            BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
             t1_opt_flag = 0;
 
             Set_PWM_Thr(4500);
@@ -516,21 +531,18 @@ int calculate_noPID_pwm(int cur_point, int tar_point, bool is_x)
     }
 }
 
-bool taskOne_C(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint, uint16_t Task1_Type1,  uint16_t Task1_Type2)
+bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint, uint16_t Task1_Type1,  uint16_t Task1_Type2)
 {
     static int start_location[2] = {0};
     int path[4][2];
     int next_target[2];
-    static int index = 0, old_index = 0;
+    static int index = 0;
     //设置任务的起始点
     if(!(*is_SetStartPoint))
     {
         start_location[0] = cur_location[0] * 100;
         start_location[1] = cur_location[1] * 100;
         *is_SetStartPoint = 1;
-        //请求识别type4,即红色三角形
-        // Pack_cmd_buf(Task1_Type1,1,cmd_buf);
-        // BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
     }
     //设置任务的路径点
     path[0][0] = tar1_x; path[0][1] = start_location[1];
@@ -538,11 +550,76 @@ bool taskOne_C(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2
     path[2][0] = tar2_x; path[2][1] = tar1_y;
     path[3][0] = tar2_x; path[3][1] = tar2_y;       //目标点2
 
-    old_index = index;
     //得到当前路径中的目标点
     index = getCurrentTarget(cur_location, next_target, 4, t1_path_flag, path, 25, Task1_Type1, Task1_Type2);
     printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
-
+    if(drop_goods_flag[0] == 1)
+    {
+        if(abs(height - 800) > 100)
+        {
+            Take_off(800, height);
+            drop_time = HAL_GetTick();
+        }
+        else if(abs(height - 800) <= 100)
+        {
+            if(HAL_GetTick() - drop_time > 3000)
+            {
+                Set_PWM_Thr(4500);
+                drop_goods_flag[1] = 1;
+                drop_goods_flag[0] = 0;
+                is_begin = 1;
+            }
+        }
+    }
+    if(drop_goods_flag[1] == 1)//舵机下降
+    {
+        Throw_Moto(&is_begin, &is_over);
+    }
+    if(drop_goods_flag[2] == 1)
+    {
+        if(((int)(cur_location[0] * 100) - next_target[0]) * ((int)(cur_location[0] * 100) - next_target[0]) + ((int)(cur_location[1] * 100) - next_target[1]) * ((int)(cur_location[1] * 100) - next_target[1]) < 15 * 15)
+        {
+            if(!is_count_time)
+            {
+                stable_time = HAL_GetTick();
+                is_count_time = 1;
+            }
+            if(HAL_GetTick() - stable_time > 5000)
+            {
+                drop_goods_flag[3] = 1;
+                drop_goods_flag[2] = 0;
+                is_over = 1;
+            }
+        }
+        else
+        {
+            is_count_time = 0;
+        }
+    }
+    if(drop_goods_flag[3] == 1)
+    {
+        if(Throw_Moto(&is_begin, &is_over))
+        {
+            is_over = 0;
+            drop_goods_flag[4] = 1;
+            drop_goods_flag[3] = 0;
+        }
+    }
+    if(drop_goods_flag[4] == 1)
+    {
+        if(abs(height - 1500) > 100)
+        {
+            Take_off(1500, height);
+            drop_time = HAL_GetTick();
+        }
+        else if(abs(height - 1500) <= 100)
+        {
+            if(HAL_GetTick() - drop_time > 3000)
+            {
+                Set_PWM_Thr(4500);
+            }
+        }
+    }
     //混合UWB的PID和视觉定位PID,并输出
     if(index == 1)
         to_one_point(cur_location, next_target, Task1_Type1, is_near_target + index, 1);
@@ -553,6 +630,34 @@ bool taskOne_C(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2
     if(index == 4) return true;
     else return false;
 }
+
+bool landon_C(int height, float* current_location, bool *is_SetStartPoint)
+{
+    static int start_location[2] = {0};
+    int path[2][2], index = 0;
+    int next_target[2];
+    //设置任务的起始点
+    if(!(*is_SetStartPoint))
+    {
+        start_location[0] = current_location[0];
+        start_location[1] = current_location[1];
+        *is_SetStartPoint = 1;
+    }
+    index = getCurrentTarget(current_location, next_target, 2, ld_path_flag, path, 10, 0, 8);
+    if(drop_goods_flag[0] == 1)
+        land(height);
+    if(index == 1)
+        to_one_point(current_location, next_target, 0, is_near_target_land + index, 1);
+    else
+        to_one_point(current_location, next_target, 8, is_near_target_land + index, 0);
+	if(height < 80) 
+    {
+        clear_drop_goods_flag();
+        return true;
+    }
+	else return false;
+}
+
 
 void Moto_Down()
 {
@@ -589,6 +694,8 @@ bool Throw_Moto(bool *is_begin, bool *is_over)
     if (HAL_GetTick() - down_time >= 10000)
     {
         Moto_stable();
+        drop_goods_flag[1] = 0;
+        drop_goods_flag[2] = 1;
     }
     if(*is_over)
     {

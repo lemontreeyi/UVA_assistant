@@ -21,15 +21,17 @@ int Get_circle_1(float *crrent_location, int *target_location, int *begin, int *
 int Get_circle_2(int current_height, int target_height);
 bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_settarget);
 bool taskOne(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint, uint16_t Task1_Type1,  uint16_t Task1_Type2);
-bool taskOne_C(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint, uint16_t Task1_Type1,  uint16_t Task1_Type2);
+bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint, uint16_t Task1_Type1,  uint16_t Task1_Type2);
 bool Fly2Target(float *current_location,int *target_location);
 bool landon(int height, float* current_location, bool *is_SetStartPoint);
+bool landon_C(int height, float* current_location, bool *is_SetStartPoint);
 bool shootphoto(float target_x, float target_y, float* current_location, USART_TypeDef* huart);
 int Get_WeightedValue(int param1, int param2, float weight);
 void Mix_PwmOut(int cur_x, int cur_y, int *target_location, uint16_t task1_type);
 bool fixyaw(float yaw);
-void Moto_Down();
-void Moto_Up();
-void Moto_stable();
+void Moto_Down(void);
+void Moto_Up(void);
+void Moto_stable(void);
+bool Throw_Moto(bool *is_begin, bool *is_over);
 
 #endif

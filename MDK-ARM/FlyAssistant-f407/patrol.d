@@ -51,3 +51,4 @@ flyassistant-f407\patrol.o: ../Inc/uart_api.h
 flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+flyassistant-f407\patrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

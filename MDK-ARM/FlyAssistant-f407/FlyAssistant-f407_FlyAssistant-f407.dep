@@ -491,7 +491,7 @@ I (../DSP_LIB/Include/arm_math.h)(0x62E36CD9)
 I (../DSP_LIB/Include/core_cm4.h)(0x62E36CD9)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x55DB2B7E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x55DB2B78)
-F (..\Src\encodedDecoder.c)(0x62E36CDA)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Inc -I./MAVLink_Decode -I../MAVLink -I../MAVLink/common -I../DSP_LIB -I../DSP_LIB/Include -I../vl53l1x/core -I../vl53l1x/platform-I d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -DUSE_FULL_LL_DRIVER-o flyassistant-f407\encodeddecoder.o --omf_browse flyassistant-f407\encodeddecoder.crf --depend flyassistant-f407\encodeddecoder.d)
+F (..\Src\encodedDecoder.c)(0x62E40B06)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Inc -I./MAVLink_Decode -I../MAVLink -I../MAVLink/common -I../DSP_LIB -I../DSP_LIB/Include -I../vl53l1x/core -I../vl53l1x/platform-I d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -DUSE_FULL_LL_DRIVER-o flyassistant-f407\encodeddecoder.o --omf_browse flyassistant-f407\encodeddecoder.crf --depend flyassistant-f407\encodeddecoder.d)
 I (../Inc/coderDecoder.h)(0x62E36CD9)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x62E36CD9)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x62E36CD9)
@@ -652,8 +652,8 @@ I (../vl53l1x/core/vl53l1_api_strings.h)(0x62E36CDA)
 I (../vl53l1x/core/vl53l1_api_core.h)(0x62E36CDA)
 I (C:\Keil_v5\ARM\ARMCC\include\time.h)(0x55DB2B80)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x55DB2B7E)
-F (..\Src\patrol.c)(0x62E3B85F)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Inc -I./MAVLink_Decode -I../MAVLink -I../MAVLink/common -I../DSP_LIB -I../DSP_LIB/Include -I../vl53l1x/core -I../vl53l1x/platform-I d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -DUSE_FULL_LL_DRIVER-o flyassistant-f407\patrol.o --omf_browse flyassistant-f407\patrol.crf --depend flyassistant-f407\patrol.d)
-I (../Inc/patrol.h)(0x62E3B86E)
+F (..\Src\patrol.c)(0x62E3E7A8)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Inc -I./MAVLink_Decode -I../MAVLink -I../MAVLink/common -I../DSP_LIB -I../DSP_LIB/Include -I../vl53l1x/core -I../vl53l1x/platform-I d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -DUSE_FULL_LL_DRIVER-o flyassistant-f407\patrol.o --omf_browse flyassistant-f407\patrol.crf --depend flyassistant-f407\patrol.d)
+I (../Inc/patrol.h)(0x62E3E6A7)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x55DB2B76)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x55DB2B80)
 I (../Inc/flyControl.h)(0x62E36CD9)
@@ -704,7 +704,8 @@ I (../Inc/uart_api.h)(0x62E36CD9)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x55DB2B76)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x55DB2B78)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x55DB2B7E)
-F (../Core/Src/main.c)(0x62E3B68D)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Inc -I./MAVLink_Decode -I../MAVLink -I../MAVLink/common -I../DSP_LIB -I../DSP_LIB/Include -I../vl53l1x/core -I../vl53l1x/platform-I d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -DUSE_FULL_LL_DRIVER-o flyassistant-f407\main.o --omf_browse flyassistant-f407\main.crf --depend flyassistant-f407\main.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x55DB2B78)
+F (../Core/Src/main.c)(0x62E40AD2)(--c99 -c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Inc -I./MAVLink_Decode -I../MAVLink -I../MAVLink/common -I../DSP_LIB -I../DSP_LIB/Include -I../vl53l1x/core -I../vl53l1x/platform-I d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE-I C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="517" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx -DARM_MATH_CM4 -DUSE_FULL_LL_DRIVER-o flyassistant-f407\main.o --omf_browse flyassistant-f407\main.crf --depend flyassistant-f407\main.d)
 I (../Core/Inc/main.h)(0x62E36CD9)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x62E36CD9)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x62E36CD9)
@@ -894,7 +895,7 @@ I (../Inc/imu.h)(0x62E36CD9)
 I (../Inc/mymath.h)(0x62E36CD9)
 I (../Inc/Matrix.h)(0x62E36CD9)
 I (../Inc/Kalman.h)(0x62E36CD9)
-I (../Inc/patrol.h)(0x62E3B86E)
+I (../Inc/patrol.h)(0x62E3E6A7)
 I (../vl53l1x/core/vl53l1_api.h)(0x62E36CDA)
 I (../vl53l1x/core/vl53l1_api_strings.h)(0x62E36CDA)
 I (../vl53l1x/core/vl53l1_def.h)(0x62E36CDA)

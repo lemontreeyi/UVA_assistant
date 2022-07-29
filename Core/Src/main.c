@@ -588,22 +588,23 @@ int main(void)
 						break;
 					case 2:
 						//步骤2:前往两个目标�?
-						if(taskOne_C(location_esm, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint, Task1_Type1, Task1_Type2))
+						if(taskOne_C(location_esm, height, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint, Task1_Type1, Task1_Type2))
 						{
 							BEEP_ON();
-							HAL_Delay(1000);
+							HAL_Delay(4000);
 							BEEP_OFF();
+							task = 3;
 						}
 						break;
 					case 3:
 						//步骤3:返回起飞点并降落
-						if(landon(height,location_esm,&is_SetLandStartPoint))
+						if(landon_C(height,location_esm,&is_SetLandStartPoint))
 						{
 							BEEP_ON();
-							HAL_Delay(1000);
+							HAL_Delay(4000);
 							BEEP_OFF();
 							Set_PWM_Thr(3000);
-							// task = 3;
+							task = 4;
 						}
 					default:
 						Back2Center();
@@ -1065,7 +1066,7 @@ void USART_RxCallback(USART_TypeDef *huart)
 		else if (huart == USART2)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
-			//printf("%c",data);
+			printf("%c",data);
 			if(data == 0x23)
 			{
 				UART2_Frame_Flag = 1;
