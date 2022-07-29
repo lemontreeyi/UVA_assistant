@@ -153,10 +153,10 @@ void calculate_location(float d[], float location[], float height)
 {
     // 先将三维距离转化为xy平面投影上的距离
     // d_xy = sqrt(d**2 - dh**2)
-    float d1 = (float)sqrt(d[0]*d[0] - (STATION1_Z - height - 0.15)*(STATION1_Z - height - 0.15));
-    float d2 = (float)sqrt(d[1]*d[1] - (STATION2_Z - height - 0.15)*(STATION2_Z - height - 0.15));
-    float d3 = (float)sqrt(d[2]*d[2] - (STATION3_Z - height - 0.15)*(STATION3_Z - height - 0.15));
-    float d4 = (float)sqrt(d[3]*d[3] - (STATION4_Z - height - 0.15)*(STATION4_Z - height - 0.15));
+    float d1 = (float)sqrt(d[0]*d[0] - (STATION1_Z - height - 0.15f)*(STATION1_Z - height - 0.15f));
+    float d2 = (float)sqrt(d[1]*d[1] - (STATION2_Z - height - 0.15f)*(STATION2_Z - height - 0.15f));
+    float d3 = (float)sqrt(d[2]*d[2] - (STATION3_Z - height - 0.15f)*(STATION3_Z - height - 0.15f));
+    float d4 = (float)sqrt(d[3]*d[3] - (STATION4_Z - height - 0.15f)*(STATION4_Z - height - 0.15f));
     float e1[3] = {
         STATION1_X * STATION1_X - STATION4_X * STATION4_X + STATION1_Y * STATION1_Y - STATION4_Y * STATION4_Y - d1 * d1 + d4 * d4,
         STATION2_X * STATION2_X - STATION4_X * STATION4_X + STATION2_Y * STATION2_Y - STATION4_Y * STATION4_Y - d2 * d2 + d4 * d4,

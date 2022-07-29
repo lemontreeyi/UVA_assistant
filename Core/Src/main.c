@@ -94,7 +94,7 @@ static int UART2_Frame_Flag = 0;
 static int UART3_Frame_Flag = 0;
 //static int UART5_Frame_Flag = 0;
 
-static int heartbeat = 0;
+
 // static int MAVLink_message_length = 0;
 // static mavlink_distance_sensor_t packet;
 
@@ -152,6 +152,9 @@ VL53L1_Error vl53l1x_init(VL53L1_DEV pDev);
 VL53L1_Error vl53l1x_Cali(VL53L1_DEV pDev, VL53L1_CalibrationData_t* save);
 VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev);
 void mav_request_data(USART_TypeDef* huart);
+
+//蜂鸣器定时
+Beep_time_t beep_tim;
 
 void end(void)
 {
@@ -267,37 +270,37 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	uint16_t i1 = 0, i2 = 0, i3 = 0, i5 = 0;
-	uint16_t len = 0;
+	// uint16_t len = 0;
 	uint16_t rxlen_usart_1;
 	uint16_t rxlen_usart_2;
 	uint16_t rxlen_usart_3;
 	uint16_t rxlen_uart_5;
 	
-	uint8_t cmd = 0;
+	// uint8_t cmd = 0;
 	uint8_t key;
-	uint32_t RunTime = 0;
-	uint32_t ContrlTime_x = 0;
-	uint32_t ContrlTime_y = 0;
+	// uint32_t RunTime = 0;
+	// uint32_t ContrlTime_x = 0;
+	// uint32_t ContrlTime_y = 0;
 	uint32_t ContriGetDataTime = 0;
 	uint32_t ctrlstart_x = HAL_GetTick();
 	uint32_t ctrlstart_y = HAL_GetTick();
 	uint32_t ContriGetDataStart = HAL_GetTick();
-	uint32_t Ctrl_flag_time = 0;
+	// uint32_t Ctrl_flag_time = 0;
 	uint32_t Ctrl_flag_start = HAL_GetTick();
-	uint32_t decodetimer;
+	// uint32_t decodetimer;
 	uint32_t tickstart = HAL_GetTick();
 	uint32_t ticklast = HAL_GetTick();
 	uint32_t Cxof_Time = HAL_GetTick();
 	uint32_t Cxof_Wait = HAL_GetTick();
 	uint32_t Dtime = 0;
-	int flag_rx2 = 0;
+	// int flag_rx2 = 0;
 //	mavlink_message_t msg1;
 //	mavlink_message_t msg2;
 //	mavlink_message_t msg_tmp;
 //	mavlink_message_t msg_altitude;
 //	mavlink_message_t msg_request_data_stream;
 //	uint32_t len = 0;
-  uint8_t str[] = "hello world\r\n";
+
 
   /* USER CODE END 1 */
 
@@ -411,6 +414,8 @@ int main(void)
 
 	//patrol init
 	//init_flypath();
+	//蜂鸣器定时器初始化
+	init_Beeptim(&beep_tim);
 
 	TIM11_Set(0);
 	TIM13_Set(0);
@@ -529,7 +534,7 @@ int main(void)
           			Pack_cxof_buf(speed, 100, cxof_buf);//打包光流数据
 					Cxof_Time = HAL_GetTick();
 					Cxof_Wait = HAL_GetTick();
-					BEEP_OFF();
+
           			Send_cxof_buf(UART5, cxof_buf, 9);//将光流数据发送给飞控
         		}
 				rxlen_uart_5 = 0;
@@ -552,8 +557,8 @@ int main(void)
 				BSP_USART_StartIT_LL(USART3); //启动下一次接�?
 				printf("_yaw:%f\r\n",yaw);
 			}
-			if(HAL_GetTick() - Cxof_Wait >= 500)			//超过500ms未接收到uwb的数据，蜂鸣器响起报�?
-				BEEP_OFF();
+			// if(HAL_GetTick() - Cxof_Wait >= 500)			//超过500ms未接收到uwb的数据，蜂鸣器响起报�?
+			// 	BEEP_OFF();
 			if (3 == RC_Read()) //飞控助手控制
 			{	
 				// Pack_cmd_buf(1, 1, cmd_buf);		//打包数据发给F103副板
@@ -566,11 +571,8 @@ int main(void)
 					case 0:
 						Pack_cmd_buf(1, 0, cmd_buf);		//打包数据发给F103副板
                 		BSP_USART_SendArray_LL(USART3, cmd_buf, 4);
-						printf("have send\r\n");
-						Pack_cmd_buf(0,1,cmd_buf);
-						BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
 						HAL_Delay(500);
-						task = 1;
+						// task = 1;
 						break;
 					case 1:
 						//步骤1:定点�?键起�?
@@ -578,17 +580,15 @@ int main(void)
 						if(takeoff(height, location_esm, &is_takeoff, &is_settarget))
 						{
 							BEEP_ON();
-							HAL_Delay(500);
+							HAL_Delay(400);
 							BEEP_OFF();
 							// task = 2;
 						}
 						break;
 					case 2:
 						//步骤2:前往两个目标�?
-						if(taskOne(location_esm, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint, Task1_Type1, Task1_Type2))
+						if(taskOne_C(location_esm, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint, Task1_Type1, Task1_Type2))
 						{
-							Pack_cmd_buf(3,0,cmd_buf);
-							BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
 							BEEP_ON();
 							HAL_Delay(1000);
 							BEEP_OFF();
@@ -618,6 +618,7 @@ int main(void)
 				{
 					printf("mode3\r\n");
 				}
+				// BEEP_timing_off(&beep_tim);
 				//用于打印数据调试
 				ContriGetDataTime = HAL_GetTick() - ContriGetDataStart;
 				if(ContriGetDataTime >= 300)
@@ -875,7 +876,7 @@ float filter_av(char filter_id)
 float DataProcessing(float IN_Data)			//权重滤波
 {
 	static float out_Data = 0, last_Data = 0, filter_Data = 0;
-	out_Data = 0.7 * IN_Data + 0.3 * last_Data;
+	out_Data = 0.7f * IN_Data + 0.3f * last_Data;
 	filter_Data = filter(out_Data);
 	last_Data = filter_Data;
 	return filter_Data;
@@ -1608,7 +1609,6 @@ void MANUAL_CONTROL_Send(int16_t xpoint, int16_t ypoint)
 	uint16_t buttons = 0;
 	mavlink_message_t msg; // msg The MAVLink message to compress the data into
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
-	uint16_t len;
 
 	mavlink_msg_manual_control_pack(system_id, component_id, &msg, target, x, y, z, r, buttons);
 	len = mavlink_msg_to_send_buffer(buf, &msg);
@@ -1632,7 +1632,7 @@ void RC_CHANNELS_OVERRIDE_Send(int16_t xpoint, int16_t ypoint)
 	uint16_t chan7_raw = 65535;
 	uint16_t chan8_raw = 65535;
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
-	uint16_t len;
+	// uint16_t len;
 
 	mavlink_msg_rc_channels_override_pack(system_id, component_id, &msg, target_system, target_component,
 										  chan1_raw, chan2_raw, chan3_raw, chan4_raw, chan5_raw, chan6_raw, chan7_raw, chan8_raw);
@@ -1661,7 +1661,7 @@ void heartbeat_Mavlink(void)
 	uint8_t system_status = 0x04;
 
 	uint8_t buf_head[MAVLINK_MAX_PACKET_LEN];
-	uint16_t len;
+	// uint16_t len;
 
 	mavlink_msg_heartbeat_pack(system_id, component_id, &heart_msg, type, autopilot, base_mode, custom_mode, system_status);
 	len = mavlink_msg_to_send_buffer(buf_head, &heart_msg);

@@ -16,6 +16,7 @@
         "uart_api.h": "c",
         "cstdlib": "c",
         "coderdecoder.h": "c",
-        "xmemory": "c"
+        "xmemory": "c",
+        "beep.h": "c"
     }
 }

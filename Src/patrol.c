@@ -9,6 +9,8 @@ bool ld_path_flag[2] = {0};
 int auto_next_target[2] = {0};
 float init_yaw = 0;
 int takeoff_location[2] = {0};
+
+bool is_near_target[4] = {0};
 //用于重置路径点标志位
 void reset_path_flag(bool path_flag[], int len)
 {
@@ -20,8 +22,8 @@ void reset_path_flag(bool path_flag[], int len)
 bool set_NextLocation(float* current_location, int* target_location, int *next_location)
 {
     //转化到m为单位
-    float tar_x = (float)target_location[0] / 100.0;
-    float tar_y = (float)target_location[1] / 100.0;
+    float tar_x = (float)target_location[0] / 100.0f;
+    float tar_y = (float)target_location[1] / 100.0f;
 
     float flag_y = (tar_y - current_location[1] > 0)?1.0:-1.0;
     float flag_x = (tar_x - current_location[0] > 0)?1.0:-1.0;
@@ -39,8 +41,8 @@ bool set_NextLocation(float* current_location, int* target_location, int *next_l
         float sin = sqrt(tan * tan / (1 + tan * tan));
         float cos = sqrt(1 / (1 + tan * tan));
 
-        next_location[1] = (int)((current_location[1] + 0.35 * flag_y * sin) * 100);
-        next_location[0] = (int)((current_location[0] + 0.35 * flag_x * cos) * 100);
+        next_location[1] = (int)((current_location[1] + 0.35f * flag_y * sin) * 100.0f);
+        next_location[0] = (int)((current_location[0] + 0.35f * flag_x * cos) * 100.0f);
         return false;
     }
 }
@@ -274,7 +276,7 @@ bool Rectangle(int *start, int width_x, int width_y, float *current_location)
 //根据坐标位置融合PWM输出
 void Mix_PwmOut(int cur_x, int cur_y, int *target_location, uint16_t task1_type)
 {
-    if(((cur_x-target_location[0])*(cur_x-target_location[0]) + (cur_y-target_location[1])*(cur_y-target_location[1])) <= 65*65)
+    if(((cur_x-target_location[0])*(cur_x-target_location[0]) + (cur_y-target_location[1])*(cur_y-target_location[1])) <= 40*40)
     {
         if(task1_type != 8)
         {
@@ -293,8 +295,8 @@ void Mix_PwmOut(int cur_x, int cur_y, int *target_location, uint16_t task1_type)
         Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y,0,0);
         //此处让坐标环PID占0.2的权重
         // printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
-        Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 0.05));
-        Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 0.05));
+        Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 1.0));
+        Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 1.0));
         //printf("roll_out:%d, pitch_out:%d\r\n",Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 0.2),Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 0.2));
     }
     else
@@ -364,8 +366,8 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
     }
 
     set_NextLocation(current_location, takeoff_location, next_target);
-    Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1] + 10);
-    Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location, 4);
+    Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1]);
+    Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location, 0);
 
     // printf("height = %d\r\n", height);
     // printf("x:%f y:%f\r\n", current_location[0], current_location[1]);
@@ -462,4 +464,92 @@ bool fixyaw(float yaw)
     else
         Set_PWM_Yaw(4431);//回中
     return is_inityaw;
+}
+
+void to_one_point(float* cur_location, int* target_location, uint16_t task1_type, bool* is_near_target, bool axis)
+{
+    int cur_x = (int)(cur_location[0] * 100);
+    int cur_y = (int)(cur_location[1] * 100);
+    int target_x = target_location[0];
+    int target_y = target_location[1];
+
+    Loiter_location(cur_x, cur_y, target_x, target_y);//必须每次丢调用这个函数，不然突然切换到位置PID会derror会产生突变
+
+    if((cur_x * target_x) * (cur_x * target_x) + (cur_y - target_y) * (cur_y - target_y) < 30 * 30 || *is_near_target == 1)
+    {
+        Mix_PwmOut(cur_x, cur_y, target_location, task1_type);
+        *is_near_target = 1;
+    }
+    else
+    {
+        int pwm_x = pwm_roll_out, pwm_y = pwm_pitch_out;
+        if(!axis) //axis = 0,沿x轴飞
+        {
+            pwm_y = calculate_noPID_pwm(cur_y, target_y, 0);
+        }
+        else
+        {
+            pwm_x = calculate_noPID_pwm(cur_x, target_x, 1);
+        }
+        Set_PWM_Roll(pwm_x);
+        Set_PWM_Pitch(pwm_y);
+    }
+}
+
+int calculate_noPID_pwm(int cur_point, int tar_point, bool is_x)
+{
+    float d_flag = ((cur_point - tar_point > 0)? 1.0: -1.0);
+    if(abs(cur_point - tar_point) < 100)
+    {
+        int out = (cur_point - tar_point) * 7.0 - 350;
+        if(is_x)
+            return 4500 + out;
+        else
+            return 4500 - out;
+    }
+    else
+    {
+        if(is_x)
+            return 4500 + d_flag * 450;
+        else
+            return 4500 - d_flag * 450;
+    }
+}
+
+bool taskOne_C(float* cur_location, int tar1_x, int tar1_y, int tar2_x, int tar2_y, bool* is_SetStartPoint, uint16_t Task1_Type1,  uint16_t Task1_Type2)
+{
+    static int start_location[2] = {0};
+    int path[4][2];
+    int next_target[2];
+    static int index = 0, old_index = 0;
+    //设置任务的起始点
+    if(!(*is_SetStartPoint))
+    {
+        start_location[0] = cur_location[0] * 100;
+        start_location[1] = cur_location[1] * 100;
+        *is_SetStartPoint = 1;
+        //请求识别type4,即红色三角形
+        // Pack_cmd_buf(Task1_Type1,1,cmd_buf);
+        // BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+    }
+    //设置任务的路径点
+    path[0][0] = tar1_x; path[0][1] = start_location[1];
+    path[1][0] = tar1_x; path[1][1] = tar1_y;       //目标点1
+    path[2][0] = tar2_x; path[2][1] = tar1_y;
+    path[3][0] = tar2_x; path[3][1] = tar2_y;       //目标点2
+
+    old_index = index;
+    //得到当前路径中的目标点
+    index = getCurrentTarget(cur_location, next_target, 4, t1_path_flag, path, 25, Task1_Type1, Task1_Type2);
+    printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
+
+    //混合UWB的PID和视觉定位PID,并输出
+    if(index == 1)
+        to_one_point(cur_location, next_target, Task1_Type1, is_near_target + index, 1);
+    else if(index == 3)
+        to_one_point(cur_location, next_target, Task1_Type2, is_near_target + index, 1);
+    else
+        to_one_point(cur_location, next_target, 8, is_near_target + index, 0);//无效视觉
+    if(index == 4) return true;
+    else return false;
 }

@@ -831,12 +831,12 @@ ARM Macro Assembler    Page 13
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=flyassistant-f407\startup_stm32f407xx.d -oflyassistant-f407\sta
-rtup_stm32f407xx.o -I.\RTE\_FlyAssistant-f407 -IF:\Tools\KEIL_v5\ARM\PACK\ARM\C
-MSIS\5.0.1\CMSIS\Include -IF:\Tools\KEIL_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\
-Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__MICROLIB SETA 1" --pre
-define="__UVISION_VERSION SETA 523" --predefine="_RTE_ SETA 1" --predefine="STM
-32F407xx SETA 1" --list=./flyassistant-f407/\startup_stm32f407xx.lst startup_st
-m32f407xx.s
+rtup_stm32f407xx.o -Id:\study\ardupilot\UVA_assistant\MDK-ARM\RTE -IC:\Keil_v5\
+ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP
+\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include --predefine="__MICROLIB SETA 
+1" --predefine="__UVISION_VERSION SETA 517" --predefine="_RTE_ SETA 1" --predef
+ine="STM32F407xx SETA 1" --list=./flyassistant-f407/\startup_stm32f407xx.lst st
+artup_stm32f407xx.s
 
 
 

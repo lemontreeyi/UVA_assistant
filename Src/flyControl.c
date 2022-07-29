@@ -4,7 +4,7 @@
 #include "coderDecoder.h"
 #include "arm_math.h"
 #include<math.h>
-
+#include <stdlib.h>
 
 int PWM_Pitch_Max=6000;
 int PWM_Pitch_mid=4500;
@@ -214,18 +214,18 @@ void PIDInit (PID *pp)
     PID_Control_Roll.SumError      = 0;
 
 	PID_Pitch_Time.Max = 210;
-	PID_Pitch_Time.Proportion = 2.2;
+	PID_Pitch_Time.Proportion = 2.8;
 	PID_Pitch_Time.Integral = 0;
-	PID_Pitch_Time.Derivative = 1.8;
+	PID_Pitch_Time.Derivative = 0.8;
 	PID_Pitch_Time.SetPoint = 112;
 	PID_Pitch_Time.LastError = 0;
 	PID_Pitch_Time.PreviousError = 0;
 	PID_Pitch_Time.SumError = 0;
 
 	PID_Roll_Time.Max = 210;
-	PID_Roll_Time.Proportion = 2.2;
+	PID_Roll_Time.Proportion = 2.8;
 	PID_Roll_Time.Integral = 0;
-	PID_Roll_Time.Derivative = 1.8;
+	PID_Roll_Time.Derivative = 0.8;
 	PID_Roll_Time.SetPoint = 112;
 	PID_Roll_Time.LastError = 0;
 	PID_Roll_Time.PreviousError = 0;
@@ -319,11 +319,11 @@ void Take_off_Preper(void)
 =====================================================================================================*/ 
 void Take_off(float target_height, float current_height)//mm
 {	
-	if(fabs(current_height - target_height) < 50.0){
+	if(fabs(current_height - target_height) < 100.0){
 		Set_PWM_Thr(4500);
 		//printf("get thr mid!\r\n");
 	}
-	else if(fabs(current_height - target_height) > 50.0)
+	else if(fabs(current_height - target_height) > 100.0)
 	{	
 		//printf("get in thr control!\r\n");
 		if(current_height < target_height) {

@@ -3,7 +3,7 @@ flyassistant-f407\mpu6050.o: ../Inc/mpu6050.h
 flyassistant-f407\mpu6050.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 flyassistant-f407\mpu6050.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h
 flyassistant-f407\mpu6050.o: ../Drivers/CMSIS/Include/core_cm4.h
-flyassistant-f407\mpu6050.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stdint.h
+flyassistant-f407\mpu6050.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 flyassistant-f407\mpu6050.o: ../Drivers/CMSIS/Include/cmsis_version.h
 flyassistant-f407\mpu6050.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 flyassistant-f407\mpu6050.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -15,7 +15,7 @@ flyassistant-f407\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_r
 flyassistant-f407\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 flyassistant-f407\mpu6050.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 flyassistant-f407\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-flyassistant-f407\mpu6050.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\stddef.h
+flyassistant-f407\mpu6050.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 flyassistant-f407\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 flyassistant-f407\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 flyassistant-f407\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -33,4 +33,4 @@ flyassistant-f407\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_p
 flyassistant-f407\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 flyassistant-f407\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 flyassistant-f407\mpu6050.o: ../Inc/i2c_application.h
-flyassistant-f407\mpu6050.o: F:\Tools\KEIL_v5\ARM\ARMCC\Bin\..\include\time.h
+flyassistant-f407\mpu6050.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
