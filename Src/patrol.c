@@ -775,9 +775,11 @@ bool fly_x(bool direction, int time)
         count_time = time;//计时时间
         TIM10_Set(1);
     }
+		printf("tim10_cnt:%d\r\n", tim10_1ms);
     if(time_over)
     {
         Set_PWM_Roll(4500);
+        printf("fly time over\r\n");
         return true;
     }
     else
@@ -948,7 +950,8 @@ bool TaskOne_D()
         }
         break;
     case 1:
-        if(fly_x(1, time_array[Task1_index_x1][Task1_index_y1])){
+        if(fly_x(1, time_array[Task1_index_x1][Task1_index_y1]))
+        {
             taskone_state = 2;
             start_time = 0;
         }

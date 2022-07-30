@@ -214,6 +214,8 @@ uint16_t Task1_index_x2;
 uint16_t Task1_index_y2;
 //Task2
 uint16_t Task2_Type;
+
+uint16_t tim10_1ms = 0;
 /*
 type说明�?
 0:cross, 1：蓝色方形，2：蓝色圆�?3：蓝色三角形�?4：红色三角形�?5：红色方形，6：红色圆
@@ -1223,13 +1225,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	static uint16_t tim11_1ms = 0; //中断次数计数
 	static uint16_t tim13_1ms = 0; //中断次数计数
 	static uint16_t tim14_1ms = 0; //中断次数计数
-	static uint16_t tim10_1ms = 0; //中断次数计数
 
 	//*****定时�?10中断服务函数->用于打杆计时*********
 	if (htim->Instance == htim10.Instance) //更新中断
 	{
 		tim10_1ms++;
-		if (tim10_1ms == count_time) 
+		if (tim10_1ms >= count_time) 
 		{
 			time_over = 1;
 			// start_time = 0;

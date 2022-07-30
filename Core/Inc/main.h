@@ -76,6 +76,7 @@ extern uint16_t Task1_index_x1;
 extern uint16_t Task1_index_y1;
 extern uint16_t Task1_index_x2;
 extern uint16_t Task1_index_y2;
+extern uint16_t tim10_1ms;
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
