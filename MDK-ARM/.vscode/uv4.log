@@ -1,3 +1,68 @@
-Load "FlyAssistant-f407\\FlyAssistant-f407.axf" 
-Erase Done.Programming Done.Verify OK.Application running ...
-Flash Load finished at 01:22:54
+*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'FlyAssistant-f407'
+compiling patrol.c...
+../Inc/patrol.h(42): warning:  #1295-D: Deprecated declaration TaskOne_D - give arg types
+  
+ool TaskOne_D();
+..\Src\patrol.c(91): warning:  #177-D: variable "time" was declared but never referenced
+      static uint32_t time = 0;
+..\Src\patrol.c(92): warning:  #177-D: variable "is_time" was declared but never referenced
+      static bool is_time = 0;
+..\Src\patrol.c(169): warning:  #550-D: variable "old_index" was set but never used
+      static int index = 0, old_index = 0;
+..\Src\patrol.c(223): warning:  #550-D: variable "old_index" was set but never used
+      static int index = 0, old_index = 0;
+..\Src\patrol.c(351): warning:  #174-D: expression has no effect
+      path[0][0], path[0][1] = begin[0], begin[1];        //èµ?å§?ç‚?
+..\Src\patrol.c(367): warning:  #111-D: statement is unreachable
+          return 1; break;
+..\Src\patrol.c(369): warning:  #111-D: statement is unreachable
+          return 3; break;
+..\Src\patrol.c(370): warning:  #111-D: statement is unreachable
+      default: return 2; break;
+..\Src\patrol.c(347): warning:  #177-D: variable "circle_flag" was declared but never referenced
+      bool circle_flag[4] = {0};
+..\Src\patrol.c(380): warning:  #940-D: missing return statement at end of non-void function "Get_circle_2"
+  }
+..\Src\patrol.c(429): warning:  #550-D: variable "start_location" was set but never used
+      static int start_location[2] = {0};
+..\Src\patrol.c(489): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+              printf("pwm1_yaw:%d\r\n", 
+ax((int)(4500 - 80 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 200));
+..\Src\patrol.c(489): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+              printf("pwm1_yaw:%d\r\n", 
+ax((int)(4500 - 80 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 200));
+..\Src\patrol.c(490): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+              Set_PWM_Yaw(
+ax((int)(4500 - 80 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 200));
+..\Src\patrol.c(490): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+              Set_PWM_Yaw(
+ax((int)(4500 - 80 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 200));
+..\Src\patrol.c(494): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+              printf("pwm1_yaw:%d\r\n", 
+in((int)(4431 + 30 * exp(tar_yaw - cur_yaw - 3.1415926)), 4431 + 200));
+..\Src\patrol.c(494): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+              printf("pwm1_yaw:%d\r\n", 
+in((int)(4431 + 30 * exp(tar_yaw - cur_yaw - 3.1415926)), 4431 + 200));
+..\Src\patrol.c(495): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+              Set_PWM_Yaw(
+in((int)(4500 + 80 * exp(tar_yaw - cur_yaw - 3.1415926)), 4500 + 200));
+..\Src\patrol.c(495): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+              Set_PWM_Yaw(
+in((int)(4500 + 80 * exp(tar_yaw - cur_yaw - 3.1415926)), 4500 + 200));
+..\Src\patrol.c(539): warning:  #223-D: function "calculate_noPID_pwm" declared implicitly
+              pwm_y = calculate_noPID_pwm(cur_y, target_y, 0);
+..\Src\patrol.c(543): warning:  #223-D: function "calculate_noPID_pwm" declared implicitly
+              pwm_x = calculate_noPID_pwm(cur_x, target_x, 1);
+..\Src\patrol.c(683): warning:  #550-D: variable "start_location" was set but never used
+      static int start_location[2] = {0};
+..\Src\patrol.c(898): warning:  #940-D: missing return statement at end of non-void function "Open_view"
+  }
+..\Src\patrol.c(928): warning:  #1-D: last line of file ends without a newline
+  }
+..\Src\patrol.c: 25 warnings, 0 errors
+linking...
+Program Size: Code=46360 RO-data=1256 RW-data=1708 ZI-data=6588  
+FromELF: creating hex file...
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 25 Warning(s).
+Build Time Elapsed:  00:00:04

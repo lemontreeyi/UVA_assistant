@@ -72,6 +72,10 @@ extern uint16_t Task1_Point2_y;
 extern uint16_t Task1_Type1;
 extern uint16_t Task1_Type2;
 extern uint16_t Task2_Type;
+extern uint16_t Task1_index_x1;
+extern uint16_t Task1_index_y1;
+extern uint16_t Task1_index_x2;
+extern uint16_t Task1_index_y2;
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/

@@ -40,6 +40,7 @@ bool Throw_Moto(bool *is_begin, bool *is_over, bool *drop_over);
 bool rotato(float cur_yaw, float tar_yaw);
 
 bool TaskOne_D();
+void init_time_array();
 
 void TIM10_Set(uint8_t sta);
 

@@ -74,7 +74,11 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 				Task1_Point2_y = inBuf[9]<<8 | inBuf[8];
 				Task1_Type1 = inBuf[11]<<8 | inBuf[10];
 				Task1_Type2 = inBuf[13]<<8 | inBuf[12];
-				printf("%d %d %d %d %d %d", Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, Task1_Type1, Task1_Type2);
+				Task1_index_x1 = inBuf[15]<<8 | inBuf[14];
+				Task1_index_y1 = inBuf[17]<<8 | inBuf[16];
+				Task1_index_x2 = inBuf[19]<<8 | inBuf[18];
+				Task1_index_y2 = inBuf[21]<<8 | inBuf[20];
+				printf("Task1_Point1_x:%d Task1_Point1_y:%d Task1_Point2_x:%d Task1_Point2_y:%d Task1_Type1:%d Task1_Type2:%d Task1_index_x1:%d Task1_index_y1:%d Task1_index_x2:%d Task1_index_y2:%d\r\n", Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, Task1_Type1, Task1_Type2, Task1_index_x1, Task1_index_y1, Task1_index_x1, Task1_index_y2);
 				return 3;
 			}
 			else if(inBuf[1] == '4')		//ÏòÓÒ·É

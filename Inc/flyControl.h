@@ -112,7 +112,7 @@ void Unlock(void);
 void Lock(void);
 void Take_off_Preper(void);
 void Take_off(float target_height, float current_height);
-void land(int current_height);
+bool land(int current_height)
 void Go_ahead(uint16_t pulse);
 void Go_back(uint16_t pulse);
 void Go_left(uint16_t pulse);

@@ -1,4 +1,5 @@
 #include "patrol.h"
+#include "main.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -25,6 +26,7 @@ bool taskone_state = 0;
 int count_time = 0;
 bool time_over = 0;
 bool start_time = 0;
+int time_array[5][5];
 
 //用于重置路径点标志位
 void reset_path_flag(bool path_flag[], int len)
@@ -402,7 +404,7 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
     if(abs(height - 1500) > 100 && *is_takeoff==1)
     {
         Take_off(1500, height);
-        if(height < 250) Set_PWM_Roll(4500 + 60);
+        if(height < 450) Set_PWM_Roll(4500 + 150);
         takeoff_Time = HAL_GetTick();
     }
     else if(height > 1400 && *is_takeoff==1)
@@ -844,7 +846,7 @@ bool fly_z(bool direction, int time)
     }
     else
     {
-        Set_PWM_Thr(4500 + (direction?-300:300));
+        Set_PWM_Thr(4500 + (direction?-600:600));
         return false;
     }
 }
@@ -891,8 +893,26 @@ bool beep_on(int time)
 
 bool Open_view(uint16_t TaskType)
 {
-
+    Pack_cmd_buf(TaskType, 1, cmd_buf);
+    BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+    t1_opt_flag = 1;
 }
+
+bool Open_view(uint16_t TaskType)
+{
+    Pack_cmd_buf(TaskType, 0, cmd_buf);
+    BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+    t1_opt_flag = 0;
+}
+
+void init_time_array()
+{
+    for(int i = 0; i < 5; ++i)
+        for(int j = 0; j < 5; ++j)
+            time_array[i][j] = 0;
+    time_array[1][1] = 1000;
+}
+
 bool TaskOne_D()
 {
     switch (taskone_state)
@@ -902,15 +922,33 @@ bool TaskOne_D()
         taskone_state = 1;
         break;
     case 1:
-        fly_x(1, 3000);
+        fly_x(1, time_array[Task1_index_x1][Task1_index_y1]);
         taskone_state = 2;
         break;
     case 2:
         switch_mode(1, 1500);
         taskone_state = 3;
         break;
+    case 3:
+        Open_view(Task1_Type1);
+        taskone_state = 4;
+        break;
+    case 4:
+        fly_z(1, 200);
+        taskone_state = 5;
+        break;
+    case 5:
+        drop_goods(1, 7000);
+        taskone_state = 6;
+        break;
     default:
         return true;
+    }
+    if(t1_opt_flag)
+    {
+        Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y, 0, 0);
+        Set_PWM_Pitch(pwm_pitch_SensorOut);
+        Set_PWM_Pitch(pwm_roll_SensorOut);
     }
     return false;
 }

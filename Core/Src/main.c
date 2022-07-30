@@ -208,6 +208,10 @@ uint16_t Task1_Point2_x = 150;
 uint16_t Task1_Point2_y = 163;
 uint16_t Task1_Type1 = 4;
 uint16_t Task1_Type2 = 3;
+uint16_t Task1_index_x1;
+uint16_t Task1_index_y1;
+uint16_t Task1_index_x2;
+uint16_t Task1_index_y2;
 //Task2
 uint16_t Task2_Type;
 /*
@@ -413,7 +417,7 @@ int main(void)
 	
 	//Attitude init
 	Attitude_init(&Attitude);
-
+	init_time_array();
 	//patrol init
 	//init_flypath();
 	//蜂鸣器定时器初始化
@@ -592,7 +596,7 @@ int main(void)
 						if(takeoff(height, location_esm, &is_takeoff, &is_settarget))
 						{
 							BEEP_ON();
-							HAL_Delay(400);
+							HAL_Delay(1000);
 							BEEP_OFF();
 							task = 2;
 						}
@@ -602,19 +606,15 @@ int main(void)
 						if(TaskOne_D())
 						{
 							BEEP_ON();
-							HAL_Delay(400);
+							HAL_Delay(1000);
 							BEEP_OFF();
 							// task = 3;
 						}
 						break;
 					case 3:
-						//步骤3:返回起飞点并降落
-						if(landon_C(height,location_esm,&is_SetLandStartPoint))
+						//步骤3:降落
+						if(land(height))
 						{
-							BEEP_ON();
-							HAL_Delay(400);
-							BEEP_OFF();
-							Set_PWM_Thr(3000);
 							task = 4;
 						}
 					default:
