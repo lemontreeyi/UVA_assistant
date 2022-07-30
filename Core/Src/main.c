@@ -1232,7 +1232,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		if (tim10_1ms == count_time) 
 		{
 			time_over = 1;
-			start_time = 0;
+			// start_time = 0;
 			TIM10->SR &= ~(1 << 0);
 			TIM10_Set(0);
 			tim10_1ms = 0;

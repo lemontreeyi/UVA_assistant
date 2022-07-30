@@ -942,60 +942,84 @@ bool TaskOne_D()
     switch (taskone_state)
     {
     case 0: 
-        if(switch_mode(0, 1500))
+        if(switch_mode(0, 1500)){
             taskone_state = 1;
+            start_time = 0;
+        }
         break;
     case 1:
-        if(fly_x(1, time_array[Task1_index_x1][Task1_index_y1]))
+        if(fly_x(1, time_array[Task1_index_x1][Task1_index_y1])){
             taskone_state = 2;
+            start_time = 0;
+        }
         break;
     case 2:
-        if(switch_mode(1, 1500))
+        if(switch_mode(1, 1500)){
             taskone_state = 3;
+            start_time = 0;
+        }
         break;
     case 3:
         Open_view(Task1_Type1);
         taskone_state = 4;
         break;
     case 4:
-        if(fly_z(1, 200))
+        if(fly_z(1, 200)){
             taskone_state = 5;
+            start_time = 0;
+        }
         break;
     case 5:
-        if(drop_goods(1, 7000))
+        if(drop_goods(1, 7000)){
             taskone_state = 6;
+            start_time = 0;
+        }
         break;
     case 6:
-        if(beep_on(5000))
+        if(beep_on(5000)){
             taskone_state = 7;
+            start_time = 0;
+        }
         break;
     case 7:
-        if(drop_goods(0, 7000))
+        if(drop_goods(0, 7000)){
             taskone_state = 8;
+            start_time = 0;
+        }
         break;
     case 8:
-        if(fly_z(0, 200))
+        if(fly_z(0, 200)){
             taskone_state = 9;
+            start_time = 0;
+        }
         break;
     case 9:
         Close_view(Task1_Type1);
         taskone_state = 10;
         break;
     case 10:
-        if(switch_mode(0, 1500))
+        if(switch_mode(0, 1500)){
             taskone_state = 11;
+            start_time = 0;
+        }
         break;
     case 11:
-        if(fly_x(0, time_array[Task1_index_x1][Task1_index_x2]))
+        if(fly_x(0, time_array[Task1_index_x1][Task1_index_x2])){
             taskone_state = 10;
+            start_time = 0;
+        }
         break;
     case 12:
-        if(switch_mode(1, 1500))
+        if(switch_mode(1, 1500)){
             taskone_state = 13;
+            start_time = 0;
+        }
         break;
     case 13:
-        if(view_location(Task1_Type1, 5000))
+        if(view_location(Task1_Type1, 5000)){
             taskone_state = 14;
+            start_time = 0;
+        }
         break;
     default:
         return true;

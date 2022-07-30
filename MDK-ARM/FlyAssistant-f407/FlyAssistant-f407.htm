@@ -3,7 +3,7 @@
 <title>Static Call Graph - [FlyAssistant-f407\FlyAssistant-f407.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image FlyAssistant-f407\FlyAssistant-f407.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Jul 31 03:23:02 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060061: Last Updated: Sun Jul 31 03:45:41 2022
 <BR><P>
 <H3>Maximum Stack Usage =        808 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1157,7 +1157,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[be]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 220 bytes, Stack size 16 bytes, main.o(i.HAL_TIM_PeriodElapsedCallback))
+<P><STRONG><a name="[be]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 216 bytes, Stack size 16 bytes, main.o(i.HAL_TIM_PeriodElapsedCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = HAL_TIM_PeriodElapsedCallback
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_USART_DisableIT_RXNE
@@ -1892,8 +1892,8 @@ Global Symbols
 <LI><a href="#[1ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;takeoff
 </UL>
 
-<P><STRONG><a name="[122]"></a>TaskOne_D</STRONG> (Thumb, 242 bytes, Stack size 24 bytes, patrol.o(i.TaskOne_D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = TaskOne_D &rArr; Loiter &rArr; PIDCalc &rArr; __aeabi_d2f
+<P><STRONG><a name="[122]"></a>TaskOne_D</STRONG> (Thumb, 254 bytes, Stack size 32 bytes, patrol.o(i.TaskOne_D))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = TaskOne_D &rArr; Loiter &rArr; PIDCalc &rArr; __aeabi_d2f
 </UL>
 <BR>[Calls]<UL><LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_PWM_Pitch
 <LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Loiter
