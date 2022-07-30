@@ -319,23 +319,23 @@ void Take_off_Preper(void)
 =====================================================================================================*/ 
 void Take_off(float target_height, float current_height)//mm
 {	
-	if(fabs(current_height - target_height) < 100.0){
+	if(current_height > target_height - 100.0){
 		Set_PWM_Thr(4500);
 		//printf("get thr mid!\r\n");
 	}
-	else if(fabs(current_height - target_height) > 100.0)
+	else
 	{	
 		//printf("get in thr control!\r\n");
-		if(current_height < target_height) {
-			printf("pwm_thr:%d\r\n", (int)(4500 + 1050 * exp((-current_height / target_height) * 1.3)));
-			Set_PWM_Thr((int)(4500 + 1050 * exp((-current_height / target_height) * 1.3)));
+		// if(current_height < target_height) {
+		printf("pwm_thr:%d\r\n", (int)(4500 + 950 * exp((-current_height / target_height) * 1.3)));
+		Set_PWM_Thr((int)(4500 + 950 * exp((-current_height / target_height) * 1.3)));
 			// printf("cur_distance = %f\r\n", current_height);
-		}
-		else 
-		{
-			Set_PWM_Thr((int)(4500 - 700 * exp((current_height - 2 * target_height) / target_height)));
-			printf("pwm_thr:%d\r\n", (int)(4500 - 700 * exp((current_height - 2 * target_height) / target_height)));
-		}
+		// }
+		// else 
+		// {
+		// 	Set_PWM_Thr((int)(4500 - 700 * exp((current_height - 2 * target_height) / target_height)));
+		// 	printf("pwm_thr:%d\r\n", (int)(4500 - 700 * exp((current_height - 2 * target_height) / target_height)));
+		// }
 	}	
 }
 

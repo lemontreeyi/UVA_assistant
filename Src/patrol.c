@@ -396,12 +396,12 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
     if(abs(height - 1500) > 100 && *is_takeoff==1)
     {
         Take_off(1500, height);
-        if(height < 50) Set_PWM_Roll(4500 + 52);
+        if(height < 250) Set_PWM_Roll(4500 + 60);
         takeoff_Time = HAL_GetTick();
     }
-    else if(fabs(height - 1500) <= 100 && *is_takeoff==1)
+    else if(height > 1400 && *is_takeoff==1)
     {
-        *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 1000)?0:1;
+        *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 3000)?0:1;
         if(*is_takeoff == 0)
         {
             // Pack_cmd_buf(0, 0, cmd_buf);
@@ -459,14 +459,14 @@ bool rotato(float cur_yaw, float tar_yaw)
     {
         if(cur_yaw - tar_yaw < -0.125f)
         {
-            Set_PWM_Yaw(min((int)(4500 + 30 * exp(tar_yaw - cur_yaw)), 4500 + 120));//右转
-            printf("pwm_yaw:%d\r\n", min((int)(4500 + 30 * exp(tar_yaw - cur_yaw)), 4500 + 120));
+            Set_PWM_Yaw(min((int)(4500 + 80 * exp(tar_yaw - cur_yaw)), 4500 + 200));//右转
+            printf("pwm_yaw:%d\r\n", min((int)(4500 + 80 * exp(tar_yaw - cur_yaw)), 4500 + 200));
         }
             
         else if(cur_yaw - tar_yaw > 0.125f)
         {
-            Set_PWM_Yaw(max((int)(4500 - 30 * exp(cur_yaw - tar_yaw)), 4500 - 120));
-            printf("pwm_yaw:%d\r\n", max((int)(4500 - 30 * exp(cur_yaw - tar_yaw)), 4500 - 120));
+            Set_PWM_Yaw(max((int)(4500 - 80 * exp(cur_yaw - tar_yaw)), 4500 - 200));
+            printf("pwm_yaw:%d\r\n", max((int)(4500 - 80 * exp(cur_yaw - tar_yaw)), 4500 - 200));
         }
         else
         {
@@ -478,13 +478,13 @@ bool rotato(float cur_yaw, float tar_yaw)
     {
         if(cur_yaw - tar_yaw < 0)
         {
-            printf("pwm1_yaw:%d\r\n", max((int)(4500 - 30 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 120));
-            Set_PWM_Yaw(max((int)(4500 - 30 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 120));
+            printf("pwm1_yaw:%d\r\n", max((int)(4500 - 80 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 200));
+            Set_PWM_Yaw(max((int)(4500 - 80 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 200));
         }     
         else
         {
-            printf("pwm1_yaw:%d\r\n", min((int)(4431 + 30 * exp(tar_yaw - cur_yaw - 3.1415926)), 4431 + 120));
-            Set_PWM_Yaw(min((int)(4500 + 30 * exp(tar_yaw - cur_yaw - 3.1415926)), 4500 + 120));
+            printf("pwm1_yaw:%d\r\n", min((int)(4431 + 30 * exp(tar_yaw - cur_yaw - 3.1415926)), 4431 + 200));
+            Set_PWM_Yaw(min((int)(4500 + 80 * exp(tar_yaw - cur_yaw - 3.1415926)), 4500 + 200));
         }
             
     }
