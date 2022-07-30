@@ -404,7 +404,7 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
     if(abs(height - 1500) > 100 && *is_takeoff==1)
     {
         Take_off(1500, height);
-        if(height < 450) Set_PWM_Roll(4500 + 150);
+        // if(height < 450) Set_PWM_Roll(4500 + 150);
         takeoff_Time = HAL_GetTick();
     }
     else if(height > 1400 && *is_takeoff==1)
@@ -468,13 +468,13 @@ bool rotato(float cur_yaw, float tar_yaw)
         if(cur_yaw - tar_yaw < -0.125f)
         {
             Set_PWM_Yaw(min((int)(4500 + 80 * exp(tar_yaw - cur_yaw)), 4500 + 200));//右转
-            printf("pwm_yaw:%d\r\n", min((int)(4500 + 120 * exp(tar_yaw - cur_yaw)), 4500 + 200));
+            // printf("pwm_yaw:%d\r\n", min((int)(4500 + 120 * exp(tar_yaw - cur_yaw)), 4500 + 200));
         }
             
         else if(cur_yaw - tar_yaw > 0.125f)
         {
             Set_PWM_Yaw(max((int)(4500 - 80 * exp(cur_yaw - tar_yaw)), 4500 - 200));
-            printf("pwm_yaw:%d\r\n", max((int)(4500 - 120 * exp(cur_yaw - tar_yaw)), 4500 - 200));
+            // printf("pwm_yaw:%d\r\n", max((int)(4500 - 120 * exp(cur_yaw - tar_yaw)), 4500 - 200));
         }
         else
         {
@@ -783,6 +783,7 @@ bool fly_x(bool direction, int time)
     else
     {
         Set_PWM_Roll(4500 + (direction?400:-400));
+        printf("pwm_roll:%d\r\n", 4500 + (direction?400:-400));
         return false;
     }
 }
@@ -847,6 +848,7 @@ bool fly_z(bool direction, int time)
     else
     {
         Set_PWM_Thr(4500 + (direction?-600:600));
+        printf("pwm_thr:%d\r\n", 4500 + (direction?-600:600));
         return false;
     }
 }
@@ -872,6 +874,11 @@ bool drop_goods(bool direction, int time)
         Moto_stable();
         return true;
     }
+    if(direction == 0 && HAL_GPIO_ReadPin(GPIOC,Moto_Pin_Pin) == GPIO_PIN_SET)
+    {
+        Moto_stable();
+        return true;
+    }
     return false;
 }
 //time是蜂鸣器项的时间
@@ -891,14 +898,14 @@ bool beep_on(int time)
     return false;
 }
 
-bool Open_view(uint16_t TaskType)
+void Open_view(uint16_t TaskType)
 {
     Pack_cmd_buf(TaskType, 1, cmd_buf);
     BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
     t1_opt_flag = 1;
 }
 
-bool Open_view(uint16_t TaskType)
+void Close_view(uint16_t TaskType)
 {
     Pack_cmd_buf(TaskType, 0, cmd_buf);
     BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
@@ -913,33 +920,82 @@ void init_time_array()
     time_array[1][1] = 1000;
 }
 
+bool view_location(uint16_t TaskType, int time)
+{
+    if(!start_time)
+    {
+        Open_view(TaskType);
+        count_time = time;//计时时间
+        TIM10_Set(1);
+    }
+    if(time_over)
+    {
+        Close_view(TaskType);
+        return true;
+    }
+    return false;
+}
+
 bool TaskOne_D()
 {
+    printf("takeone_state:%d\r\n", taskone_state);
     switch (taskone_state)
     {
     case 0: 
-        switch_mode(0, 1500);
-        taskone_state = 1;
+        if(switch_mode(0, 1500))
+            taskone_state = 1;
         break;
     case 1:
-        fly_x(1, time_array[Task1_index_x1][Task1_index_y1]);
-        taskone_state = 2;
+        if(fly_x(1, time_array[Task1_index_x1][Task1_index_y1]))
+            taskone_state = 2;
         break;
     case 2:
-        switch_mode(1, 1500);
-        taskone_state = 3;
+        if(switch_mode(1, 1500))
+            taskone_state = 3;
         break;
     case 3:
         Open_view(Task1_Type1);
         taskone_state = 4;
         break;
     case 4:
-        fly_z(1, 200);
-        taskone_state = 5;
+        if(fly_z(1, 200))
+            taskone_state = 5;
         break;
     case 5:
-        drop_goods(1, 7000);
-        taskone_state = 6;
+        if(drop_goods(1, 7000))
+            taskone_state = 6;
+        break;
+    case 6:
+        if(beep_on(5000))
+            taskone_state = 7;
+        break;
+    case 7:
+        if(drop_goods(0, 7000))
+            taskone_state = 8;
+        break;
+    case 8:
+        if(fly_z(0, 200))
+            taskone_state = 9;
+        break;
+    case 9:
+        Close_view(Task1_Type1);
+        taskone_state = 10;
+        break;
+    case 10:
+        if(switch_mode(0, 1500))
+            taskone_state = 11;
+        break;
+    case 11:
+        if(fly_x(0, time_array[Task1_index_x1][Task1_index_x2]))
+            taskone_state = 10;
+        break;
+    case 12:
+        if(switch_mode(1, 1500))
+            taskone_state = 13;
+        break;
+    case 13:
+        if(view_location(Task1_Type1, 5000))
+            taskone_state = 14;
         break;
     default:
         return true;
