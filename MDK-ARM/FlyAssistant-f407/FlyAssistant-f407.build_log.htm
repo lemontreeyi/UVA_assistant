@@ -3,84 +3,62 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.17.0.0
-Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: X Kraft, XKraft, LIC=RC9X7-EPC47-AQ80M-XPAKG-NX0RT-V0U3E
+IDE-Version: ¦ÌVision V5.23.0.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 2041729, HP Inc., LIC=P6F56-DKL4I-JPTZQ-NPAAZ-GJ9CY-5X6VK
  
 Tool Versions:
-Toolchain:       MDK-ARM Standard  Version: 5.17
-Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
-C Compiler:      Armcc.exe V5.06 update 1 (build 61)
-Assembler:       Armasm.exe V5.06 update 1 (build 61)
-Linker/Locator:  ArmLink.exe V5.06 update 1 (build 61)
-Library Manager: ArmAr.exe V5.06 update 1 (build 61)
-Hex Converter:   FromElf.exe V5.06 update 1 (build 61)
-CPU DLL:         SARMCM3.DLL V5.17
-Dialog DLL:      DCM.DLL V1.13.4.0
+Toolchain:       MDK-ARM Professional  Version: 5.23
+Toolchain Path:  F:\Tools\KEIL_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 4 (build 422)
+Assembler:       Armasm.exe V5.06 update 4 (build 422)
+Linker/Locator:  ArmLink.exe V5.06 update 4 (build 422)
+Library Manager: ArmAr.exe V5.06 update 4 (build 422)
+Hex Converter:   FromElf.exe V5.06 update 4 (build 422)
+CPU DLL:         SARMCM3.DLL V5.23
+Dialog DLL:      DCM.DLL V1.15.0.0
 Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
-Dialog DLL:      TCM.DLL V1.14.6.0
+Dialog DLL:      TCM.DLL V1.27.0.0
  
 <h2>Project:</h2>
-d:\study\ardupilot\UVA_assistant\MDK-ARM\FlyAssistant-f407.uvprojx
-Project File Date:  07/29/2022
+f:\User\lemon\Desktop\FlyAssistant\FlyAssistant_f407\UVA_assistant\MDK-ARM\FlyAssistant-f407.uvprojx
+Project File Date:  07/30/2022
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'F:\Tools\KEIL_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant-f407'
-compiling patrol.c...
-..\Src\patrol.c(79): warning:  #177-D: variable "time" was declared but never referenced
-      static uint32_t time = 0;
-..\Src\patrol.c(80): warning:  #177-D: variable "is_time" was declared but never referenced
-      static bool is_time = 0;
-..\Src\patrol.c(157): warning:  #550-D: variable "old_index" was set but never used
-      static int index = 0, old_index = 0;
-..\Src\patrol.c(211): warning:  #550-D: variable "old_index" was set but never used
-      static int index = 0, old_index = 0;
-..\Src\patrol.c(339): warning:  #174-D: expression has no effect
-      path[0][0], path[0][1] = begin[0], begin[1];        //èµ?å§?ç‚?
-..\Src\patrol.c(355): warning:  #111-D: statement is unreachable
-          return 1; break;
-..\Src\patrol.c(357): warning:  #111-D: statement is unreachable
-          return 3; break;
-..\Src\patrol.c(358): warning:  #111-D: statement is unreachable
-      default: return 2; break;
-..\Src\patrol.c(335): warning:  #177-D: variable "circle_flag" was declared but never referenced
-      bool circle_flag[4] = {0};
-..\Src\patrol.c(368): warning:  #940-D: missing return statement at end of non-void function "Get_circle_2"
-  }
-..\Src\patrol.c(416): warning:  #550-D: variable "start_location" was set but never used
-      static int start_location[2] = {0};
-..\Src\patrol.c(505): warning:  #223-D: function "calculate_noPID_pwm" declared implicitly
-              pwm_y = calculate_noPID_pwm(cur_y, target_y, 0);
-..\Src\patrol.c(509): warning:  #223-D: function "calculate_noPID_pwm" declared implicitly
-              pwm_x = calculate_noPID_pwm(cur_x, target_x, 1);
-..\Src\patrol.c(648): warning:  #550-D: variable "start_location" was set but never used
-      static int start_location[2] = {0};
-..\Src\patrol.c(741): warning:  #1-D: last line of file ends without a newline
-  // }
-..\Src\patrol.c: 15 warnings, 0 errors
+compiling flyControl.c...
+..\Src\flyControl.c(144): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  		if(flag) out *= 0.5;
+..\Src\flyControl.c(330): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  			printf("pwm_thr:%d\r\n", (int)(4500 + 1050 * exp((-current_height / target_height) * 1.3)));
+..\Src\flyControl.c(331): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  			Set_PWM_Thr((int)(4500 + 1050 * exp((-current_height / target_height) * 1.3)));
+..\Src\flyControl.c(490): warning:  #177-D: variable "h"  was declared but never referenced
+  	int h = 50;
+..\Src\flyControl.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=45948 RO-data=1084 RW-data=1704 ZI-data=6488  
+Program Size: Code=46112 RO-data=1080 RW-data=1692 ZI-data=6484  
 FromELF: creating hex file...
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 15 Warning(s).
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
 Package Vendor: ARM
-                http://www.keil.com/pack/ARM.CMSIS.4.5.0.pack
-                ARM::CMSIS:CORE:4.3.0
+                http://www.keil.com/pack/ARM.CMSIS.5.0.1.pack
+                ARM::CMSIS:CORE:5.0.1
                 CMSIS (Cortex Microcontroller Software Interface Standard)
-   * Component: CORE Version: 4.3.0
+   * Component: CORE Version: 5.0.1
 
 <h2>Collection of Component include folders:</h2>
-  d:\study\ardupilot\UVA_assistant\MDK-ARM\RTE
-  C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
-  C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+  .\RTE\_FlyAssistant-f407
+  F:\Tools\KEIL_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include
+  F:\Tools\KEIL_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
 
-   * Component: ARM::CMSIS:CORE:4.3.0
-Build Time Elapsed:  00:00:03
+   * Component: ARM::CMSIS:CORE:5.0.1
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

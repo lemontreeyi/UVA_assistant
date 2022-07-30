@@ -19,7 +19,7 @@ bool is_start_drop_goods = 0;
 uint32_t drop_time = 0;
 uint32_t stable_time = 0;
 bool is_count_time = 0;
-bool is_begin = 0, is_over = 0;
+bool is_begin = 0, is_over = 0, send_over = 0;
 //用于重置路径点标志位
 void reset_path_flag(bool path_flag[], int len)
 {
@@ -29,8 +29,12 @@ void reset_path_flag(bool path_flag[], int len)
 //清除投放货物过程的标志位
 void clear_drop_goods_flag()
 {
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < 6; ++i)
         drop_goods_flag[i] = 0;
+    is_begin = 0;
+    is_over = 0;
+    send_over = 0;
+    is_count_time = 0; 
 }
 
 //用于自动更新下一个目标点，更新半径为35cm
@@ -371,7 +375,7 @@ int Get_circle_2(int current_height, int target_height)
 bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_settarget)
 {
     static uint32_t takeoff_Time = 0;
-    static int next_target[2] = {0};
+    // static int next_target[2] = {0};
 
     if(!(*is_settarget))
     {
@@ -380,28 +384,29 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
         *is_settarget = 1;
     }
 
-    set_NextLocation(current_location, takeoff_location, next_target);
-    Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1]);
-    Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location, 0);
+    // set_NextLocation(current_location, takeoff_location, next_target);
+    // Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1]);
+    // Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location, 0);
 
-    printf("height = %d\r\n", height);
-    printf("x:%f y:%f\r\n", current_location[0], current_location[1]);
-    printf("takeoff_x:%d takeoff_y:%d\r\n", takeoff_location[0], takeoff_location[1]);
-    printf("mini_tar_x:%d mini_tar_y:%d\r\n", next_target[0], next_target[1]);
+    // printf("height = %d\r\n", height);
+    // printf("x:%f y:%f\r\n", current_location[0], current_location[1]);
+    // printf("takeoff_x:%d takeoff_y:%d\r\n", takeoff_location[0], takeoff_location[1]);
+    // printf("mini_tar_x:%d mini_tar_y:%d\r\n", next_target[0], next_target[1]);
 
     if(abs(height - 1500) > 100 && *is_takeoff==1)
     {
         Take_off(1500, height);
+        if(height < 50) Set_PWM_Roll(4500 + 52);
         takeoff_Time = HAL_GetTick();
     }
     else if(fabs(height - 1500) <= 100 && *is_takeoff==1)
     {
-        *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 3000)?0:1;
+        *is_takeoff = ((HAL_GetTick() - takeoff_Time) > 1000)?0:1;
         if(*is_takeoff == 0)
         {
-            Pack_cmd_buf(0, 0, cmd_buf);
-            BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
-            t1_opt_flag = 0;
+            // Pack_cmd_buf(0, 0, cmd_buf);
+            // BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+            // t1_opt_flag = 0;
 
             Set_PWM_Thr(4500);
             return true;
@@ -448,6 +453,44 @@ bool shootphoto(float target_x, float target_y, float* current_location, USART_T
     return false;
 }
 
+bool rotato(float cur_yaw, float tar_yaw)
+{
+    if(abs(cur_yaw - tar_yaw) < 3.1415926 / 2.0)
+    {
+        if(cur_yaw - tar_yaw < -0.125f)
+        {
+            Set_PWM_Yaw(min((int)(4500 + 30 * exp(tar_yaw - cur_yaw)), 4500 + 120));//右转
+            printf("pwm_yaw:%d\r\n", min((int)(4500 + 30 * exp(tar_yaw - cur_yaw)), 4500 + 120));
+        }
+            
+        else if(cur_yaw - tar_yaw > 0.125f)
+        {
+            Set_PWM_Yaw(max((int)(4500 - 30 * exp(cur_yaw - tar_yaw)), 4500 - 120));
+            printf("pwm_yaw:%d\r\n", max((int)(4500 - 30 * exp(cur_yaw - tar_yaw)), 4500 - 120));
+        }
+        else
+        {
+            Set_PWM_Yaw(4500);
+            return true;
+        }  
+    }
+    else
+    {
+        if(cur_yaw - tar_yaw < 0)
+        {
+            printf("pwm1_yaw:%d\r\n", max((int)(4500 - 30 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 120));
+            Set_PWM_Yaw(max((int)(4500 - 30 * exp(tar_yaw - cur_yaw + 3.1415926)), 4500 - 120));
+        }     
+        else
+        {
+            printf("pwm1_yaw:%d\r\n", min((int)(4431 + 30 * exp(tar_yaw - cur_yaw - 3.1415926)), 4431 + 120));
+            Set_PWM_Yaw(min((int)(4500 + 30 * exp(tar_yaw - cur_yaw - 3.1415926)), 4500 + 120));
+        }
+            
+    }
+    return false;
+}
+
 //纠正姿态
 bool fixyaw(float yaw)
 {
@@ -461,25 +504,8 @@ bool fixyaw(float yaw)
             is_inityaw = 1;
         }        
     }
-    if(yaw < 0 && yaw > -150.0 / 180.0 * 3.14159 && is_inityaw)
-    {
-        if(yaw - init_yaw < -0.175f)
-        {
-            // printf("pwm_yaw:%f\r\n", 4431 + 100 * (exp(init_yaw - yaw) - 1));
-            Set_PWM_Yaw(min(4431 + 80 * exp(init_yaw - yaw), 4631));//右转
-        }         
-        else if(yaw - init_yaw > 0.175f)
-        {
-            // printf("pwm_yaw:%f\r\n", 4431 - 100 * (exp(yaw - init_yaw) - 1));
-            Set_PWM_Yaw(max(4431 - 80 * exp(yaw - init_yaw), 4231));//左转
-        }
-        else
-        {
-            Set_PWM_Yaw(4431);//回中
-        }    
-    }
-    else
-        Set_PWM_Yaw(4431);//回中
+    if(is_inityaw)
+        rotato(yaw, init_yaw);
     return is_inityaw;
 }
 
@@ -558,8 +584,8 @@ bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2
     printf("height = %d\r\n", height);
     printf("x:%f y:%f\r\n", cur_location[0], cur_location[1]);
     printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
-    printf("flag:%d %d %d %d %d\r\n", drop_goods_flag[0], drop_goods_flag[1], drop_goods_flag[2], drop_goods_flag[3], drop_goods_flag[4]);
-
+    printf("flag:%d %d %d %d %d %d\r\n", drop_goods_flag[0], drop_goods_flag[1], drop_goods_flag[2], drop_goods_flag[3], drop_goods_flag[4],drop_goods_flag[5]);
+    //flag0 -> 开始降到80cm
     if(drop_goods_flag[0] == 1)
     {
         if(abs(height - 800) > 100)
@@ -578,43 +604,44 @@ bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2
             }
         }
     }
+    //flag1 -> 开始投下快递，投递5s后停止下降
     else if(drop_goods_flag[1] == 1)//舵机下降
     {
-        Throw_Moto(&is_begin, &is_over);
+        Throw_Moto(&is_begin, &is_over, &send_over);
     }
+    //flag2 -> 投递完成后，计时5s，将send_over打开
     else if(drop_goods_flag[2] == 1)
     {
-        if(((int)(cur_location[0] * 100) - next_target[0]) * ((int)(cur_location[0] * 100) - next_target[0]) + ((int)(cur_location[1] * 100) - next_target[1]) * ((int)(cur_location[1] * 100) - next_target[1]) < 30 * 30)
+        if(!is_count_time)
         {
-            if(!is_count_time)
-            {
-                stable_time = HAL_GetTick();
-                is_count_time = 1;
-            }
-            if(HAL_GetTick() - stable_time > 5000)
-            {
-                drop_goods_flag[3] = 1;
-                drop_goods_flag[2] = 0;
-                is_over = 1;
-                BEEP_ON();
-                HAL_Delay(100);
-                BEEP_OFF();
-            }
+            stable_time = HAL_GetTick();
+            is_count_time = 1;
         }
-        else
+        if(HAL_GetTick() - stable_time > 5000)
         {
-            is_count_time = 0;
+            drop_goods_flag[3] = 1;
+            drop_goods_flag[2] = 0;
+            is_over = 1;
+            BEEP_ON();
+            HAL_Delay(100);
+            BEEP_OFF();
         }
     }
+    //flag3 -> 直接收上来快递,收完后蜂鸣器提醒
     else if(drop_goods_flag[3] == 1)
     {
-        if(Throw_Moto(&is_begin, &is_over))
+        if(Throw_Moto(&is_begin, &is_over, &send_over))
         {
             is_over = 0;
             drop_goods_flag[4] = 1;
             drop_goods_flag[3] = 0;
+            BEEP_ON();
+            HAL_Delay(100);
+            BEEP_OFF();
+            printf("get up finished...\r\n");
         }
     }
+    //flag4 -> 高度升到1.5m
     else if(drop_goods_flag[4] == 1)
     {
         if(abs(height - 1500) > 100)
@@ -637,8 +664,8 @@ bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2
         to_one_point(cur_location, next_target, Task1_Type1, is_near_target + index, 1);
     else if(index == 3)
         to_one_point(cur_location, next_target, Task1_Type2, is_near_target + index, 1);
-    else
-        to_one_point(cur_location, next_target, 8, is_near_target + index, 0);//无效视觉
+    else if(index == 0 || index == 2)
+        to_one_point(cur_location, next_target, 8, is_near_target +index, 0);//无效视觉
     if(index == 4) return true;
     else return false;
 }
@@ -648,6 +675,7 @@ bool landon_C(int height, float* current_location, bool *is_SetStartPoint)
     static int start_location[2] = {0};
     int path[2][2], index = 0;
     int next_target[2];
+    
     //设置任务的起始点
     if(!(*is_SetStartPoint))
     {
@@ -655,6 +683,8 @@ bool landon_C(int height, float* current_location, bool *is_SetStartPoint)
         start_location[1] = current_location[1];
         *is_SetStartPoint = 1;
     }
+    path[0][0] = takeoff_location[0]; path[0][1] = Task1_Point2_y;
+    path[1][0] = takeoff_location[0]; path[1][1] = takeoff_location[1];
     index = getCurrentTarget(current_location, next_target, 2, ld_path_flag, path, 10, 0, 8);
 
     printf("height = %d\r\n", height);
@@ -699,8 +729,9 @@ void Moto_stable()
 func:调用时，进行投递货物任务
 param1->is_begin：开始投递货物，放下砝码，滴答定时器计时到一定时间后停止下降
 param2->is_over：结束投递货物，开始上升砝码，读到开关电平时保持静止
+param3->drop_over：下降完成后置1
 */
-bool Throw_Moto(bool *is_begin, bool *is_over)
+bool Throw_Moto(bool *is_begin, bool *is_over, bool *drop_over)
 {
     static uint32_t down_time;
     if(*is_begin)
@@ -709,11 +740,12 @@ bool Throw_Moto(bool *is_begin, bool *is_over)
         Moto_Down();
         *is_begin  = false;
     }
-    if (HAL_GetTick() - down_time >= 10000)
+    if (HAL_GetTick() - down_time >= 7000 && *drop_over == false)
     {
         Moto_stable();
         drop_goods_flag[1] = 0;
         drop_goods_flag[2] = 1;
+        *drop_over = true;
     }
     if(*is_over)
     {

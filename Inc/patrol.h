@@ -32,6 +32,7 @@ bool fixyaw(float yaw);
 void Moto_Down(void);
 void Moto_Up(void);
 void Moto_stable(void);
-bool Throw_Moto(bool *is_begin, bool *is_over);
+bool Throw_Moto(bool *is_begin, bool *is_over, bool *drop_over);
+bool rotato(float cur_yaw, float tar_yaw);
 
 #endif

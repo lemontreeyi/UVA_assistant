@@ -537,7 +537,7 @@ int main(void)
 					// location[1] = ky * location[1] + dy;
 					location_esm[0] = kalman_calc(&kalman_x, location[0]);
 					location_esm[1] = kalman_calc(&kalman_y, location[1]);//对x,y进行卡尔曼滤�?
-          			printf("kal_x:%f kal_y:%f\r\n", location_esm[0], location_esm[1]);
+          			printf("kal_x:%f kal_y:%f, height:%d\r\n", location_esm[0], location_esm[1], height);
 					Dtime = HAL_GetTick() - Cxof_Time;
           			calculate_cxof(location_esm, d_location, speed, Dtime);//计算光流
 					// printf("vx:%f, vy:%f, dtime:%d\r\n",speed[0], speed[1],Dtime);
