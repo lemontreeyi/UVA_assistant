@@ -79,6 +79,7 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 			}
 			else if(inBuf[1] == '4')		//œÚ”“∑…
 			{
+				Task2_Type = inBuf[3]<<8 | inBuf[2];
 				return 4;
 			}
 			else if(inBuf[1] == '5')		//œÚ”“∑…

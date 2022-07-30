@@ -208,6 +208,8 @@ uint16_t Task1_Point2_x = 150;
 uint16_t Task1_Point2_y = 163;
 uint16_t Task1_Type1 = 4;
 uint16_t Task1_Type2 = 3;
+//Task2
+uint16_t Task2_Type;
 /*
 type说明�?
 0:cross, 1：蓝色方形，2：蓝色圆�?3：蓝色三角形�?4：红色三角形�?5：红色方形，6：红色圆
@@ -460,10 +462,19 @@ int main(void)
 				HAL_Delay(200);
 			}
 			break;
-		case KEY2_PRES: 		//给v831发指令进行扫�?
-			LED1_Slow_Flash();
-			Pack_cmd_buf(7, 0, cmd_buf);		//�?7个ID代表7类图形的ID,7表示二维�?
-			BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+		case KEY2_PRES: 		//给v831发指令进行扫码
+			if(mode == 0)
+			{
+				LED1_Slow_Flash();
+				Pack_cmd_buf(7, 0, cmd_buf);		//�?7个ID代表7类图形的ID,7表示二维�?
+				BSP_USART_SendArray_LL(USART2, cmd_buf, 4);
+			}
+			else if(mode == 1) //给v831发指令进行图案识别
+			{
+				LED1_Slow_Flash();
+				Pack_cmd_buf(8, 0, cmd_buf);
+				BSP_USART_SendArray_LL(USART2, cmd_buf, 4);//然后v831应把对应的两个坐标传过来
+			}
 			break;
 		}
 		
@@ -529,7 +540,7 @@ int main(void)
           			printf("kal_x:%f kal_y:%f\r\n", location_esm[0], location_esm[1]);
 					Dtime = HAL_GetTick() - Cxof_Time;
           			calculate_cxof(location_esm, d_location, speed, Dtime);//计算光流
-					printf("vx:%f, vy:%f, dtime:%d\r\n",speed[0], speed[1],Dtime);
+					// printf("vx:%f, vy:%f, dtime:%d\r\n",speed[0], speed[1],Dtime);
 
           			Pack_cxof_buf(speed, 100, cxof_buf);//打包光流数据
 					Cxof_Time = HAL_GetTick();
@@ -545,7 +556,6 @@ int main(void)
 			if (USART3_RX_STA & 0x8000) //�?高位被强制置1�?
 			{	
 				rxlen_usart_3 = Recv_Cnt_UART3;
-				printf("okk\r\n");
 				Recv_Cnt_UART3 = 0;					//清零计数
 				for(i3=0;i3<rxlen_usart_3;i3++)
 				{
@@ -566,6 +576,7 @@ int main(void)
 				// printf("have send\r\n");
 				if(mode == 0)//赛题任务�?
 				{
+					printf("task:%d\r\n", task);
 					switch (task)
 					{
 					case 0:
@@ -591,7 +602,7 @@ int main(void)
 						if(taskOne_C(location_esm, height, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint, Task1_Type1, Task1_Type2))
 						{
 							BEEP_ON();
-							HAL_Delay(4000);
+							HAL_Delay(400);
 							BEEP_OFF();
 							task = 3;
 						}
@@ -601,7 +612,7 @@ int main(void)
 						if(landon_C(height,location_esm,&is_SetLandStartPoint))
 						{
 							BEEP_ON();
-							HAL_Delay(4000);
+							HAL_Delay(400);
 							BEEP_OFF();
 							Set_PWM_Thr(3000);
 							task = 4;
@@ -614,11 +625,81 @@ int main(void)
 				}
 				else if (mode == 1)//赛题任务�?
 				{
-					printf("mode2\r\n");
+					//复用赛题一
+					printf("task:%d\r\n", task);
+					switch (task)
+					{
+					case 0:
+						printf("send_message\r\n");
+						Pack_cmd_buf(1, 0, cmd_buf);		//打包数据发给F103副板
+                		BSP_USART_SendArray_LL(USART3, cmd_buf, 4);
+						HAL_Delay(500);
+						task = 1;
+						break;
+					case 1:
+						//步骤1:定点�?键起�?
+						if(height > 300) Set_PWM_Mode(4500);		//Loiter -> 1500 x 3
+						if(takeoff(height, location_esm, &is_takeoff, &is_settarget))
+						{
+							BEEP_ON();
+							HAL_Delay(400);
+							BEEP_OFF();
+							task = 2;
+						}
+						break;
+					case 2:
+						//步骤2:前往两个目标�?
+						if(taskOne_C(location_esm, height, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint, Task1_Type1, Task1_Type2))
+						{
+							BEEP_ON();
+							HAL_Delay(400);
+							BEEP_OFF();
+							task = 3;
+						}
+						break;
+					case 3:
+						//步骤3:返回起飞点并降落
+						if(landon_C(height,location_esm,&is_SetLandStartPoint))
+						{
+							BEEP_ON();
+							HAL_Delay(400);
+							BEEP_OFF();
+							Set_PWM_Thr(3000);
+							task = 4;
+						}
+					default:
+						Back2Center();
+						break;
+					}
+					fixyaw(yaw);//修正yaw姿�??
 				}
 				else if (mode == 2)//赛题任务�?
 				{
-					printf("mode3\r\n");
+					printf("task:%d\r\n", task);
+					switch (task)
+					{
+						case 0:
+							printf("send_message\r\n");
+							Pack_cmd_buf(1, 0, cmd_buf);		//打包数据发给F103副板
+                			BSP_USART_SendArray_LL(USART3, cmd_buf, 4);
+							HAL_Delay(500);
+							task = 1;
+							break;
+						case 1:
+							if(height > 300) Set_PWM_Mode(4500);		//Loiter -> 1500 x 3
+							if(takeoff(height, location_esm, &is_takeoff, &is_settarget))
+							{
+								BEEP_ON();
+								HAL_Delay(400);
+								BEEP_OFF();
+								task = 2;
+							}
+							fixyaw(yaw);
+							break;
+						case 2:
+						
+							break;
+					}
 				}
 				// BEEP_timing_off(&beep_tim);
 				//用于打印数据调试
@@ -1009,6 +1090,7 @@ VL53L1_Error vl53l1x_GetDistance(VL53L1_DEV pDev)
   Status = VL53L1_GetMeasurementDataReady(pDev,&isDataReady);//非阻塞测�?
   if(Status!=VL53L1_ERROR_NONE) 
 	{
+		BEEP_ON();
 		printf("Wait too long!\r\n");
 		return Status;
 	}
@@ -1066,24 +1148,23 @@ void USART_RxCallback(USART_TypeDef *huart)
 		else if (huart == USART2)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
-			printf("%c",data);
+			// printf("%c",data);
 			if(data == 0x23)
 			{
 				UART2_Frame_Flag = 1;
 			}
-        	if(((USART2_RX_STA  & (1<<15))==0) && (UART2_Frame_Flag == 1))		//还可以接收数�?,�?高位不为1.
+        	if((UART2_Frame_Flag == 1) && ((USART2_RX_STA & (1<<15))==0))		//还可以接收数�?,�?高位不为1.
 			{
-				TIM13->CNT=0;											//计数�??????13清空
+				// TIM13->CNT=0;											//计数�??????13清空
         		if(USART2_RX_STA == 0)
 				{
-					TIM13_Set(1);	 	                //使能定时�?13的中�?
+					// TIM13_Set(1);	 	                //使能定时�?13的中�?
 					Recv_Cnt_UART2 = 0;
 				}
-				USART2_RX_BUF[USART2_RX_STA++] = data;
-				Recv_Cnt_UART2 ++;			
+				USART2_RX_BUF[Recv_Cnt_UART2++] = data;
+				USART2_RX_STA++;
 				if(Recv_Cnt_UART2>=27)
 				{
-					Recv_Cnt_UART2 = 0;
 					UART2_Frame_Flag = 0;
 					USART2_RX_STA |= 1<<15;					//强制标记接收完成
 					LL_USART_DisableIT_RXNE(USART2);
@@ -1126,7 +1207,7 @@ void USART_RxCallback(USART_TypeDef *huart)
 				if(data == 0xFD && Recv_Cnt_UART3 == 7)
 				{
 					USART3_RX_STA |= 1<<15;	//�?高位强制�?1,结束接收
-					//Cnt计数值用于在解析时获取长度，不在此清�?
+					// Cnt计数值用于在解析时获取长度，不在此清�?
 					UART3_Frame_Flag = 0;	//关闭标志�?
 					LL_USART_DisableIT_RXNE(USART3);
 				}
@@ -1170,7 +1251,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == htim13.Instance) 
 	{
 		tim13_1ms++;
-		if (tim13_1ms == 40) 
+		if (tim13_1ms == 50) 
 		{
 			USART2_RX_STA |= (1 << 15); //标记接收完成
 			TIM13->SR &= ~(1 << 0);		//清除中断标志

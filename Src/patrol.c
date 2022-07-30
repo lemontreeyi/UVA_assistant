@@ -14,7 +14,8 @@ int takeoff_location[2] = {0};
 bool is_near_target[4] = {0};
 bool is_near_target_land[2] = {0};
 
-bool drop_goods_flag[5] = {0};//分别代表下降，舵机下降货物，稳住5s，舵机上升，上升五个步骤
+bool drop_goods_flag[6] = {0};//分别代表下降，舵机下降货物，稳住5s，舵机上升，上升，前往下一个坐标六个步骤
+bool is_start_drop_goods = 0;
 uint32_t drop_time = 0;
 uint32_t stable_time = 0;
 bool is_count_time = 0;
@@ -88,12 +89,13 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
     {
         if(have_arrive == 1 || have_arrive == 3)
         {
-            if(drop_goods_flag[0] == 0)
+            if(drop_goods_flag[0] == 0 && !is_start_drop_goods)
             {
                 clear_drop_goods_flag();
                 drop_goods_flag[0] = 1;//开启下降
+                is_start_drop_goods = 1;
             }
-            if(drop_goods_flag[4] == 1)
+            if(drop_goods_flag[5] == 1)
             {
                 if(have_arrive == 1 && t1_opt_flag)
                 {
@@ -108,10 +110,8 @@ int getCurrentTarget(float* current_location, int* target_location, int Length, 
                     t1_opt_flag = 0;
                 }
                 clear_drop_goods_flag();//
+                is_start_drop_goods = 0;
                 path_flag[have_arrive] = true;
-                BEEP_ON();
-                HAL_Delay(100);
-                BEEP_OFF();
                 ++have_arrive;
             }
         }
@@ -309,14 +309,14 @@ void Mix_PwmOut(int cur_x, int cur_y, int *target_location, uint16_t task1_type)
         
         Loiter(Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y,0,0);
         //此处让坐标环PID占0.2的权重
-        // printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
+        printf("1pwm_roll_out:%d pwm_pitch_out:%d pwm_roll_SensorOut:%d pwm_pitch_SensorOut:%d\r\n", pwm_roll_out, pwm_pitch_out, pwm_roll_SensorOut, pwm_pitch_SensorOut);
         Set_PWM_Roll(Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 1.0));
         Set_PWM_Pitch(Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 1.0));
         //printf("roll_out:%d, pitch_out:%d\r\n",Get_WeightedValue(pwm_roll_out, pwm_roll_SensorOut, 0.2),Get_WeightedValue(pwm_pitch_out, pwm_pitch_SensorOut, 0.2));
     }
     else
     {
-        // printf("2pwm_roll_out:%d pwm_pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
+        printf("2pwm_roll_out:%d pwm_pitch_out:%d\r\n", pwm_roll_out, pwm_pitch_out);
         Set_PWM_Roll(pwm_roll_out);
         Set_PWM_Pitch(pwm_pitch_out);   
     }
@@ -384,9 +384,11 @@ bool takeoff(int height, float* current_location, bool* is_takeoff, bool* is_set
     Loiter_location((int)(current_location[0]*100), (int)(current_location[1]*100), takeoff_location[0], takeoff_location[1]);
     Mix_PwmOut((int)(current_location[0] * 100), (int)(current_location[1] * 100),takeoff_location, 0);
 
-    // printf("height = %d\r\n", height);
-    // printf("x:%f y:%f\r\n", current_location[0], current_location[1]);
-    // printf("takeoff_x:%d takeoff_y:%d\r\n", takeoff_location[0], takeoff_location[1]);
+    printf("height = %d\r\n", height);
+    printf("x:%f y:%f\r\n", current_location[0], current_location[1]);
+    printf("takeoff_x:%d takeoff_y:%d\r\n", takeoff_location[0], takeoff_location[1]);
+    printf("mini_tar_x:%d mini_tar_y:%d\r\n", next_target[0], next_target[1]);
+
     if(abs(height - 1500) > 100 && *is_takeoff==1)
     {
         Take_off(1500, height);
@@ -463,12 +465,12 @@ bool fixyaw(float yaw)
     {
         if(yaw - init_yaw < -0.175f)
         {
-            printf("pwm_yaw:%f\r\n", 4431 + 100 * (exp(init_yaw - yaw) - 1));
+            // printf("pwm_yaw:%f\r\n", 4431 + 100 * (exp(init_yaw - yaw) - 1));
             Set_PWM_Yaw(min(4431 + 80 * exp(init_yaw - yaw), 4631));//右转
         }         
         else if(yaw - init_yaw > 0.175f)
         {
-            printf("pwm_yaw:%f\r\n", 4431 - 100 * (exp(yaw - init_yaw) - 1));
+            // printf("pwm_yaw:%f\r\n", 4431 - 100 * (exp(yaw - init_yaw) - 1));
             Set_PWM_Yaw(max(4431 - 80 * exp(yaw - init_yaw), 4231));//左转
         }
         else
@@ -552,7 +554,12 @@ bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2
 
     //得到当前路径中的目标点
     index = getCurrentTarget(cur_location, next_target, 4, t1_path_flag, path, 25, Task1_Type1, Task1_Type2);
+
+    printf("height = %d\r\n", height);
+    printf("x:%f y:%f\r\n", cur_location[0], cur_location[1]);
     printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
+    printf("flag:%d %d %d %d %d\r\n", drop_goods_flag[0], drop_goods_flag[1], drop_goods_flag[2], drop_goods_flag[3], drop_goods_flag[4]);
+
     if(drop_goods_flag[0] == 1)
     {
         if(abs(height - 800) > 100)
@@ -571,13 +578,13 @@ bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2
             }
         }
     }
-    if(drop_goods_flag[1] == 1)//舵机下降
+    else if(drop_goods_flag[1] == 1)//舵机下降
     {
         Throw_Moto(&is_begin, &is_over);
     }
-    if(drop_goods_flag[2] == 1)
+    else if(drop_goods_flag[2] == 1)
     {
-        if(((int)(cur_location[0] * 100) - next_target[0]) * ((int)(cur_location[0] * 100) - next_target[0]) + ((int)(cur_location[1] * 100) - next_target[1]) * ((int)(cur_location[1] * 100) - next_target[1]) < 15 * 15)
+        if(((int)(cur_location[0] * 100) - next_target[0]) * ((int)(cur_location[0] * 100) - next_target[0]) + ((int)(cur_location[1] * 100) - next_target[1]) * ((int)(cur_location[1] * 100) - next_target[1]) < 30 * 30)
         {
             if(!is_count_time)
             {
@@ -589,6 +596,9 @@ bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2
                 drop_goods_flag[3] = 1;
                 drop_goods_flag[2] = 0;
                 is_over = 1;
+                BEEP_ON();
+                HAL_Delay(100);
+                BEEP_OFF();
             }
         }
         else
@@ -596,7 +606,7 @@ bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2
             is_count_time = 0;
         }
     }
-    if(drop_goods_flag[3] == 1)
+    else if(drop_goods_flag[3] == 1)
     {
         if(Throw_Moto(&is_begin, &is_over))
         {
@@ -605,7 +615,7 @@ bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2
             drop_goods_flag[3] = 0;
         }
     }
-    if(drop_goods_flag[4] == 1)
+    else if(drop_goods_flag[4] == 1)
     {
         if(abs(height - 1500) > 100)
         {
@@ -617,6 +627,8 @@ bool taskOne_C(float* cur_location, int height, int tar1_x, int tar1_y, int tar2
             if(HAL_GetTick() - drop_time > 3000)
             {
                 Set_PWM_Thr(4500);
+                drop_goods_flag[5] = 1;
+                drop_goods_flag[4] = 0;
             }
         }
     }
@@ -644,6 +656,12 @@ bool landon_C(int height, float* current_location, bool *is_SetStartPoint)
         *is_SetStartPoint = 1;
     }
     index = getCurrentTarget(current_location, next_target, 2, ld_path_flag, path, 10, 0, 8);
+
+    printf("height = %d\r\n", height);
+    printf("x:%f y:%f\r\n", current_location[0], current_location[1]);
+    printf("target_x:%d, target_y:%d, index:%d\r\n", next_target[0], next_target[1], index);
+    printf("flag:%d %d %d %d %d\r\n", drop_goods_flag[0], drop_goods_flag[1], drop_goods_flag[2], drop_goods_flag[3], drop_goods_flag[4]);
+    
     if(drop_goods_flag[0] == 1)
         land(height);
     if(index == 1)
@@ -687,7 +705,7 @@ bool Throw_Moto(bool *is_begin, bool *is_over)
     static uint32_t down_time;
     if(*is_begin)
     {
-        uint32_t down_time = HAL_GetTick();
+        down_time = HAL_GetTick();
         Moto_Down();
         *is_begin  = false;
     }
@@ -708,3 +726,16 @@ bool Throw_Moto(bool *is_begin, bool *is_over)
     }
     return false;
 }
+
+// bool circle(float yaw)
+// {
+//     if(check_circle())
+//     {
+//         return 0;
+//     }
+// }
+
+// bool check_circle()
+// {
+//     return false;
+// }

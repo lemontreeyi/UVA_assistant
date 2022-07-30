@@ -1,13 +1,39 @@
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant-f407'
-compiling encodedDecoder.c...
-..\Src\encodedDecoder.c(92): warning:  #940-D: missing return statement at end of non-void function "encodeDecode_Analysis"
+compiling patrol.c...
+..\Src\patrol.c(79): warning:  #177-D: variable "time" was declared but never referenced
+      static uint32_t time = 0;
+..\Src\patrol.c(80): warning:  #177-D: variable "is_time" was declared but never referenced
+      static bool is_time = 0;
+..\Src\patrol.c(157): warning:  #550-D: variable "old_index" was set but never used
+      static int index = 0, old_index = 0;
+..\Src\patrol.c(211): warning:  #550-D: variable "old_index" was set but never used
+      static int index = 0, old_index = 0;
+..\Src\patrol.c(339): warning:  #174-D: expression has no effect
+      path[0][0], path[0][1] = begin[0], begin[1];        //èµ?å§?ç‚?
+..\Src\patrol.c(355): warning:  #111-D: statement is unreachable
+          return 1; break;
+..\Src\patrol.c(357): warning:  #111-D: statement is unreachable
+          return 3; break;
+..\Src\patrol.c(358): warning:  #111-D: statement is unreachable
+      default: return 2; break;
+..\Src\patrol.c(335): warning:  #177-D: variable "circle_flag" was declared but never referenced
+      bool circle_flag[4] = {0};
+..\Src\patrol.c(368): warning:  #940-D: missing return statement at end of non-void function "Get_circle_2"
   }
-..\Src\encodedDecoder.c(129): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  						outBuf[uwb_id - 1] /= 100.00;
-..\Src\encodedDecoder.c: 2 warnings, 0 errors
+..\Src\patrol.c(416): warning:  #550-D: variable "start_location" was set but never used
+      static int start_location[2] = {0};
+..\Src\patrol.c(505): warning:  #223-D: function "calculate_noPID_pwm" declared implicitly
+              pwm_y = calculate_noPID_pwm(cur_y, target_y, 0);
+..\Src\patrol.c(509): warning:  #223-D: function "calculate_noPID_pwm" declared implicitly
+              pwm_x = calculate_noPID_pwm(cur_x, target_x, 1);
+..\Src\patrol.c(648): warning:  #550-D: variable "start_location" was set but never used
+      static int start_location[2] = {0};
+..\Src\patrol.c(741): warning:  #1-D: last line of file ends without a newline
+  // }
+..\Src\patrol.c: 15 warnings, 0 errors
 linking...
-Program Size: Code=45436 RO-data=1000 RW-data=1700 ZI-data=6484  
+Program Size: Code=45948 RO-data=1084 RW-data=1704 ZI-data=6488  
 FromELF: creating hex file...
-"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 2 Warning(s).
+"FlyAssistant-f407\FlyAssistant-f407.axf" - 0 Error(s), 15 Warning(s).
 Build Time Elapsed:  00:00:03
