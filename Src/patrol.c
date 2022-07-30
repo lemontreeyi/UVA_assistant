@@ -20,6 +20,12 @@ uint32_t drop_time = 0;
 uint32_t stable_time = 0;
 bool is_count_time = 0;
 bool is_begin = 0, is_over = 0, send_over = 0;
+
+bool taskone_state = 0;
+int count_time = 0;
+bool time_over = 0;
+bool start_time = 0;
+
 //用于重置路径点标志位
 void reset_path_flag(bool path_flag[], int len)
 {
@@ -460,13 +466,13 @@ bool rotato(float cur_yaw, float tar_yaw)
         if(cur_yaw - tar_yaw < -0.125f)
         {
             Set_PWM_Yaw(min((int)(4500 + 80 * exp(tar_yaw - cur_yaw)), 4500 + 200));//右转
-            printf("pwm_yaw:%d\r\n", min((int)(4500 + 80 * exp(tar_yaw - cur_yaw)), 4500 + 200));
+            printf("pwm_yaw:%d\r\n", min((int)(4500 + 120 * exp(tar_yaw - cur_yaw)), 4500 + 200));
         }
             
         else if(cur_yaw - tar_yaw > 0.125f)
         {
             Set_PWM_Yaw(max((int)(4500 - 80 * exp(cur_yaw - tar_yaw)), 4500 - 200));
-            printf("pwm_yaw:%d\r\n", max((int)(4500 - 80 * exp(cur_yaw - tar_yaw)), 4500 - 200));
+            printf("pwm_yaw:%d\r\n", max((int)(4500 - 120 * exp(cur_yaw - tar_yaw)), 4500 - 200));
         }
         else
         {
@@ -759,15 +765,152 @@ bool Throw_Moto(bool *is_begin, bool *is_over, bool *drop_over)
     return false;
 }
 
-// bool circle(float yaw)
-// {
-//     if(check_circle())
-//     {
-//         return 0;
-//     }
-// }
+//direction为飞行方向，1为右飞，0为左飞,time为飞行时间
+bool fly_x(bool direction, int time)
+{
+    if(!start_time)
+    {
+        count_time = time;//计时时间
+        TIM10_Set(1);
+    }
+    if(time_over)
+    {
+        Set_PWM_Roll(4500);
+        return true;
+    }
+    else
+    {
+        Set_PWM_Roll(4500 + (direction?400:-400));
+        return false;
+    }
+}
 
-// bool check_circle()
-// {
-//     return false;
-// }
+//direction为飞行方向，1为后飞，0为前飞,time为飞行时间
+bool fly_y(bool direction, int time)
+{
+    if(!start_time)
+    {
+        count_time = time;//计时时间
+        TIM10_Set(1);
+    }
+    if(time_over)
+    {
+        Set_PWM_Pitch(4500);
+        return true;
+    }
+    else
+    {
+        Set_PWM_Pitch(4500 + (direction?300:-300));
+        return false;
+    }
+}
+
+//mode为飞行模式,0为定高模型,1为悬停模式,time为切换模式延时时间
+bool switch_mode(bool mode, int time)
+{
+    if(!start_time)
+    {
+        count_time = time;//计时时间
+        TIM10_Set(1);
+    }
+    if(time_over)
+    {
+        if(mode)
+        {
+            Set_PWM_Mode(4500);
+            return true;
+        }
+        else
+        {
+            Set_PWM_Mode(3000);
+            return true;
+        }
+    }
+    return false;
+}
+
+//direction为飞行方向，1为下飞，0为上飞,time为飞行时间
+bool fly_z(bool direction, int time)
+{
+    if(!start_time)
+    {
+        count_time = time;//计时时间
+        TIM10_Set(1);
+    }
+    if(time_over)
+    {
+        Set_PWM_Thr(4500);
+        return true;
+    }
+    else
+    {
+        Set_PWM_Thr(4500 + (direction?-300:300));
+        return false;
+    }
+}
+
+//direction为舵机方向，1为下放，0为上拉,time为控制时间
+bool drop_goods(bool direction, int time)
+{
+    if(!start_time)
+    {
+        if(direction)
+        {
+            Moto_Down();
+        }
+        else
+        {
+            Moto_Up();
+        }
+        count_time = time;//计时时间
+        TIM10_Set(1);
+    }
+    if(time_over)
+    {
+        Moto_stable();
+        return true;
+    }
+    return false;
+}
+//time是蜂鸣器项的时间
+bool beep_on(int time)
+{
+    if(!start_time)
+    {
+        BEEP_ON();
+        count_time = time;//计时时间
+        TIM10_Set(1);
+    }
+    if(time_over)
+    {
+        BEEP_OFF();
+        return true;
+    }
+    return false;
+}
+
+bool Open_view(uint16_t TaskType)
+{
+
+}
+bool TaskOne_D()
+{
+    switch (taskone_state)
+    {
+    case 0: 
+        switch_mode(0, 1500);
+        taskone_state = 1;
+        break;
+    case 1:
+        fly_x(1, 3000);
+        taskone_state = 2;
+        break;
+    case 2:
+        switch_mode(1, 1500);
+        taskone_state = 3;
+        break;
+    default:
+        return true;
+    }
+    return false;
+}

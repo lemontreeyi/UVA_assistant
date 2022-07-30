@@ -599,12 +599,12 @@ int main(void)
 						break;
 					case 2:
 						//步骤2:前往两个目标�?
-						if(taskOne_C(location_esm, height, Task1_Point1_x, Task1_Point1_y, Task1_Point2_x, Task1_Point2_y, &is_SetStartPoint, Task1_Type1, Task1_Type2))
+						if(TaskOne_D())
 						{
 							BEEP_ON();
 							HAL_Delay(400);
 							BEEP_OFF();
-							task = 3;
+							// task = 3;
 						}
 						break;
 					case 3:
@@ -1225,12 +1225,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	static uint16_t tim14_1ms = 0; //中断次数计数
 	static uint16_t tim10_1ms = 0; //中断次数计数
 
-	//*****定时�?10中断服务函数->用于延时*********
+	//*****定时�?10中断服务函数->用于打杆计时*********
 	if (htim->Instance == htim10.Instance) //更新中断
 	{
 		tim10_1ms++;
-		if (tim10_1ms == 10) 
+		if (tim10_1ms == count_time) 
 		{
+			time_over = 1;
+			start_time = 0;
+			TIM10->SR &= ~(1 << 0);
+			TIM10_Set(0);
+			tim10_1ms = 0;
 			// printf("TIME 10 INT \r\n");
 		}
 	}
@@ -1282,6 +1287,8 @@ void TIM10_Set(uint8_t sta)
 	if (sta)
 	{
 		TIM10->CNT = 0;
+		start_time = 1;
+        time_over = 0;
 		HAL_TIM_Base_Start_IT(&htim10);
 	}
 	else

@@ -12,6 +12,10 @@ extern uint8_t cmd_buf[4];
 extern bool t1_path_flag[4];
 extern bool t1_opt_flag;
 
+extern int count_time;
+extern bool time_over;
+extern bool start_time;
+
 // void init_flypath();
 void reset_path_flag(bool path_flag[], int len);
 bool set_NextLocation(float* current_location, int* target_location, int *next_location);
@@ -34,5 +38,9 @@ void Moto_Up(void);
 void Moto_stable(void);
 bool Throw_Moto(bool *is_begin, bool *is_over, bool *drop_over);
 bool rotato(float cur_yaw, float tar_yaw);
+
+bool TaskOne_D();
+
+void TIM10_Set(uint8_t sta);
 
 #endif

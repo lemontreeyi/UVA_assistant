@@ -327,8 +327,8 @@ void Take_off(float target_height, float current_height)//mm
 	{	
 		//printf("get in thr control!\r\n");
 		// if(current_height < target_height) {
-		printf("pwm_thr:%d\r\n", (int)(4500 + 950 * exp((-current_height / target_height) * 1.3)));
-		Set_PWM_Thr((int)(4500 + 950 * exp((-current_height / target_height) * 1.3)));
+		printf("pwm_thr:%d\r\n", (int)(4500 + 850 * exp((-current_height / target_height) * 1.3)));
+		Set_PWM_Thr((int)(4500 + 850 * exp((-current_height / target_height) * 1.3)));
 			// printf("cur_distance = %f\r\n", current_height);
 		// }
 		// else 
